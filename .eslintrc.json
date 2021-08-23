@@ -4,27 +4,11 @@
         "es2021": true
     },
     "extends": [
-        "plugin:react/recommended",
-        "airbnb",
-        "plugin:@typescript-eslint/recommended"
+        "react-app",
+        "airbnb-typescript"
     ],
-    "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "@typescript-eslint",
-        "react-hooks"
-    ],
-    "settings": {
-        "import/resolver": {
-            "typescript": {}
-        }
+        "project": "./tsconfig.json"
     },
     "rules": {
         "no-use-before-define": "off",
@@ -39,7 +23,6 @@
             }
         ],
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": ["error"],
         "@typescript-eslint/explicit-function-return-type": "off",
         "max-len": ["warn", { "code": 120 }],
         "react-hooks/rules-of-hooks": "error",
@@ -47,6 +30,29 @@
         "import/prefer-default-export": "off",
         "react/prop-types": "off",
         "no-param-reassign": ["error", { "props": false }],
-        "comma-dangle": ["error", "only-multiline"]
+        "comma-dangle": ["error", "only-multiline"],
+        "arrow-parens": [
+            "error",
+            "as-needed"
+        ],
+        "no-return-assign": "off",
+        "object-curly-newline": [
+            "error",
+            {
+                "consistent": true
+            }
+        ],
+        "@typescript-eslint/no-shadow": "off",
+        "react/jsx-no-duplicate-props": [
+            "error",
+            {
+                "ignoreCase": false
+            }
+        ],
+        "react/jsx-props-no-spreading": "off",
+        "react/react-in-jsx-scope": "off",
+        "import/no-cycle": "off",
+        "import/no-extraneous-dependencies": "off",
+        "@typescript-eslint/no-unused-vars": ["warn"]
     }
 }

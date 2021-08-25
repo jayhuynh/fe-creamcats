@@ -1,18 +1,7 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import { Home } from './pages/Home';
-import { DefaultLayout } from './layout/DefaultLayout';
-import Login from './pages/login';
+import Layout from './layout';
 
 const App = () => (
-  <DefaultLayout theme="Hello">
-    <Route path="/home">
-      <Home />
-    </Route>
-    <Route path="/login">
-      <Login />
-    </Route>
-  </DefaultLayout>
+  <Layout/>
 );
 
 export default App;

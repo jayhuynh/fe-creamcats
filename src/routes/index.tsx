@@ -6,11 +6,18 @@ import {
   Switch,
   SwitchProps,
   useRouteMatch,
+  generatePath,
 } from 'react-router-dom';
+import qs from 'querystring';
+
 
 import ProtectedRoute from './ProtectedRoute';
 import Layout from '../layout';
 import Login from '../pages/login';
+import Home from '../pages/home';
+import { QueryDictionary } from './useNavigate';
+import Position from '../pages/position';
+import NotFound from '../pages/not-found';
 
 export interface RouteConfig extends RouteProps {
   path: string;
@@ -50,18 +57,44 @@ export const Routes = (
   renderRoutes(routes, useRouteMatch(), switchProps)
 );
 
+export const resolvePath = <T extends any>(
+  route: RouteConfig,
+  params: Parameters<typeof generatePath>[1] = {},
+  queries?: QueryDictionary<T>,
+) => Array.of(
+    generatePath(`${route.basePath || ''}${route.path}`, params),
+    queries ? qs.stringify(queries) : '',
+  ).filter(Boolean).join('?');
+
 export const login: RouteConfig = {
   path: '/login',
   component: Login,
 };
 
+export const home: RouteConfig = {
+  path: '/home',
+  component: Home,
+};
+
+export const position: RouteConfig = {
+  path: '/position/:positionId',
+  component: Position,
+};
+
+export const notfound: RouteConfig = {
+  path: '/*',
+  component: NotFound,
+};
+
 const routes: RouteConfig[] = [
-  login,
   {
     path: '/',
-    component: Layout,
-    requireAuth: true,
+    exact: true,
+    redirect: home.path,
   },
+  home,
+  position,
+  notfound,
 ];
 
 export * from './useQuery';

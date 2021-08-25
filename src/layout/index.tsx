@@ -1,8 +1,12 @@
-import React from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import routes, { Routes } from '../routes';
 
 export const Layout = () => (
   <>
-   <div>Layout</div>
+    <Header/>
+    <Routes routes={routes}/>
+    <Footer/>
   </>
 );
 

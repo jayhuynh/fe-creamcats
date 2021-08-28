@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 const moment = require('moment');
 
@@ -16,12 +16,30 @@ export default function ReleaseTime(props: any) {
   color = typeof color === 'undefined' ? '#cbd0d3' : extraText;
 
   return (
-    <Typography variant="body2" color="textSecondary" component="p">
-      <AccessTimeIcon style={{ color: color }} />
-      {
-        //Parsing time and calculate the past time with moment
-        moment(time).fromNow() + (extraText === '' ? '' : ' ' + extraText)
-      }
-    </Typography>
+    <Grid container direction="row" alignItems="center" style={{ height: 16 }}>
+      <Grid item>
+        <AccessTimeIcon style={{ width: 16, height: 16, color: color }} />
+      </Grid>
+      <Grid item>
+        <Typography
+          style={{
+            fontSize: 13,
+            fontWeight: 'normal',
+            fontStretch: 'normal',
+            fontStyle: 'oblique',
+            letterSpacing: 'normal',
+            textAlign: 'left',
+            color: '#a6adb4',
+            lineHeight: '16px',
+            marginLeft: 10,
+          }}
+        >
+          {
+            //Parsing time and calculate the past time with moment
+            moment(time).fromNow() + (extraText === '' ? '' : ' ' + extraText)
+          }
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }

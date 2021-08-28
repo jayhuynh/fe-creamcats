@@ -2,10 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Grid, Button, Typography, Divider } from '@material-ui/core';
 import {
   Card,
-  // CardContent,
   CardMedia,
-  // CardActionArea,
-  // CardActions,
 } from '@material-ui/core';
 
 import Carousel from 'react-material-ui-carousel';

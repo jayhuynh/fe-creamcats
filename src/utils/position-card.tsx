@@ -11,7 +11,7 @@ import ReleaseTime from './release-time';
 
 /**
  * This component generate a position card
- * @param {string} [coverURL] Default a question mark picture
+ * @param {string} [coverURL] Position cover image URL, default a question mark picture
  * @param {string} title Position title
  * @param {string} description Position description
  * @param {string} releaseTime Release time in ISO 8601 format e.g. 1997-07-26 23:30:26

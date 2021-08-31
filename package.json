@@ -12,9 +12,11 @@
     "@types/material-ui": "^0.21.9",
     "@types/react-redux": "^7.1.7",
     "axios": "^0.21.1",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.13.0",
+    "react-material-ui-carousel": "^2.3.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3"

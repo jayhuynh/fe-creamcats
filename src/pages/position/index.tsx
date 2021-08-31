@@ -9,6 +9,7 @@ import Carousel from 'react-material-ui-carousel';
 
 import ReleaseTime from '../../utils/release-time';
 import PositionCard from '../../utils/position-card';
+import ApplicationDialog from './components/ApplicationDialog';
 
 interface ParamsTypes {
   positionId: string;
@@ -387,22 +388,10 @@ const Position = () => {
           </Grid>
           <Grid item xs>
             <div>
-              {/* HTML embedding will be replaced in the future 
+              {/* HTML embedding will be replaced in the future
               <div dangerouslySetInnerHTML={{ __html: posDetail }} />*/}
               {posDetail}
-              <Button
-                style={{
-                  width: 134,
-                  height: 40,
-                  padding: '16px 30px',
-                  borderRadius: 6,
-                  backgroundColor: '#fa6980',
-                  color: 'white',
-                }}
-              >
-                {' '}
-                Register{' '}
-              </Button>
+              <ApplicationDialog/>
             </div>
           </Grid>
         </Grid>

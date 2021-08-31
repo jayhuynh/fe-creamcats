@@ -6,6 +6,20 @@ import Grid  from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { useForm } from 'react-hook-form';
 import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: '0 !important',
+  },
+  maxSize: {
+    width: '100%',
+    height: '100%',
+  },
+  closeButton: {
+    height: 0,
+  },
+}));
 
 
 interface ApplicationFormInput {
@@ -16,6 +30,7 @@ interface ApplicationFormInput {
 }
 
 const ApplicationDialog = () => {
+  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm<ApplicationFormInput>({
     defaultValues: { email: '', fullName: '', phoneNumber: '', notes: '' },
@@ -47,18 +62,21 @@ const ApplicationDialog = () => {
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title">
-        <DialogContent>
+        <DialogContent className={classes.root}>
           <Grid container>
             <Grid item xs={6}>
               <img
+                className={classes.maxSize}
                 src="https://i.ibb.co/jH3P4H0/Screen-Shot-2021-08-27-at-2-42-37-am.png"
                 alt="Screen-Shot-2021-08-27-at-2-42-37-am"/>
             </Grid>
             <Grid item xs={6}>
-                <form onSubmit={handleSubmit(doSubmitApplication)}>
+                <form onSubmit={handleSubmit(doSubmitApplication)} className={classes.maxSize}>
                   <Grid
                     alignItems="center"
                     container
+                    justifyContent="center"
+                    className={classes.maxSize}
                     direction="column">
                     <Box width={0.70}>
                       <TextField
@@ -105,7 +123,7 @@ const ApplicationDialog = () => {
                       rows={4}
                     />
                     </Box>
-                    <Box width={0.70} mt={4}>
+                    <Box width={0.70} mt={2}>
                       <Button
                         variant="contained"
                         color="secondary">

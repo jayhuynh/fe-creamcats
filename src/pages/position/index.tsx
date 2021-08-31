@@ -10,6 +10,9 @@ import Carousel from 'react-material-ui-carousel';
 import ReleaseTime from '../../utils/release-time';
 import PositionCard from '../../utils/position-card';
 import ApplicationDialog from './components/ApplicationDialog';
+import Login from '../login';
+import { useSelector } from 'react-redux';
+import { fromAuth } from '../../store';
 
 interface ParamsTypes {
   positionId: string;
@@ -333,6 +336,7 @@ function CarouselItem(props: any) {
  */
 const Position = () => {
   const { positionId } = useParams<ParamsTypes>();
+  const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
   console.log('This is the detail of position ' + { positionId });
 
   return (
@@ -391,7 +395,7 @@ const Position = () => {
               {/* HTML embedding will be replaced in the future
               <div dangerouslySetInnerHTML={{ __html: posDetail }} />*/}
               {posDetail}
-              <ApplicationDialog/>
+              {isAuthenticated ? <ApplicationDialog/> : <Login/>}
             </div>
           </Grid>
         </Grid>

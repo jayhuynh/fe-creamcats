@@ -108,9 +108,8 @@ const ApplicationDialog = () => {
                     <Box width={0.70} mt={4}>
                       <Button
                         variant="contained"
-                        color="secondary"
-                        onClick={handleClickOpen}>
-                        REGISTER
+                        color="secondary">
+                        APPLY NOW
                       </Button>
                     </Box>
                   </Grid>

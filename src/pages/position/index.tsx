@@ -1,9 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { Grid, Button, Typography, Divider } from '@material-ui/core';
-import {
-  Card,
-  CardMedia,
-} from '@material-ui/core';
+import { Grid, Typography, Divider, Card, CardMedia } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Carousel from 'react-material-ui-carousel';
 
@@ -17,6 +14,64 @@ import { fromAuth } from '../../store';
 interface ParamsTypes {
   positionId: string;
 }
+
+const useStyles = makeStyles({
+  root: {
+    backgroundColor: '#f6f8f9',
+  },
+  rootGrid: {
+    width: '100%',
+  },
+  carouselGrid: {
+    width: '100%',
+    marginBottom: 30,
+  },
+  briefPositionDetailsGrid: {
+    width: '75%',
+    marginBottom: 30,
+  },
+  briefTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 'normal',
+    textAlign: 'left',
+    color: '#202124',
+  },
+  briefContent: {
+    fontSize: 16,
+    fontWeight: 'normal',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 'normal',
+    textAlign: 'left',
+    color: '#a6adb4',
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 'normal',
+    textAlign: 'left',
+    color: '#202124',
+  },
+  relatedPositionsGrid: {
+    width: '70%',
+    marginBottom: 30,
+  },
+  relatedPositionsTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 'normal',
+    textAlign: 'left',
+    color: '#202124',
+    marginBottom: 20,
+  },
+});
 
 //---------------- Mock data ----------------
 const carouselItems = [
@@ -64,7 +119,7 @@ const subtitle: any = {
   extraText: 'by Organisation',
 };
 
-const posInfoList: any[] = [
+const positionInfoList: any[] = [
   {
     posCover:
       'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
@@ -91,7 +146,7 @@ const posInfoList: any[] = [
   },
 ];
 
-const posDetail: any = (
+const positionDetail: any = (
   <div>
     <Typography
       style={{
@@ -258,50 +313,25 @@ const posDetail: any = (
 );
 //---------------- Mock data ----------------
 
-const genBrief = (brief: any) => {
+const Brief = (props: any) => {
+  const { brief } = props;
+  const classes = useStyles();
+
   return brief.map((item: any) => {
     //how to claim the 'item'?
     return (
       <Grid item key={item.type}>
-        <Typography
-          style={{
-            fontSize: 24,
-            fontWeight: 'bold',
-            fontStretch: 'normal',
-            fontStyle: 'normal',
-            letterSpacing: 'normal',
-            textAlign: 'left',
-            color: '#202124',
-          }}
-          gutterBottom
-          variant="h5"
-          component="h4"
-        >
-          {item.type}
-        </Typography>
-        <Typography
-          style={{
-            fontSize: 16,
-            fontWeight: 'normal',
-            fontStretch: 'normal',
-            fontStyle: 'normal',
-            letterSpacing: 'normal',
-            textAlign: 'left',
-            color: '#a6adb4',
-          }}
-          variant="body2"
-          color="textSecondary"
-          component="p"
-        >
-          {item.content}
-        </Typography>
+        <Typography className={classes.briefTitle}>{item.type}</Typography>
+        <Typography className={classes.briefContent}>{item.content}</Typography>
       </Grid>
     );
   });
 };
 
-const genPositionCards = (posInfoList: object[]) => {
-  return posInfoList.map((item: any) => {
+const PositionCards = (props: any) => {
+  const { positionInfoList } = props;
+
+  return positionInfoList.map((item: any) => {
     return (
       <Grid item xs>
         <PositionCard
@@ -316,7 +346,7 @@ const genPositionCards = (posInfoList: object[]) => {
   });
 };
 
-function CarouselItem(props: any) {
+const CarouselItem = (props: any) => {
   return (
     <Card style={{ borderRadius: 0 }}>
       <CardMedia
@@ -328,7 +358,7 @@ function CarouselItem(props: any) {
       />
     </Card>
   );
-}
+};
 
 /**
  * Position detail page component
@@ -337,17 +367,19 @@ function CarouselItem(props: any) {
 const Position = () => {
   const { positionId } = useParams<ParamsTypes>();
   const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const classes = useStyles();
+
   console.log('This is the detail of position ' + { positionId });
 
   return (
-    <div style={{ backgroundColor: '#f6f8f9' }}>
+    <div className={classes.root}>
       <Grid
-        style={{ width: '100%' }}
+        className={classes.rootGrid}
         container
         direction="column"
         alignItems="center"
       >
-        <Grid item style={{ width: '100%', marginBottom: 30 }}>
+        <Grid item className={classes.carouselGrid}>
           <Carousel>
             {carouselItems.map((item, i) => (
               <CarouselItem key={i} url={item} />
@@ -356,28 +388,18 @@ const Position = () => {
         </Grid>
         <Grid
           direction="row"
-          style={{ width: '75%', marginBottom: 30 }}
+          className={classes.briefPositionDetailsGrid}
           container
           spacing={6}
         >
           <Grid item xs={4}>
             <Grid container direction="column" spacing={3}>
-              {genBrief(brief)}
+              <Brief brief={brief} />
               <Grid item>
                 <Divider />
               </Grid>
               <Grid item>
-                <Typography
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    fontStretch: 'normal',
-                    fontStyle: 'normal',
-                    letterSpacing: 'normal',
-                    textAlign: 'left',
-                    color: '#202124',
-                  }}
-                >
+                <Typography className={classes.subtitle}>
                   {subtitle.title}
                 </Typography>
                 <ReleaseTime
@@ -393,29 +415,18 @@ const Position = () => {
           <Grid item xs>
             <div>
               {/* HTML embedding will be replaced in the future
-              <div dangerouslySetInnerHTML={{ __html: posDetail }} />*/}
-              {posDetail}
-              {isAuthenticated ? <ApplicationDialog/> : <Login/>}
+              <div dangerouslySetInnerHTML={{ __html: positionDetail }} />*/}
+              {positionDetail}
+              {isAuthenticated ? <ApplicationDialog /> : <Login />}
             </div>
           </Grid>
         </Grid>
-        <Grid style={{ width: '70%', marginBottom: 30 }} container>
-          <Typography
-            style={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              fontStretch: 'normal',
-              fontStyle: 'normal',
-              letterSpacing: 'normal',
-              textAlign: 'left',
-              color: '#202124',
-              marginBottom: 20,
-            }}
-          >
+        <Grid className={classes.relatedPositionsGrid} container>
+          <Typography className={classes.relatedPositionsTitle}>
             RELATED POSITIONS
           </Typography>
           <Grid container spacing={4}>
-            {genPositionCards(posInfoList)}
+            <PositionCards positionInfoList={positionInfoList} />
           </Grid>
         </Grid>
       </Grid>

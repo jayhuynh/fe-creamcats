@@ -1,6 +1,21 @@
 import { Typography, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 const moment = require('moment');
+
+const useStyles = makeStyles({
+  releaseTimeText: {
+    fontSize: 13,
+    fontWeight: 'normal',
+    fontStretch: 'normal',
+    fontStyle: 'oblique',
+    letterSpacing: 'normal',
+    textAlign: 'left',
+    color: '#a6adb4',
+    lineHeight: '16px',
+    marginLeft: 10,
+  },
+});
 
 /**
  * This component calaulate the past time according to the release time
@@ -10,6 +25,7 @@ const moment = require('moment');
  * @returns {object}
  */
 export default function ReleaseTime(props: any) {
+  const classes = useStyles();
   let { time, extraText, color } = props;
 
   extraText = typeof extraText === 'undefined' ? '' : extraText;
@@ -21,19 +37,7 @@ export default function ReleaseTime(props: any) {
         <AccessTimeIcon style={{ width: 16, height: 16, color: color }} />
       </Grid>
       <Grid item>
-        <Typography
-          style={{
-            fontSize: 13,
-            fontWeight: 'normal',
-            fontStretch: 'normal',
-            fontStyle: 'oblique',
-            letterSpacing: 'normal',
-            textAlign: 'left',
-            color: '#a6adb4',
-            lineHeight: '16px',
-            marginLeft: 10,
-          }}
-        >
+        <Typography className={classes.releaseTimeText}>
           {
             //Parsing time and calculate the past time with moment
             moment(time).fromNow() + (extraText === '' ? '' : ' ' + extraText)

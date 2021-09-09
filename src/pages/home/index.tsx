@@ -2,8 +2,10 @@ import { login, resolvePath } from '../../routes';
 import { Grid, Button } from '@material-ui/core';
 import { AccessTime, ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PositionCard from '../../utils/position-card';
+import { useSelector } from 'react-redux';
+import { fromPositions, useAppDispatch } from '../../store';
 
 const useStyles = makeStyles(() => ({
   flex: {
@@ -62,7 +64,15 @@ const testImg =
 const Home = () => {
   const [viewAll, setViewAll] = useState(false);
   const classes = useStyles();
-  console.log(resolvePath(login, undefined, { redirect_uri: '/blog' }));
+  const positions = useSelector(fromPositions.selectPositions);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fromPositions.doFetchPositions());
+  }, [dispatch]);
+
+  console.log(positions);
+  // console.log(resolvePath(login, undefined, { redirect_uri: '/blog' }));
   return (
     <div style={{ minHeight: 'calc(100vh - 248px)' }}>
       <div style={{ display: 'flex', color: 'white' }}>
@@ -123,13 +133,13 @@ const Home = () => {
         </h2>
         <div>
           <Grid container spacing={3}>
-            {testData.slice(0, viewAll ? 9 : 3).map((item, index) => (
-              <Grid item xs={4}>
+            {positions.slice(0, viewAll ? 9 : 3).map((position, index) => (
+              <Grid item xs={4} key={position.id}>
                 <PositionCard
-                  coverURL={testImg}
-                  title="Position"
-                  description="Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat."
-                  releaseTime={new Date()}
+                  coverURL={position.thumbnail}
+                  title={position.name}
+                  description={position.description}
+                  releaseTime={position.createdAt}
                 />
               </Grid>
             ))}

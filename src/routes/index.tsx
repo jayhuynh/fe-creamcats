@@ -10,13 +10,13 @@ import {
 } from 'react-router-dom';
 import qs from 'querystring';
 
-
 import ProtectedRoute from './ProtectedRoute';
 import Layout from '../layout';
 import Login from '../pages/login';
 import Home from '../pages/home';
 import { QueryDictionary } from './useNavigate';
 import Position from '../pages/position';
+import Profile from '../pages/profile';
 import NotFound from '../pages/not-found';
 
 export interface RouteConfig extends RouteProps {
@@ -31,40 +31,62 @@ export const renderRoutes = (
   match?: MatchProps | null,
   switchProps?: SwitchProps,
 ) => {
-  const basePath = (match && match.path !== '/') ? match.path : '';
+  const basePath = match && match.path !== '/' ? match.path : '';
   // populate basePath for resolvePath to run
-  routes.forEach(r => r.basePath = basePath);
+  routes.forEach(r => (r.basePath = basePath));
   return (
     <Switch {...switchProps}>
-      {
-        routes.map(({ redirect, requireAuth, path, ...routeProps }) => {
-          if (redirect) {
-            return <Redirect key={`${basePath}${path}`} path={`${basePath}${path}`} to={`${basePath}${redirect}`} {...routeProps} />;
-          }
-          if (requireAuth) {
-            return <ProtectedRoute key={`${basePath}${path}`} path={`${basePath}${path}`} {...routeProps} />;
-          }
-          return <Route key={`${basePath}${path}`} path={`${basePath}${path}`} {...routeProps} />;
-        })
-      }
+      {routes.map(({ redirect, requireAuth, path, ...routeProps }) => {
+        if (redirect) {
+          return (
+            <Redirect
+              key={`${basePath}${path}`}
+              path={`${basePath}${path}`}
+              to={`${basePath}${redirect}`}
+              {...routeProps}
+            />
+          );
+        }
+        if (requireAuth) {
+          return (
+            <ProtectedRoute
+              key={`${basePath}${path}`}
+              path={`${basePath}${path}`}
+              {...routeProps}
+            />
+          );
+        }
+        return (
+          <Route
+            key={`${basePath}${path}`}
+            path={`${basePath}${path}`}
+            {...routeProps}
+          />
+        );
+      })}
     </Switch>
   );
 };
 
-export const Routes = (
-  { routes, switchProps }: { routes: RouteConfig[]; switchProps?: SwitchProps; },
-) => (
-  renderRoutes(routes, useRouteMatch(), switchProps)
-);
+export const Routes = ({
+  routes,
+  switchProps,
+}: {
+  routes: RouteConfig[];
+  switchProps?: SwitchProps;
+}) => renderRoutes(routes, useRouteMatch(), switchProps);
 
 export const resolvePath = <T extends any>(
   route: RouteConfig,
   params: Parameters<typeof generatePath>[1] = {},
   queries?: QueryDictionary<T>,
-) => Array.of(
-    generatePath(`${route.basePath || ''}${route.path}`, params),
-    queries ? qs.stringify(queries) : '',
-  ).filter(Boolean).join('?');
+) =>
+    Array.of(
+      generatePath(`${route.basePath || ''}${route.path}`, params),
+      queries ? qs.stringify(queries) : '',
+    )
+      .filter(Boolean)
+      .join('?');
 
 export const login: RouteConfig = {
   path: '/login',
@@ -81,6 +103,11 @@ export const position: RouteConfig = {
   component: Position,
 };
 
+export const profile: RouteConfig = {
+  path: '/profile',
+  component: Profile,
+};
+
 export const notfound: RouteConfig = {
   path: '/*',
   component: NotFound,
@@ -94,6 +121,7 @@ const routes: RouteConfig[] = [
   },
   home,
   position,
+  profile,
   notfound,
 ];
 

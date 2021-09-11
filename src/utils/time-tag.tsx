@@ -31,21 +31,22 @@ function tagText(
   extraText: string,
   status = undefined,
 ) {
+  console.log(status);
   switch (usage) {
     default:
       //Parsing time and calculate the past time with moment
       return moment(time).fromNow() + (extraText === '' ? '' : ' ' + extraText);
     case 'personal':
-      if (status === 'On-going' || 'Ended') {
-        return status;
-      } else if (status === 'Applied') {
+      if (status === 'Applied') {
         return (
           status +
+          ' ' +
           moment(time).fromNow() +
           (extraText === '' ? '' : ' ' + extraText)
         );
+      } else {
+        return status;
       }
-      return moment(time).fromNow() + (extraText === '' ? '' : ' ' + extraText);
   }
 }
 

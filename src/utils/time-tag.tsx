@@ -32,7 +32,6 @@ function tagText(
   extraText: string,
   status = undefined,
 ) {
-  console.log(status);
   switch (usage) {
     default:
       //Parsing time and calculate the past time with moment

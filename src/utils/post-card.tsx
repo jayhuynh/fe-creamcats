@@ -44,6 +44,7 @@ const useStyles = makeStyles({
     textAlign: 'left',
     color: '#202124',
     height: 28,
+    overflow: 'hidden',
   },
   description: {
     fontSize: 14,

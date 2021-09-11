@@ -419,12 +419,12 @@ function Position() {
             <Divider orientation="vertical" />
           </Grid>
           <Grid item xs>
-            <div>
+            <section>
               {/* HTML embedding will be replaced in the future
               <div dangerouslySetInnerHTML={{ __html: positionDetail }} />*/}
               {positionDetail}
               {isAuthenticated ? <ApplicationDialog /> : <Login />}
-            </div>
+            </section>
           </Grid>
         </Grid>
         <Grid className={classes.relatedPositionsGrid} container>

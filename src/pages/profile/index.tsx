@@ -154,7 +154,7 @@ const positionInfoList: any[] = [
   {
     posCover:
       'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
-    title: 'Position 1',
+    title: 'Position 4',
     status: 'Applied',
     description:
       'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat. ',
@@ -163,7 +163,7 @@ const positionInfoList: any[] = [
   {
     posCover:
       'https://www.intheblack.com/-/media/intheblack/allimages/magazine-2021/04-april/empty-city-street.jpg?rev=d3b55cf125a14112bcb2d8b7054591d4',
-    title: 'Position 2',
+    title: 'Position 5',
     status: 'On-going',
     description:
       'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat.',
@@ -172,7 +172,7 @@ const positionInfoList: any[] = [
   {
     posCover:
       'https://www.brisbane.qld.gov.au/sites/default/files/styles/hero_image/public/images/2021-03/1600x900-sbp-brisbane-sign.jpg?itok=jiR58xQI',
-    title: 'Position 3',
+    title: 'Position 6',
     status: 'Ended',
     description:
       'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat.',
@@ -181,7 +181,7 @@ const positionInfoList: any[] = [
   {
     posCover:
       'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
-    title: 'Position 1',
+    title: 'Position 7',
     status: 'Applied',
     description:
       'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat. ',
@@ -190,7 +190,7 @@ const positionInfoList: any[] = [
   {
     posCover:
       'https://www.intheblack.com/-/media/intheblack/allimages/magazine-2021/04-april/empty-city-street.jpg?rev=d3b55cf125a14112bcb2d8b7054591d4',
-    title: 'Position 2',
+    title: 'Position 8',
     status: 'On-going',
     description:
       'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat.',
@@ -229,9 +229,9 @@ function VoluntaryWork(props: any) {
 
   const positionCards = positionInformationList.map((item: any) => {
     return (
-      <Grid item xs={4}>
+      <Grid key={item.title} item xs={4}>
         <PositionCard
-          key={item.title}
+          // key={item.title}
           coverURL={item.posCover}
           title={item.title}
           usage="personal"

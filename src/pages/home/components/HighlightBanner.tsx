@@ -1,4 +1,4 @@
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { AccessTime, ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,6 +34,7 @@ const useStyles = makeStyles(() => ({
     color: '#a6adb4',
     fontSize: '14px',
     marginRight: '4px',
+    marginTop: '10px',
     verticalAlign: '-2px',
   },
   content: {
@@ -68,36 +69,36 @@ const HighlightBanner = () => {
           backgroundImage: 'url(' + testImg + ')',
         }}
       >
-        <h1 style={{ color: 'white' }}>Resident Admissions Volunteer</h1>
-        <div style={{ background:'white', height:1 }}/>
-        <p className={classes.limit}>
+        <Typography variant="h4" style={{ color: 'white' }}>Resident Admissions Volunteer</Typography>
+        <div style={{ background:'white', height: 2, marginTop: 20, marginBottom: 20 }}/>
+        <Typography variant="body1" className={classes.limit}>
           Lorem ipsum dolor sit amet consectetur adipiscing elit sodales primis, mollis viverra conubia ligula
           inceptos laoreet libero tortor, nascetur non habitasse iaculis tempor nec egestas fames augue, platea porta
           integer nostra curae sed arcu. Nec ut diam vulputate ante scelerisque ridiculus lobortis orci mi{' '}
-        </p>
+        </Typography>
         <Button variant="contained" style={{ background: '#fa6980', color: 'white', marginTop: 22 }}>
           LEARN MORE
         </Button>
       </div>
       <div style={{ width: '40%', padding: '100px 100px 0' }}>
-        <h2 className={classes.title}>
+        <Typography variant="h5" className={classes.title}>
           MOST POPULAR
           <div style={{ flex: 1 }}></div>
           <ChevronLeft style={{ cursor: 'pointer', color: '#a6adb4' }}></ChevronLeft>
           <ChevronRight style={{ cursor: 'pointer' }}></ChevronRight>
-        </h2>
+        </Typography>
         <div style={{ margin: '40px 0', background: '#ebeded', height: 1 }} />
-        <div className={classes.t1}>POSITION 1</div>
-        <div className={classes.t2}>Organisation 1 </div>
-        <p className={classes.text}>Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat…</p>
+        <Typography className={classes.t1}>POSITION 1</Typography>
+        <Typography className={classes.t2}>Organisation 1 </Typography>
+        <Typography className={classes.text}>Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat…</Typography>
         <div className={classes.text}>
           <AccessTime className={classes.time}></AccessTime> <i>2 min ago</i>
         </div>
-        <div className={classes.t1} style={{ marginTop: 38 }}>
+        <Typography className={classes.t1} style={{ marginTop: 38 }}>
           POSITION 1
-        </div>
-        <div className={classes.t2}>Organisation 1 </div>
-        <p className={classes.text}>Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat…</p>
+        </Typography>
+        <Typography className={classes.t2}>Organisation 1 </Typography>
+        <Typography className={classes.text}>Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat…</Typography>
         <div className={classes.text}>
           <AccessTime className={classes.time}></AccessTime> <i>2 min ago</i>
         </div>

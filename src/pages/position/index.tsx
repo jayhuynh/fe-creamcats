@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Carousel from 'react-material-ui-carousel';
 
-import ReleaseTime from '../../utils/release-time';
+import TimeTag from '../../utils/time-tag';
 import PositionCard from '../../utils/position-card';
 import ApplicationDialog from './components/ApplicationDialog';
 import Login from '../login';
@@ -25,6 +25,10 @@ const useStyles = makeStyles({
   carouselGrid: {
     width: '100%',
     marginBottom: 30,
+  },
+  carouselItem: {
+    borderRadius: 0,
+    boxShadow: 'none',
   },
   briefPositionDetailsGrid: {
     width: '75%',
@@ -196,7 +200,7 @@ const positionDetail: any = (
       nostra curae sed arcu. Nec ut diam vulputate ante scelerisque ridiculus
       lobortis orci mi
     </Typography>
-    <Card style={{ marginBottom: 20 }}>
+    <Card style={{ marginBottom: 20, boxShadow: 'none' }}>
       <CardMedia
         component="img"
         className="organizationShowcase"
@@ -313,7 +317,7 @@ const positionDetail: any = (
 );
 //---------------- Mock data ----------------
 
-const Brief = (props: any) => {
+function Brief(props: any) {
   const { brief } = props;
   const classes = useStyles();
 
@@ -326,9 +330,9 @@ const Brief = (props: any) => {
       </Grid>
     );
   });
-};
+}
 
-const PositionCards = (props: any) => {
+function PositionCards(props: any) {
   const { positionInfoList } = props;
 
   return positionInfoList.map((item: any) => {
@@ -339,16 +343,18 @@ const PositionCards = (props: any) => {
           coverURL={item.posCover}
           title={item.title}
           description={item.description}
-          releaseTime={item.releaseTime}
+          time={item.releaseTime}
         />
       </Grid>
     );
   });
-};
+}
 
-const CarouselItem = (props: any) => {
+function CarouselItem(props: any) {
+  const classes = useStyles();
+
   return (
-    <Card style={{ borderRadius: 0 }}>
+    <Card className={classes.carouselItem}>
       <CardMedia
         component="img"
         className="eventShowcase"
@@ -358,13 +364,13 @@ const CarouselItem = (props: any) => {
       />
     </Card>
   );
-};
+}
 
 /**
  * Position detail page component
  * @returns Object
  */
-const Position = () => {
+function Position() {
   const { positionId } = useParams<ParamsTypes>();
   const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
   const classes = useStyles();
@@ -402,7 +408,7 @@ const Position = () => {
                 <Typography className={classes.subtitle}>
                   {subtitle.title}
                 </Typography>
-                <ReleaseTime
+                <TimeTag
                   time={subtitle.releaseTime}
                   extraText={subtitle.extraText}
                 />
@@ -432,6 +438,6 @@ const Position = () => {
       </Grid>
     </div>
   );
-};
+}
 
 export default Position;

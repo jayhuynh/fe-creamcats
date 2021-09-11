@@ -4,6 +4,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 const moment = require('moment');
 
 const useStyles = makeStyles({
+  accessTimeIcon: { width: 16, height: 16 },
   releaseTimeText: {
     fontSize: 13,
     fontWeight: 'normal',
@@ -69,7 +70,10 @@ export default function TimeTag(props: any) {
   return (
     <Grid container direction="row" alignItems="center" style={{ height: 16 }}>
       <Grid item>
-        <AccessTimeIcon style={{ width: 16, height: 16, color: color }} />
+        <AccessTimeIcon
+          className={classes.accessTimeIcon}
+          style={{ color: color }}
+        />
       </Grid>
       <Grid item>
         <Typography className={classes.releaseTimeText}>

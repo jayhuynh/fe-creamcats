@@ -151,7 +151,7 @@ export const Login = () => {
                           variant="contained"
                           type="submit"
                           color="secondary">
-                          <Typography>LOGIN</Typography>
+                          LOGIN
                         </Button>
                       </Grid>
                     </Grid>

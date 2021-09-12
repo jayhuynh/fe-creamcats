@@ -99,7 +99,7 @@ export const home: RouteConfig = {
 };
 
 export const position: RouteConfig = {
-  path: '/position/:positionId',
+  path: '/positions/:positionId',
   component: Position,
 };
 

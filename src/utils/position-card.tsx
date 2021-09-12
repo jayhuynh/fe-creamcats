@@ -8,9 +8,12 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import ReleaseTime from './release-time';
+import TimeTag from './time-tag';
 
 const useStyles = makeStyles({
+  card: {
+    boxShadow: 'none',
+  },
   title: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -37,14 +40,16 @@ const useStyles = makeStyles({
  * This component generate a position card
  * @param {string} [coverURL] Position cover image URL, default a question mark picture
  * @param {string} title Position title
- * @param {string} description Position description
- * @param {string} releaseTime Release time in ISO 8601 format e.g. 1997-07-26 23:30:26
+ * @param {string} [usage] This should be "public" or "personal", default as "public"
+ * @param {string} [status] Position status, e.g.  applied, on-going, or ended (only required in personal usage)
+ * @param {string} [description] Position description (only required in public usage)
+ * @param {string} time Release (public usage)/applied (personal usage) time in ISO 8601 format e.g. 1997-07-26 23:30:26
  * @returns {object}
  */
 export default function PositionCard(props: any) {
   let { coverURL } = props;
   const classes = useStyles();
-  const { title, description, releaseTime } = props;
+  const { title, usage, status, description, time } = props;
 
   coverURL =
     typeof coverURL === 'undefined'
@@ -52,7 +57,7 @@ export default function PositionCard(props: any) {
       : coverURL;
 
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -64,10 +69,17 @@ export default function PositionCard(props: any) {
         />
         <CardContent>
           <Typography className={classes.title}>{title}</Typography>
-          <Typography className={classes.description}>{description}</Typography>
+          {
+            //If for public or undefined usage, add description
+            usage === 'public' || typeof usage === 'undefined' ? (
+              <Typography className={classes.description}>
+                {description}
+              </Typography>
+            ) : null
+          }
         </CardContent>
         <CardActions>
-          <ReleaseTime time={releaseTime} />
+          <TimeTag usage={usage} status={status} time={time} />
         </CardActions>
       </CardActionArea>
     </Card>

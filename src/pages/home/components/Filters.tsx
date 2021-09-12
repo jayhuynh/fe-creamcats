@@ -11,6 +11,9 @@ import {
 import { PropsWithChildren, useState } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
+import { DateType } from '@date-io/type';
+import moment from 'moment';
+import { CcDatePicker } from '../../../utils';
 
 interface OptionContainerInputs {
   name: string
@@ -52,7 +55,7 @@ const Filters = () => {
   const [personName, setPersonName] = useState<string[]>([]);
   const icon = <CheckBoxOutlineBlank fontSize="small" />;
   const checkedIcon = <CheckBox fontSize="small" />;
-
+  const [date, setDate] = useState<DateType | null>(moment(new Date()));
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setAge(event.target.value as string);
@@ -64,7 +67,7 @@ const Filters = () => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={2}>
+      <Grid item xs={4}>
         <OptionContainer name="gender" label="Gender">
           <Select
             value={age}
@@ -82,7 +85,51 @@ const Filters = () => {
         </OptionContainer>
       </Grid>
       <Grid item xs={4}>
-        <OptionContainer name="tow" label="Types of work">
+        <OptionContainer name="gender" label="Participant Gender">
+          <Select
+            value={age}
+            onChange={handleChange}
+            variant="outlined"
+            displayEmpty
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={4}>
+        <OptionContainer name="startDate" label="Start Date">
+          <CcDatePicker
+            value={date}
+            onChange={date => setDate(date)}
+            animateYearScrolling
+          />
+        </OptionContainer>
+      </Grid>
+
+      <Grid item xs={4}>
+        <OptionContainer name="distance" label="Distance">
+          <Select
+            value={age}
+            onChange={handleChange}
+            variant="outlined"
+            displayEmpty
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={4}>
+        <OptionContainer name="tags" label="Tags">
           <Autocomplete
             multiple
             limitTags={2}
@@ -102,8 +149,17 @@ const Filters = () => {
               </>
             )}
             renderInput={params => (
-              <TextField {...params} variant="outlined" placeholder="Favorites" />
+              <TextField {...params} variant="outlined" placeholder="tags" />
             )}
+          />
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={4}>
+        <OptionContainer name="endDate" label="End Date">
+          <CcDatePicker
+            value={date}
+            onChange={date => setDate(date)}
+            animateYearScrolling
           />
         </OptionContainer>
       </Grid>

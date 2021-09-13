@@ -4,12 +4,15 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Carousel from 'react-material-ui-carousel';
 
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
+import { fromAuth, fromPositions, useAppDispatch } from '../../store';
+
 import TimeTag from '../../utils/time-tag';
 import PositionCard from '../../utils/position-card';
 import ApplicationDialog from './components/ApplicationDialog';
 import Login from '../login';
-import { useSelector } from 'react-redux';
-import { fromAuth } from '../../store';
 
 interface ParamsTypes {
   positionId: string;
@@ -375,8 +378,16 @@ function Position() {
   const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
   const classes = useStyles();
 
+  const position = useSelector(fromPositions.selectCurrentPosition);
+  const dispatch = useAppDispatch();
+
+  console.log(position);
   console.log('This is the detail of position ' + { positionId });
 
+  useEffect(() => {
+    dispatch(fromPositions.doFetchCurrentPosition({ id: Number(positionId) }));
+  }, [dispatch, positionId]);
+  
   return (
     <div className={classes.root}>
       <Grid

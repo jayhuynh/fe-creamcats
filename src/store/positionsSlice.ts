@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 import { SerializedException, exceptionOf, Position } from '../models';
 import { PositionService } from '../services';
@@ -7,32 +11,80 @@ import { AppState } from './index';
 export const POSITIONS_FEATURE_KEY = 'positions';
 interface PositionsState {
   positions: Position[];
-  currentPosition: Position | null;
+  currentPosition: any | null;
   loading: boolean;
   errors: SerializedException[];
 }
 
 export const createInitialState = (): PositionsState => ({
   positions: [],
-  currentPosition: null,
+  currentPosition: {
+    id: 1,
+    thumbnail: '',
+    name: '',
+    overview: '',
+    releaseTime: new Date(),
+    carousel: [
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1200px-Question_Mark.svg.png',
+    ],
+    brief: [
+      {
+        type: 'Location',
+        content: 'Unknown',
+      },
+      {
+        type: 'Type of work',
+        content: 'Unknown',
+      },
+      {
+        type: 'Commitment',
+        content: 'Unknown',
+      },
+      {
+        type: 'Training',
+        content: 'Unknown',
+      },
+      {
+        type: 'Time required',
+        content: 'Unknown',
+      },
+      {
+        type: 'Number of applicants',
+        content: 'Unknown',
+      },
+      {
+        type: 'Others',
+        content: 'Unknown',
+      },
+    ],
+    eventId: 1,
+
+    // Attribute(s) below are absent
+    subtitle: '',
+    organization: '',
+    description: '',
+
+    //Attribute(s) below I don't know what's for
+    requirements: '',
+
+    //Attribute(s) below is required by Position interface
+    typesOfWork: [],
+    createdAt: new Date(),
+  },
   loading: false,
   errors: [],
 });
 
 export const doFetchPositions = createAsyncThunk(
   'positions/fetch',
-  async (
-    data,
-    { rejectWithValue },
-  ) => {
+  async (data, { rejectWithValue }) => {
     try {
       const positions = await PositionService.getPositions();
       return {
         positions,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e)
-        .toJson());
+      return rejectWithValue(exceptionOf(e).toJson());
     }
   },
 );
@@ -41,7 +93,7 @@ export const doFetchCurrentPosition = createAsyncThunk(
   'positions/fetchCurrent',
   async (
     data: {
-      id:number,
+      id: number;
     },
     { rejectWithValue },
   ) => {
@@ -51,12 +103,10 @@ export const doFetchCurrentPosition = createAsyncThunk(
         position,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e)
-        .toJson());
+      return rejectWithValue(exceptionOf(e).toJson());
     }
   },
 );
-
 
 const positionsSlice = createSlice({
   name: POSITIONS_FEATURE_KEY,
@@ -97,7 +147,8 @@ const positionsSlice = createSlice({
   },
 });
 
-const selectPositionsFeature = (state: AppState) => state[POSITIONS_FEATURE_KEY];
+const selectPositionsFeature = (state: AppState) =>
+  state[POSITIONS_FEATURE_KEY];
 
 export const selectLoading = createSelector(
   selectPositionsFeature,
@@ -115,4 +166,3 @@ export const selectCurrentPosition = createSelector(
 );
 
 export default positionsSlice.reducer;
-

@@ -81,44 +81,44 @@ const useStyles = makeStyles({
 });
 
 //---------------- Mock data ----------------
-const carouselItems = [
-  'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
-  'https://www.intheblack.com/-/media/intheblack/allimages/magazine-2021/04-april/empty-city-street.jpg?rev=d3b55cf125a14112bcb2d8b7054591d4',
-  'https://www.brisbane.qld.gov.au/sites/default/files/styles/hero_image/public/images/2021-03/1600x900-sbp-brisbane-sign.jpg?itok=jiR58xQI',
-];
+// const carouselItems = [
+//   'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
+//   'https://www.intheblack.com/-/media/intheblack/allimages/magazine-2021/04-april/empty-city-street.jpg?rev=d3b55cf125a14112bcb2d8b7054591d4',
+//   'https://www.brisbane.qld.gov.au/sites/default/files/styles/hero_image/public/images/2021-03/1600x900-sbp-brisbane-sign.jpg?itok=jiR58xQI',
+// ];
 
-const brief: object[] = [
-  {
-    type: 'Location',
-    content: 'Bardon QLD',
-  },
-  {
-    type: 'Type of work',
-    content:
-      'Administration & Office Management, Companionship & Social Support, Seniors & Aged Care',
-  },
-  {
-    type: 'Commitment',
-    content: 'Regular - more than 6 months',
-  },
-  {
-    type: 'Training',
-    content: 'Volunteer Training',
-  },
-  {
-    type: 'Time required',
-    content: 'Office hours preferred',
-  },
-  {
-    type: 'Number of applicants',
-    content: '30 people',
-  },
-  {
-    type: 'Others',
-    content:
-      'Current flu vaccination. COVID-19 vaccination. Police check (SVCS can organise this for you).',
-  },
-];
+// const brief: object[] = [
+//   {
+//     type: 'Location',
+//     content: 'Bardon QLD',
+//   },
+//   {
+//     type: 'Type of work',
+//     content:
+//       'Administration & Office Management, Companionship & Social Support, Seniors & Aged Care',
+//   },
+//   {
+//     type: 'Commitment',
+//     content: 'Regular - more than 6 months',
+//   },
+//   {
+//     type: 'Training',
+//     content: 'Volunteer Training',
+//   },
+//   {
+//     type: 'Time required',
+//     content: 'Office hours preferred',
+//   },
+//   {
+//     type: 'Number of applicants',
+//     content: '30 people',
+//   },
+//   {
+//     type: 'Others',
+//     content:
+//       'Current flu vaccination. COVID-19 vaccination. Police check (SVCS can organise this for you).',
+//   },
+// ];
 
 const subtitle: any = {
   title: 'Small Title - Subtitle',
@@ -329,7 +329,9 @@ function Brief(props: any) {
     return (
       <Grid item key={item.type}>
         <Typography className={classes.briefTitle}>{item.type}</Typography>
-        <Typography className={classes.briefContent}>{item.content}</Typography>
+        <Typography className={classes.briefContent}>
+          {typeof item.content === 'undefined' ? 'Unknown' : item.content}
+        </Typography>
       </Grid>
     );
   });
@@ -340,13 +342,12 @@ function PositionCards(props: any) {
 
   return positionInfoList.map((item: any) => {
     return (
-      <Grid item xs>
+      <Grid item xs={4} key={item.name}>
         <PositionCard
-          key={item.title}
-          coverURL={item.posCover}
+          coverURL={item.thumbnail}
           title={item.title}
           description={item.description}
-          time={item.releaseTime}
+          time={item.createdAt}
         />
       </Grid>
     );
@@ -363,10 +364,34 @@ function CarouselItem(props: any) {
         className="eventShowcase"
         alt="Event showcase"
         height="600"
-        image={props.url}
+        image={
+          typeof props.url === 'undefined'
+            ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1200px-Question_Mark.svg.png'
+            : props.url
+        }
       />
     </Card>
   );
+}
+
+function GenerateCarousel(props: any) {
+  const { carouselItems } = props;
+
+  if (typeof carouselItems === 'undefined' || carouselItems.length <= 0) {
+    return (
+      <Carousel>
+        <CarouselItem url={undefined} />
+      </Carousel>
+    );
+  } else {
+    return (
+      <Carousel>
+        {carouselItems.map((item: string, i: number) => (
+          <CarouselItem key={i} url={item} />
+        ))}
+      </Carousel>
+    );
+  }
 }
 
 /**
@@ -376,18 +401,21 @@ function CarouselItem(props: any) {
 function Position() {
   const { positionId } = useParams<ParamsTypes>();
   const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
-  const classes = useStyles();
 
   const position = useSelector(fromPositions.selectCurrentPosition);
+  const positions = useSelector(fromPositions.selectPositions);
   const dispatch = useAppDispatch();
-
-  console.log(position);
-  console.log('This is the detail of position ' + { positionId });
 
   useEffect(() => {
     dispatch(fromPositions.doFetchCurrentPosition({ id: Number(positionId) }));
+    dispatch(fromPositions.doFetchPositions());
   }, [dispatch, positionId]);
-  
+  const { brief, carouselItems, createdAt } = position;
+
+  console.log('This is the detail of position ' + positionId);
+
+  const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <Grid
@@ -397,11 +425,7 @@ function Position() {
         alignItems="center"
       >
         <Grid item className={classes.carouselGrid}>
-          <Carousel>
-            {carouselItems.map((item, i) => (
-              <CarouselItem key={i} url={item} />
-            ))}
-          </Carousel>
+          <GenerateCarousel carouselItems={carouselItems} />
         </Grid>
         <Grid
           direction="row"
@@ -419,10 +443,7 @@ function Position() {
                 <Typography className={classes.subtitle}>
                   {subtitle.title}
                 </Typography>
-                <TimeTag
-                  time={subtitle.releaseTime}
-                  extraText={subtitle.extraText}
-                />
+                <TimeTag time={createdAt} extraText={subtitle.extraText} />
               </Grid>
             </Grid>
           </Grid>
@@ -443,7 +464,7 @@ function Position() {
             RELATED POSITIONS
           </Typography>
           <Grid container spacing={4}>
-            <PositionCards positionInfoList={positionInfoList} />
+            <PositionCards positionInfoList={positions} />
           </Grid>
         </Grid>
       </Grid>

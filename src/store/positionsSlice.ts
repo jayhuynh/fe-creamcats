@@ -24,9 +24,7 @@ export const createInitialState = (): PositionsState => ({
     name: '',
     overview: '',
     releaseTime: new Date(),
-    carousel: [
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1200px-Question_Mark.svg.png',
-    ],
+    carousel: [],
     brief: [
       {
         type: 'Location',
@@ -58,16 +56,10 @@ export const createInitialState = (): PositionsState => ({
       },
     ],
     eventId: 1,
-
-    // Attribute(s) below are absent
     subtitle: '',
     organization: '',
     description: '',
-
-    //Attribute(s) below I don't know what's for
     requirements: '',
-
-    //Attribute(s) below is required by Position interface
     typesOfWork: [],
     createdAt: new Date(),
   },

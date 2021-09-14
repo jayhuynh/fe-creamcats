@@ -24,7 +24,8 @@ export const getCurrentPosition = async (id: number) => {
   let currentEvent: any = {};
   let currentOrganization = { name: 'Placeholder' };
 
-  await new Promise(async (resolve, reject) => {
+  //Is using promise right in here? Or I should create another fetch function and combine the data in UI?
+  await new Promise(async resolve => {
     currentPosition = (await Axios.get(`/positions/${id}`)).data;
     resolve(currentPosition.eventId);
   }).then(async eventId => {
@@ -75,15 +76,15 @@ export const getCurrentPosition = async (id: number) => {
     createdAt: currentPosition.timeCreated,
     eventId: currentPosition.eventId,
 
-    // Attribute(s) below are absent
+    // Attribute(s) below are absent in the API
     subtitle: currentPosition.subtitle,
     organization: currentOrganization.name,
     description: currentPosition.description,
 
-    //Attribute(s) below I don't know what's for
+    //Attribute(s) below I don't know what for
     requirements: currentPosition.requirements,
 
-    //Attribute(s) below is required by Position interface
+    //Attribute(s) below is required by Position interface (?)
     typesOfWork: currentPosition.typesOfWork,
   };
 };

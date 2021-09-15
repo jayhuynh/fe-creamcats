@@ -2,14 +2,17 @@ import { useParams } from 'react-router-dom';
 import { Grid, Typography, Divider, Card, CardMedia } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Carousel from 'react-material-ui-carousel';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import TimeTag from '../../utils/time-tag';
-import PositionCard from '../../utils/position-card';
+import { fromAuth, fromPositions, useAppDispatch } from '../../store';
+
+import PositionCarousel from './components/PositionCarousel';
+import Brief from './components/Brief';
 import ApplicationDialog from './components/ApplicationDialog';
 import Login from '../login';
-import { useSelector } from 'react-redux';
-import { fromAuth } from '../../store';
+import PositionCards from './components/PositionCards';
+import TimeTag from '../../utils/time-tag';
 
 interface ParamsTypes {
   positionId: string;
@@ -18,6 +21,7 @@ interface ParamsTypes {
 const useStyles = makeStyles({
   root: {
     backgroundColor: '#f6f8f9',
+    paddingBottom: 60,
   },
   rootGrid: {
     width: '100%',
@@ -26,31 +30,9 @@ const useStyles = makeStyles({
     width: '100%',
     marginBottom: 30,
   },
-  carouselItem: {
-    borderRadius: 0,
-    boxShadow: 'none',
-  },
   briefPositionDetailsGrid: {
     width: '75%',
     marginBottom: 30,
-  },
-  briefTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontStretch: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 'normal',
-    textAlign: 'left',
-    color: '#202124',
-  },
-  briefContent: {
-    fontSize: 16,
-    fontWeight: 'normal',
-    fontStretch: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 'normal',
-    textAlign: 'left',
-    color: '#a6adb4',
   },
   subtitle: {
     fontSize: 16,
@@ -78,78 +60,15 @@ const useStyles = makeStyles({
 });
 
 //---------------- Mock data ----------------
-const carouselItems = [
-  'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
-  'https://www.intheblack.com/-/media/intheblack/allimages/magazine-2021/04-april/empty-city-street.jpg?rev=d3b55cf125a14112bcb2d8b7054591d4',
-  'https://www.brisbane.qld.gov.au/sites/default/files/styles/hero_image/public/images/2021-03/1600x900-sbp-brisbane-sign.jpg?itok=jiR58xQI',
-];
 
-const brief: object[] = [
-  {
-    type: 'Location',
-    content: 'Bardon QLD',
-  },
-  {
-    type: 'Type of work',
-    content:
-      'Administration & Office Management, Companionship & Social Support, Seniors & Aged Care',
-  },
-  {
-    type: 'Commitment',
-    content: 'Regular - more than 6 months',
-  },
-  {
-    type: 'Training',
-    content: 'Volunteer Training',
-  },
-  {
-    type: 'Time required',
-    content: 'Office hours preferred',
-  },
-  {
-    type: 'Number of applicants',
-    content: '30 people',
-  },
-  {
-    type: 'Others',
-    content:
-      'Current flu vaccination. COVID-19 vaccination. Police check (SVCS can organise this for you).',
-  },
-];
-
+//This mock data reamains because I didn't found any suitable data from the API
 const subtitle: any = {
   title: 'Small Title - Subtitle',
   releaseTime: '2021-08-26 23:09:01',
   extraText: 'by Organisation',
 };
 
-const positionInfoList: any[] = [
-  {
-    posCover:
-      'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
-    title: 'Position 1',
-    description:
-      'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat. ',
-    releaseTime: '1997-07-26 00:00:00', //This should be calculated in future, e.g. use the current time minus the release time
-  },
-  {
-    posCover:
-      'https://www.intheblack.com/-/media/intheblack/allimages/magazine-2021/04-april/empty-city-street.jpg?rev=d3b55cf125a14112bcb2d8b7054591d4',
-    title: 'Position 2',
-    description:
-      'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat.',
-    releaseTime: '2021-08-26 22:35:00',
-  },
-  {
-    posCover:
-      'https://www.brisbane.qld.gov.au/sites/default/files/styles/hero_image/public/images/2021-03/1600x900-sbp-brisbane-sign.jpg?itok=jiR58xQI',
-    title: 'Position 3',
-    description:
-      'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat.',
-    releaseTime: '2021-08-26 20:42:00',
-  },
-];
-
+//This mock data remains untill I realise the seperate CSS/LESS file to control the dangerous HTML's style
 const positionDetail: any = (
   <div>
     <Typography
@@ -317,65 +236,26 @@ const positionDetail: any = (
 );
 //---------------- Mock data ----------------
 
-function Brief(props: any) {
-  const { brief } = props;
-  const classes = useStyles();
-
-  return brief.map((item: any) => {
-    //how to claim the 'item'?
-    return (
-      <Grid item key={item.type}>
-        <Typography className={classes.briefTitle}>{item.type}</Typography>
-        <Typography className={classes.briefContent}>{item.content}</Typography>
-      </Grid>
-    );
-  });
-}
-
-function PositionCards(props: any) {
-  const { positionInfoList } = props;
-
-  return positionInfoList.map((item: any) => {
-    return (
-      <Grid item xs>
-        <PositionCard
-          key={item.title}
-          coverURL={item.posCover}
-          title={item.title}
-          description={item.description}
-          time={item.releaseTime}
-        />
-      </Grid>
-    );
-  });
-}
-
-function CarouselItem(props: any) {
-  const classes = useStyles();
-
-  return (
-    <Card className={classes.carouselItem}>
-      <CardMedia
-        component="img"
-        className="eventShowcase"
-        alt="Event showcase"
-        height="600"
-        image={props.url}
-      />
-    </Card>
-  );
-}
-
 /**
  * Position detail page component
- * @returns Object
  */
 function Position() {
   const { positionId } = useParams<ParamsTypes>();
   const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
-  const classes = useStyles();
 
-  console.log('This is the detail of position ' + { positionId });
+  const position = useSelector(fromPositions.selectCurrentPosition);
+  const positions = useSelector(fromPositions.selectPositions);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fromPositions.doFetchCurrentPosition({ id: Number(positionId) }));
+    dispatch(fromPositions.doFetchPositions());
+  }, [dispatch, positionId]);
+  const { brief, carouselItems, createdAt } = position;
+
+  console.log('This is the detail of position ' + positionId);
+
+  const classes = useStyles();
 
   return (
     <div className={classes.root}>
@@ -386,11 +266,7 @@ function Position() {
         alignItems="center"
       >
         <Grid item className={classes.carouselGrid}>
-          <Carousel>
-            {carouselItems.map((item, i) => (
-              <CarouselItem key={i} url={item} />
-            ))}
-          </Carousel>
+          <PositionCarousel carouselItems={carouselItems} />
         </Grid>
         <Grid
           direction="row"
@@ -408,10 +284,7 @@ function Position() {
                 <Typography className={classes.subtitle}>
                   {subtitle.title}
                 </Typography>
-                <TimeTag
-                  time={subtitle.releaseTime}
-                  extraText={subtitle.extraText}
-                />
+                <TimeTag time={createdAt} extraText={subtitle.extraText} />
               </Grid>
             </Grid>
           </Grid>
@@ -432,7 +305,7 @@ function Position() {
             RELATED POSITIONS
           </Typography>
           <Grid container spacing={4}>
-            <PositionCards positionInfoList={positionInfoList} />
+            <PositionCards positionInfoList={positions} />
           </Grid>
         </Grid>
       </Grid>

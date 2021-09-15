@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     boxShadow: 'none',
   },
   title: {
+    marginBottom: 10,
     fontSize: 16,
     fontWeight: 'bold',
     fontStretch: 'normal',
@@ -25,6 +26,8 @@ const useStyles = makeStyles({
     color: '#202124',
   },
   description: {
+    height: 40,
+    overflow: 'hidden',
     fontSize: 13,
     fontWeight: 'normal',
     fontStretch: 'normal',

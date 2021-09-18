@@ -19,7 +19,7 @@ function isReplaceQuery(arg: any): arg is ReplaceQuery {
   return arg.type === 'REPLACE_QUERY';
 }
 
-type QueryConfig<T> = MergeQuery<T> | ReplaceQuery<T>;
+export type QueryConfig<T> = MergeQuery<T> | ReplaceQuery<T>;
 
 export const useNavigate = <T = any>() => {
   const history = useHistory();
@@ -56,5 +56,6 @@ export const useNavigate = <T = any>() => {
     }, [history, location.pathname, convertSearchString]),
     mergeQuery,
     replaceQuery,
+    convertSearchString,
   };
 };

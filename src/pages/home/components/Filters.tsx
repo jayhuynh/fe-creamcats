@@ -11,13 +11,15 @@ import {
 import { PropsWithChildren, useEffect, useState } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
-import { DateType } from '@date-io/type';
 import moment from 'moment';
 import { CcDatePicker } from '../../../utils';
 import { useSelector } from 'react-redux';
-import { fromTags, useAppDispatch } from '../../../store';
+import { fromPositions, fromTags, useAppDispatch } from '../../../store';
 import { Tag } from '../../../models';
 import { useForm } from 'react-hook-form';
+import { useDebounce } from 'use-debounce';
+import { home as homeRoute, useNavigate } from '../../../routes';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 interface FilterFormInputs {
   startingLocation: string
@@ -26,16 +28,15 @@ interface FilterFormInputs {
   tags: Tag[]
   startDate: Date;
   endDate: Date;
+  limit: number;
 }
 
 interface OptionContainerInputs {
-  name: string
   label: string
   quickClear?: boolean
 }
 
 const OptionContainer = ({
-  name,
   label,
   quickClear = false,
   ...rest
@@ -58,19 +59,6 @@ const OptionContainer = ({
   </FormControl>
 );
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
 const genders = [
   { label: 'All', value: 'all' },
   { label: 'Male', value: 'male' },
@@ -78,131 +66,149 @@ const genders = [
 ];
 
 const distances = [
-  { label: '5km', value: 5 },
-  { label: '10km', value: 10 },
-  { label: '20km', value: 20 },
+  { label: '5km', value: 5000 },
+  { label: '10km', value: 10000 },
+  { label: '20km', value: 20000 },
 ];
 
-const Filters = () => {
-  const [age, setAge] = useState('');
-  const [personName, setPersonName] = useState<string[]>([]);
-  const icon = <CheckBoxOutlineBlank fontSize="small"/>;
-  const checkedIcon = <CheckBox fontSize="small"/>;
-  const [date, setDate] = useState<DateType | null>(moment(new Date()));
+const TagsFilter = () => {
   const tags = useSelector(fromTags.selectTags);
-  const disspatch = useAppDispatch();
-  const { register, handleSubmit, formState: { errors } } = useForm<FilterFormInputs>({
-    defaultValues: {
-      startingLocation: 'starting location',
-      distance: 0,
-      gender: '',
-      tags: [],
-      startDate: moment(new Date()),
-      endDate: moment(new Date()),
-    },
-  });
-
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    disspatch(fromTags.doFetchTags());
-  }, [disspatch]);
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setAge(event.target.value as string);
-  };
-
-  const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setPersonName(event.target.value as string[]);
-  };
-
-  const doFilter = async ({ startingLocation, distance, gender, tags, startDate, endDate }: FilterFormInputs) => {
-    console.log(startDate);
-  };
+    dispatch(fromTags.doFetchTags());
+  }, [dispatch]);
 
   return (
-    <form onSubmit={handleSubmit(doFilter)}>
-      <Grid container spacing={3}>
-        <Grid item xs={4}>
-          <OptionContainer name="startingLocation" label="Starting Location">
-            <TextField
-              variant="outlined"
-              required
-              {...register('startingLocation')}
-              error={!!errors.startingLocation}
-            />
-          </OptionContainer>
-        </Grid>
-        <Grid item xs={4}>
-          <OptionContainer name="gender" label="Participant Gender">
-            <Select
-              value={age}
-              onChange={handleChange}
-              variant="outlined"
-              displayEmpty
-            >
-              {genders.map(gender => (<MenuItem value={gender.value} id={gender.value}>{gender.label}</MenuItem>))}
-            </Select>
-          </OptionContainer>
-        </Grid>
-        <Grid item xs={4}>
-          <OptionContainer name="startDate" label="Start Date">
-            <CcDatePicker
-              value={date}
-              onChange={date => setDate(date)}
-              animateYearScrolling
-            />
-          </OptionContainer>
-        </Grid>
+    <Autocomplete
+      multiple
+      limitTags={2}
+      options={tags}
+      disableCloseOnSelect
+      fullWidth
+      getOptionLabel={option => option.name}
+      renderOption={(option, { selected }) => (
+        <>
+          <Checkbox
+            icon={<CheckBoxOutlineBlank fontSize="small"/>}
+            checkedIcon={<CheckBox fontSize="small"/>}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {option.name}
+        </>
+      )}
+      renderInput={params => (
+        <TextField {...params} variant="outlined" placeholder="tags"/>
+      )}
+    />
+  );
+};
 
-        <Grid item xs={4}>
-          <OptionContainer name="distance" label="Distance">
-            <Select
-              value={age}
-              onChange={handleChange}
-              variant="outlined"
-              displayEmpty
-            >
-              {distances.map(distance => (<MenuItem value={distance.value}>{distance.label}</MenuItem>))}
-            </Select>
-          </OptionContainer>
-        </Grid>
-        <Grid item xs={4}>
-          <OptionContainer name="tags" label="Tags" quickClear>
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={names}
-              disableCloseOnSelect
-              fullWidth
-              getOptionLabel={option => option}
-              renderOption={(option, { selected }) => (
-                <>
-                  <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option}
-                </>
-              )}
-              renderInput={params => (
-                <TextField {...params} variant="outlined" placeholder="tags"/>
-              )}
-            />
-          </OptionContainer>
-        </Grid>
-        <Grid item xs={4}>
-          <OptionContainer name="endDate" label="End Date">
-            <CcDatePicker
-              value={date}
-              onChange={date => setDate(date)}
-              animateYearScrolling
-            />
-          </OptionContainer>
-        </Grid>
+const Filters = () => {
+  const { replace, replaceQuery, convertSearchString } = useNavigate();
+  const dispatch = useAppDispatch();
+  const initialState: FilterFormInputs = {
+    startingLocation: 'My address',
+    distance: distances[0].value,
+    gender: genders[1].value,
+    tags: [],
+    startDate: moment().toDate(),
+    endDate: moment().add(7, 'days').toDate(),
+    limit: 9,
+  };
+  const { register, watch, formState: { errors }, setValue } = useForm<FilterFormInputs>({
+    defaultValues: initialState,
+  });
+  const [queryString, setQueryString] = useState('');
+  const [debouncedQueryString] = useDebounce(queryString, 300);
+
+  useEffect(() => {
+    if (debouncedQueryString) dispatch(fromPositions.doFetchPositions({ queryString: debouncedQueryString }));
+  }, [dispatch, debouncedQueryString]);
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      const query = replaceQuery({
+        gender: value.gender,
+        // tags: value.tags?.join(','),
+        address: value.startingLocation,
+        within: value.distance,
+        dayfrom: value.startDate.toISOString(),
+        dayto: value.endDate.toISOString(),
+        limit: value.limit,
+      });
+      replace(homeRoute.path, query);
+      setQueryString(convertSearchString(query));
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, replaceQuery, replace, convertSearchString]);
+
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={4}>
+        <OptionContainer label="Starting Location">
+          <TextField
+            variant="outlined"
+            required
+            {...register('startingLocation')}
+            error={!!errors.startingLocation}
+          />
+        </OptionContainer>
       </Grid>
-    </form>
+      <Grid item xs={4}>
+        <OptionContainer label="Participant Gender">
+          <Select
+            {...register('gender')}
+            value={watch('gender')}
+            error={!!errors.gender}
+            variant="outlined"
+            displayEmpty
+          >
+            {genders.map(gender => (<MenuItem value={gender.value} key={gender.value}>{gender.label}</MenuItem>))}
+          </Select>
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={4}>
+        <OptionContainer label="Start Date">
+          <CcDatePicker
+            value={watch('startDate')}
+            onChange={(date: MaterialUiPickersDate) => setValue('startDate', date?.toDate() || new Date())}
+            animateYearScrolling
+          />
+        </OptionContainer>
+      </Grid>
+
+      <Grid item xs={4}>
+        <OptionContainer label="Distance">
+          <Select
+            {...register('distance')}
+            value={watch('distance')}
+            variant="outlined"
+            displayEmpty
+          >
+            {distances.map(distance =>
+              (<MenuItem value={distance.value} key={distance.value}>{distance.label}</MenuItem>))
+            }
+          </Select>
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={4}>
+        <OptionContainer label="Tags" quickClear>
+          <TagsFilter/>
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={4}>
+        <OptionContainer label="End Date">
+          <CcDatePicker
+            {...register('endDate')}
+            value={watch('endDate')}
+            onChange={(date: MaterialUiPickersDate) => setValue('endDate', date?.toDate() || new Date())}
+            animateYearScrolling
+          />
+        </OptionContainer>
+      </Grid>
+    </Grid>
   );
 };
 

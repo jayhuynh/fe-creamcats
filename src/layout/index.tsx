@@ -7,7 +7,7 @@ import ScrollToTop from '../routes/ScrollToTop';
 
 export const Layout = () => (
   <MuiThemeProvider theme={theme}>
-    <ScrollToTop/>
+    {/*<ScrollToTop/>*/}
     <Header/>
     <Routes routes={routes}/>
     <Footer/>

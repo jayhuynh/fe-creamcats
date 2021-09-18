@@ -13,7 +13,7 @@ const PositionsList = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fromPositions.doFetchPositions());
+    dispatch(fromPositions.doFetchPositions({ queryString: '' }));
   }, [dispatch]);
 
   return (

@@ -2,8 +2,8 @@ import Axios from 'axios';
 
 import { Position } from '../models';
 
-export const getPositions = async () => {
-  const positions = (await Axios.get('/positions')).data;
+export const getPositions = async (queryString: string) => {
+  const positions = (await Axios.get(`/positions?${queryString}`)).data;
   return positions.map(
     (position: any) =>
       ({

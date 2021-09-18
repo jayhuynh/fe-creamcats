@@ -9,6 +9,7 @@ import { PositionService } from '../services';
 import { AppState } from './index';
 
 export const POSITIONS_FEATURE_KEY = 'positions';
+
 interface PositionsState {
   positions: Position[];
   currentPosition: any | null;
@@ -69,14 +70,19 @@ export const createInitialState = (): PositionsState => ({
 
 export const doFetchPositions = createAsyncThunk(
   'positions/fetch',
-  async (data, { rejectWithValue }) => {
+  async (
+    data: {
+      queryString: string;
+    },
+    { rejectWithValue }) => {
     try {
-      const positions = await PositionService.getPositions();
+      const positions = await PositionService.getPositions(data.queryString);
       return {
         positions,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e).toJson());
+      return rejectWithValue(exceptionOf(e)
+        .toJson());
     }
   },
 );
@@ -95,7 +101,8 @@ export const doFetchCurrentPosition = createAsyncThunk(
         position,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e).toJson());
+      return rejectWithValue(exceptionOf(e)
+        .toJson());
     }
   },
 );

@@ -8,7 +8,7 @@ import { SerializedException, exceptionOf, Position, Tag } from '../models';
 import { PositionService } from '../services';
 import { AppState } from './index';
 import moment from 'moment';
-import { FilterFormInputs } from '../pages/home/components/Filters';
+import { FilterFormInputs } from '../pages/home/components/filter/Filters';
 
 export const POSITIONS_FEATURE_KEY = 'positions';
 
@@ -23,16 +23,16 @@ interface PositionsState {
 export const createInitialState = (): PositionsState => ({
   positions: [],
   filters: {
-    address: '277 Bedford Ave, Brooklyn, NY 11211, USA',
-    distance: 10000,
-    gender: 'male',
-    tags: ['Education', 'Young People', 'Community Services'],
-    startDate: moment('2021-01-01T14:48:00.000Z').toDate(),
-    endDate: moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
-    limit: 9,
+    address: '',
+    distance: 0,
+    gender: '',
+    tags: [],
+    startDate: moment().toDate(),
+    endDate: moment().toDate(),
+    limit: 0,
     offset: 0,
-    sort: 'applications',
-    order: 'desc',
+    sort: '',
+    order: '',
   },
   currentPosition: {
     id: 1,

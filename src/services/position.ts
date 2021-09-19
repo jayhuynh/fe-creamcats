@@ -2,7 +2,7 @@ import Axios from 'axios';
 import qs from 'querystring';
 
 import { Position } from '../models';
-import { FilterFormInputs, parseQuery } from '../pages/home/components/Filters';
+import { FilterFormInputs, parseQuery } from '../pages/home/components/filter/Filters';
 
 export const getPositions = async (filters: FilterFormInputs) => {
   const queryString = qs.stringify(parseQuery(filters));

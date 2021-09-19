@@ -4,7 +4,7 @@ import { Fade, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { FilterList } from '@material-ui/icons';
 import Box from '@material-ui/core/Box';
-import Filters from './Filters';
+import Filters from './filter/Filters';
 
 const TitleContainer = () => {
   const [open, setOpen] = useState(false);

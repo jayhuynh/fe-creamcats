@@ -55,7 +55,7 @@ export const useNavigate = <T = any>() => {
       });
     }, [history, location.pathname, convertSearchString]),
     mergeQuery,
-    replaceQuery,
+    replaceQuery: useCallback(replaceQuery, []),
     convertSearchString,
   };
 };

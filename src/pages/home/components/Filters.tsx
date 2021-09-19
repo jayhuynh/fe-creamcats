@@ -8,18 +8,22 @@ import {
   Checkbox,
   TextField,
 } from '@material-ui/core';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
+import { CheckBox, CheckBoxOutlineBlank, MyLocation } from '@material-ui/icons';
 import { CcDatePicker } from '../../../utils';
 import { useSelector } from 'react-redux';
 import { fromPositions, fromTags, useAppDispatch } from '../../../store';
 import { useForm } from 'react-hook-form';
 import { home as homeRoute, useNavigate } from '../../../routes';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 export interface FilterFormInputs {
-  startingLocation: string;
+  startingLocation: {
+    latitude: number | undefined;
+    longitude: number | undefined;
+  };
   distance: number;
   gender?: string;
   tags?: string[];
@@ -35,7 +39,8 @@ export const parseQuery = (filters: FilterFormInputs) => {
   let query = {
     gender: filters.gender,
     tags: filters.tags,
-    address: filters.startingLocation,
+    lng: filters.startingLocation.longitude,
+    lat: filters.startingLocation.latitude,
     within: filters.distance,
     dayfrom: filters.startDate.toISOString(),
     dayto: filters.endDate.toISOString(),
@@ -45,6 +50,7 @@ export const parseQuery = (filters: FilterFormInputs) => {
     order: filters.order,
   };
   if (filters.gender === 'all') delete query.gender;
+  if (!filters.tags || filters.tags?.length === 0) delete query.tags;
   if (!filters.tags || filters.tags?.length === 0) delete query.tags;
   return query;
 };
@@ -152,8 +158,23 @@ const Filters = () => {
           <TextField
             variant="outlined"
             required
-            {...register('startingLocation')}
-            error={!!errors.startingLocation}
+            value={'My address'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <MyLocation
+                    onClick={() => {
+                      navigator.geolocation.getCurrentPosition(position => {
+                        setValue('startingLocation', {
+                          longitude: position.coords.longitude,
+                          latitude: position.coords.latitude,
+                        });
+                      });
+                    }}
+                  />
+                </InputAdornment>
+              ),
+            }}
           />
         </OptionContainer>
       </Grid>

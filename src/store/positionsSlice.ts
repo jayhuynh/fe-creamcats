@@ -9,7 +9,6 @@ import { PositionService } from '../services';
 import { AppState } from './index';
 import moment from 'moment';
 import { FilterFormInputs } from '../pages/home/components/Filters';
-import { QueryConfig, useNavigate } from '../routes';
 
 export const POSITIONS_FEATURE_KEY = 'positions';
 
@@ -24,10 +23,13 @@ interface PositionsState {
 export const createInitialState = (): PositionsState => ({
   positions: [],
   filters: {
-    startingLocation: 'My address',
+    startingLocation: {
+      latitude: 152.9976,
+      longitude: -27.4942,
+    },
     distance: 10000,
     gender: 'male',
-    tags: [],
+    tags: ['Education', 'Young People', 'Community Services'],
     startDate: moment('2021-01-01T14:48:00.000Z').toDate(),
     endDate: moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
     limit: 9,
@@ -139,7 +141,7 @@ const positionsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doFetchPositions.fulfilled, (state, action) => {
-      state.positions = action.payload.positions;
+      state.positions = [ ...action.payload.positions, ...state.positions];
       state.loading = false;
       state.errors = [];
     });

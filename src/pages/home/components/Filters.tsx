@@ -11,25 +11,43 @@ import {
 import { PropsWithChildren, useEffect, useState } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
-import moment from 'moment';
 import { CcDatePicker } from '../../../utils';
 import { useSelector } from 'react-redux';
 import { fromPositions, fromTags, useAppDispatch } from '../../../store';
-import { Tag } from '../../../models';
 import { useForm } from 'react-hook-form';
-import { useDebounce } from 'use-debounce';
 import { home as homeRoute, useNavigate } from '../../../routes';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
-interface FilterFormInputs {
-  startingLocation: string
-  distance: number
-  gender: string
-  tags: Tag[]
+export interface FilterFormInputs {
+  startingLocation: string;
+  distance: number;
+  gender?: string;
+  tags?: string[];
   startDate: Date;
   endDate: Date;
   limit: number;
+  offset: number;
+  sort: string;
+  order: string;
 }
+
+export const parseQuery = (filters: FilterFormInputs) => {
+  let query = {
+    gender: filters.gender,
+    tags: filters.tags,
+    address: filters.startingLocation,
+    within: filters.distance,
+    dayfrom: filters.startDate.toISOString(),
+    dayto: filters.endDate.toISOString(),
+    limit: filters.limit,
+    offset: filters.offset,
+    sort: filters.sort,
+    order: filters.order,
+  };
+  if (filters.gender === 'all') delete query.gender;
+  if (!filters.tags || filters.tags?.length === 0) delete query.tags;
+  return query;
+};
 
 interface OptionContainerInputs {
   label: string
@@ -106,43 +124,26 @@ const TagsFilter = () => {
 };
 
 const Filters = () => {
-  const { replace, replaceQuery, convertSearchString } = useNavigate();
+  const { replace, replaceQuery } = useNavigate();
   const dispatch = useAppDispatch();
-  const initialState: FilterFormInputs = {
-    startingLocation: 'My address',
-    distance: distances[0].value,
-    gender: genders[1].value,
-    tags: [],
-    startDate: moment().toDate(),
-    endDate: moment().add(7, 'days').toDate(),
-    limit: 9,
-  };
+  const filters = useSelector(fromPositions.selectFilters);
   const { register, watch, formState: { errors }, setValue } = useForm<FilterFormInputs>({
-    defaultValues: initialState,
+    defaultValues: {
+      ...filters,
+      offset: 0,
+    },
   });
-  const [queryString, setQueryString] = useState('');
-  const [debouncedQueryString] = useDebounce(queryString, 300);
-
-  useEffect(() => {
-    if (debouncedQueryString) dispatch(fromPositions.doFetchPositions({ queryString: debouncedQueryString }));
-  }, [dispatch, debouncedQueryString]);
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      const query = replaceQuery({
-        gender: value.gender,
-        // tags: value.tags?.join(','),
-        address: value.startingLocation,
-        within: value.distance,
-        dayfrom: value.startDate.toISOString(),
-        dayto: value.endDate.toISOString(),
-        limit: value.limit,
-      });
-      replace(homeRoute.path, query);
-      setQueryString(convertSearchString(query));
+      dispatch(fromPositions.doChangeFilters(value));
     });
     return () => subscription.unsubscribe();
-  }, [watch, replaceQuery, replace, convertSearchString]);
+  }, [watch, dispatch]);
+
+  useEffect(() => {
+    replace(homeRoute.path, replaceQuery(parseQuery(filters)));
+  }, [filters, replaceQuery, replace]);
 
   return (
     <Grid container spacing={3}>

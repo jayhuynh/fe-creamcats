@@ -1,17 +1,21 @@
 import {
   createAsyncThunk,
   createSelector,
-  createSlice,
+  createSlice, PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { SerializedException, exceptionOf, Position } from '../models';
+import { SerializedException, exceptionOf, Position, Tag } from '../models';
 import { PositionService } from '../services';
 import { AppState } from './index';
+import moment from 'moment';
+import { FilterFormInputs } from '../pages/home/components/Filters';
+import { QueryConfig, useNavigate } from '../routes';
 
 export const POSITIONS_FEATURE_KEY = 'positions';
 
 interface PositionsState {
   positions: Position[];
+  filters: FilterFormInputs;
   currentPosition: any | null;
   loading: boolean;
   errors: SerializedException[];
@@ -19,6 +23,18 @@ interface PositionsState {
 
 export const createInitialState = (): PositionsState => ({
   positions: [],
+  filters: {
+    startingLocation: 'My address',
+    distance: 10000,
+    gender: 'male',
+    tags: [],
+    startDate: moment('2021-01-01T14:48:00.000Z').toDate(),
+    endDate: moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
+    limit: 9,
+    offset: 0,
+    sort: 'applications',
+    order: 'desc',
+  },
   currentPosition: {
     id: 1,
     thumbnail: '',
@@ -71,12 +87,11 @@ export const createInitialState = (): PositionsState => ({
 export const doFetchPositions = createAsyncThunk(
   'positions/fetch',
   async (
-    data: {
-      queryString: string;
-    },
-    { rejectWithValue }) => {
+    data,
+    { rejectWithValue, getState }) => {
     try {
-      const positions = await PositionService.getPositions(data.queryString);
+      const state: PositionsState = (getState() as any)[POSITIONS_FEATURE_KEY];
+      const positions = await PositionService.getPositions(state.filters);
       return {
         positions,
       };
@@ -110,7 +125,14 @@ export const doFetchCurrentPosition = createAsyncThunk(
 const positionsSlice = createSlice({
   name: POSITIONS_FEATURE_KEY,
   initialState: createInitialState(),
-  reducers: {},
+  reducers: {
+    doLoadMore: state => {
+      state.filters.offset += state.filters.limit;
+    },
+    doChangeFilters: (state, action: PayloadAction<FilterFormInputs>) => {
+      state.filters = action.payload;
+    },
+  },
   extraReducers: builder => {
     // Fetch position
     builder.addCase(doFetchPositions.pending, state => {
@@ -159,9 +181,15 @@ export const selectPositions = createSelector(
   state => state.positions,
 );
 
+export const selectFilters = createSelector(
+  selectPositionsFeature,
+  state => state.filters,
+);
+
 export const selectCurrentPosition = createSelector(
   selectPositionsFeature,
   state => state.currentPosition,
 );
 
+export const { doLoadMore, doChangeFilters } = positionsSlice.actions;
 export default positionsSlice.reducer;

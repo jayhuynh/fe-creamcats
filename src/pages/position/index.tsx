@@ -249,7 +249,7 @@ function Position() {
 
   useEffect(() => {
     dispatch(fromPositions.doFetchCurrentPosition({ id: Number(positionId) }));
-    dispatch(fromPositions.doFetchPositions({ queryString: '' }));
+    dispatch(fromPositions.doFetchPositions());
   }, [dispatch, positionId]);
   const { brief, carouselItems, createdAt } = position;
 

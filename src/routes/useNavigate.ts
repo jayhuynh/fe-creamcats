@@ -2,7 +2,7 @@ import qs from 'querystring';
 import { useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-type QueryType = string | number | boolean | undefined;
+type QueryType = string | number | boolean | undefined | Array<string>;
 export type QueryDictionary<T = unknown, K extends keyof T = keyof T> = Record<K, QueryType>;
 
 interface MergeQuery<T = unknown> {

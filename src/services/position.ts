@@ -1,8 +1,11 @@
 import Axios from 'axios';
+import qs from 'querystring';
 
 import { Position } from '../models';
+import { FilterFormInputs, parseQuery } from '../pages/home/components/Filters';
 
-export const getPositions = async (queryString: string) => {
+export const getPositions = async (filters: FilterFormInputs) => {
+  const queryString = qs.stringify(parseQuery(filters));
   const positions = (await Axios.get(`/positions?${queryString}`)).data;
   return positions.map(
     (position: any) =>

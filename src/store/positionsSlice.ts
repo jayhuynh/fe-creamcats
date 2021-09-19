@@ -23,10 +23,7 @@ interface PositionsState {
 export const createInitialState = (): PositionsState => ({
   positions: [],
   filters: {
-    startingLocation: {
-      latitude: 152.9976,
-      longitude: -27.4942,
-    },
+    address: '277 Bedford Ave, Brooklyn, NY 11211, USA',
     distance: 10000,
     gender: 'male',
     tags: ['Education', 'Young People', 'Community Services'],

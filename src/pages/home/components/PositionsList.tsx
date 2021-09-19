@@ -10,7 +10,6 @@ import { useDebounce } from 'use-debounce';
 import useDidMountEffect from '../../../utils/useDidMountEffect';
 
 const PositionsList = () => {
-  const [viewAll, setViewAll] = useState(false);
   const positions = useSelector(fromPositions.selectPositions);
   const dispatch = useAppDispatch();
   const filters = useSelector(fromPositions.selectFilters);
@@ -23,7 +22,7 @@ const PositionsList = () => {
   return (
     <>
       <Grid container spacing={3}>
-        {positions.slice(0, 9).map((position, index) => (
+        {positions.map((position, index) => (
             <Grid item xs={4} key={position.id}>
               <Link to={`/positions/${position.id}`} style={{ textDecoration: 'none' }}>
                 <PositionCard

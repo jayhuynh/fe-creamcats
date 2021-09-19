@@ -23,16 +23,16 @@ interface PositionsState {
 export const createInitialState = (): PositionsState => ({
   positions: [],
   filters: {
-    address: '',
-    distance: 0,
-    gender: '',
-    tags: [],
-    startDate: moment().toDate(),
-    endDate: moment().toDate(),
-    limit: 0,
+    address: '77 Sir Fred Schonell Dr, St Lucia QLD 4067, Australia',
+    distance: 10000,
+    gender: 'all',
+    tags: ['Education', 'Young People', 'Community Services'],
+    startDate: moment('2021-01-01T14:48:00.000Z').toDate(),
+    endDate: moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
+    limit: 9,
     offset: 0,
-    sort: '',
-    order: '',
+    sort: 'applications',
+    order: 'desc',
   },
   currentPosition: {
     id: 1,
@@ -128,6 +128,9 @@ const positionsSlice = createSlice({
     doLoadMore: state => {
       state.filters.offset += state.filters.limit;
     },
+    doClear: state => {
+      state.positions = [];
+    },
     doChangeFilters: (state, action: PayloadAction<FilterFormInputs>) => {
       state.filters = action.payload;
     },
@@ -190,5 +193,5 @@ export const selectCurrentPosition = createSelector(
   state => state.currentPosition,
 );
 
-export const { doLoadMore, doChangeFilters } = positionsSlice.actions;
+export const { doLoadMore, doChangeFilters, doClear } = positionsSlice.actions;
 export default positionsSlice.reducer;

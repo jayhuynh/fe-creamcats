@@ -3,28 +3,30 @@ import HighlightBanner from './components/HighlightBanner';
 import TitleContainer from './components/TitleContainer';
 import PositionsList from './components/PositionsList';
 import { useQuery } from '../../routes';
-import { useEffect } from 'react';
 import { fromPositions, useAppDispatch } from '../../store';
 import moment from 'moment';
 import { FilterFormInputs } from './components/filter/Filters';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 const Home = () => {
   const { queryDictionary } = useQuery();
   const dispatch = useAppDispatch();
+  const filter = useSelector(fromPositions.selectFilters);
 
   useEffect(() => {
     const query = queryDictionary();
     dispatch(fromPositions.doChangeFilters({
-      address: query.address ? query.address : '277 Bedford Ave, Brooklyn, NY 11211, USA',
-      distance: query.within ? Number(query.within) : 10000,
-      gender: query.gender ? query.gender : 'all',
-      tags: query.tags ? query.tags : ['Education', 'Young People', 'Community Services'],
-      startDate: query.dayfrom ? moment(query.dayfrom as string).toDate() : moment('2021-01-01T14:48:00.000Z').toDate(),
-      endDate: query.dayto ? moment(query.dayto as string).toDate() : moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
-      limit: query.limit ? Number(query.limit) : 9,
-      offset: query.offset ? Number(query.offset) : 0,
-      sort: query.sort ? query.sort : 'applications',
-      order: query.order ? query.order : 'desc',
+      address: query.address ? query.address : filter.address,
+      distance: query.within ? Number(query.within) : filter.distance,
+      gender: query.gender ? query.gender : filter.gender,
+      tags: query.tags ? query.tags : filter.tags,
+      startDate: query.dayfrom ? moment(query.dayfrom as string).toDate() : filter.startDate,
+      endDate: query.dayto ? moment(query.dayto as string).toDate() : filter.endDate,
+      limit: query.limit ? Number(query.limit) : filter.limit,
+      offset: query.offset ? Number(query.offset) : filter.offset,
+      sort: query.sort ? query.sort : filter.sort,
+      order: query.order ? query.order : filter.order,
     } as FilterFormInputs));
   }, [queryDictionary, dispatch]);
 

@@ -17,6 +17,7 @@ import { home as homeRoute, useNavigate } from '../../../../routes';
 import { Tag } from '../../../../models';
 import TagsMultiSelect from './components/TagsMultiSelect';
 import OptionContainer from './components/OptionContainer';
+import useDidMountEffect from '../../../../utils/useDidMountEffect';
 
 export interface FilterFormInputs {
   address: string;
@@ -32,7 +33,7 @@ export interface FilterFormInputs {
 }
 
 export const parseQuery = (filters: FilterFormInputs) => {
-  let query = {
+  let query: any = {
     gender: filters.gender,
     tags: filters.tags,
     address: filters.address,
@@ -46,6 +47,11 @@ export const parseQuery = (filters: FilterFormInputs) => {
   };
   if (filters.gender === 'all') delete query.gender;
   if (!filters.tags || filters.tags?.length === 0) delete query.tags;
+
+  // Remove temporary because backend bug
+  delete query.sort;
+  delete query.order;
+
   return query;
 };
 
@@ -74,12 +80,14 @@ const Filters = () => {
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
+      value.offset = 0;
+      dispatch(fromPositions.doClear());
       dispatch(fromPositions.doChangeFilters(value));
     });
     return () => subscription.unsubscribe();
   }, [watch, dispatch]);
 
-  useEffect(() => {
+  useDidMountEffect(() => {
     replace(homeRoute.path, replaceQuery(parseQuery(filters)));
   }, [filters, replaceQuery, replace]);
 

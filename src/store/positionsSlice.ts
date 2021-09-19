@@ -1,16 +1,20 @@
 import {
   createAsyncThunk,
   createSelector,
-  createSlice,
+  createSlice, PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { SerializedException, exceptionOf, Position } from '../models';
+import { SerializedException, exceptionOf, Position, Tag } from '../models';
 import { PositionService } from '../services';
 import { AppState } from './index';
+import moment from 'moment';
+import { FilterFormInputs } from '../pages/home/components/filter/Filters';
 
 export const POSITIONS_FEATURE_KEY = 'positions';
+
 interface PositionsState {
   positions: Position[];
+  filters: FilterFormInputs;
   currentPosition: any | null;
   loading: boolean;
   errors: SerializedException[];
@@ -18,6 +22,18 @@ interface PositionsState {
 
 export const createInitialState = (): PositionsState => ({
   positions: [],
+  filters: {
+    address: '77 Sir Fred Schonell Dr, St Lucia QLD 4067, Australia',
+    distance: 10000,
+    gender: 'all',
+    tags: ['Education', 'Young People', 'Community Services'],
+    startDate: moment('2021-01-01T14:48:00.000Z').toDate(),
+    endDate: moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
+    limit: 9,
+    offset: 0,
+    sort: 'applications',
+    order: 'desc',
+  },
   currentPosition: {
     id: 1,
     thumbnail: '',
@@ -69,14 +85,18 @@ export const createInitialState = (): PositionsState => ({
 
 export const doFetchPositions = createAsyncThunk(
   'positions/fetch',
-  async (data, { rejectWithValue }) => {
+  async (
+    data,
+    { rejectWithValue, getState }) => {
     try {
-      const positions = await PositionService.getPositions();
+      const state: PositionsState = (getState() as any)[POSITIONS_FEATURE_KEY];
+      const positions = await PositionService.getPositions(state.filters);
       return {
         positions,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e).toJson());
+      return rejectWithValue(exceptionOf(e)
+        .toJson());
     }
   },
 );
@@ -95,7 +115,8 @@ export const doFetchCurrentPosition = createAsyncThunk(
         position,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e).toJson());
+      return rejectWithValue(exceptionOf(e)
+        .toJson());
     }
   },
 );
@@ -103,14 +124,24 @@ export const doFetchCurrentPosition = createAsyncThunk(
 const positionsSlice = createSlice({
   name: POSITIONS_FEATURE_KEY,
   initialState: createInitialState(),
-  reducers: {},
+  reducers: {
+    doLoadMore: state => {
+      state.filters.offset += state.filters.limit;
+    },
+    doClear: state => {
+      state.positions = [];
+    },
+    doChangeFilters: (state, action: PayloadAction<FilterFormInputs>) => {
+      state.filters = action.payload;
+    },
+  },
   extraReducers: builder => {
     // Fetch position
     builder.addCase(doFetchPositions.pending, state => {
       state.loading = true;
     });
     builder.addCase(doFetchPositions.fulfilled, (state, action) => {
-      state.positions = action.payload.positions;
+      state.positions = [ ...action.payload.positions, ...state.positions];
       state.loading = false;
       state.errors = [];
     });
@@ -152,9 +183,15 @@ export const selectPositions = createSelector(
   state => state.positions,
 );
 
+export const selectFilters = createSelector(
+  selectPositionsFeature,
+  state => state.filters,
+);
+
 export const selectCurrentPosition = createSelector(
   selectPositionsFeature,
   state => state.currentPosition,
 );
 
+export const { doLoadMore, doChangeFilters, doClear } = positionsSlice.actions;
 export default positionsSlice.reducer;

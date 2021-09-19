@@ -2,7 +2,7 @@ import qs from 'querystring';
 import { useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-type QueryType = string | number | boolean | undefined;
+type QueryType = string | number | boolean | undefined | Array<string>;
 export type QueryDictionary<T = unknown, K extends keyof T = keyof T> = Record<K, QueryType>;
 
 interface MergeQuery<T = unknown> {
@@ -19,7 +19,7 @@ function isReplaceQuery(arg: any): arg is ReplaceQuery {
   return arg.type === 'REPLACE_QUERY';
 }
 
-type QueryConfig<T> = MergeQuery<T> | ReplaceQuery<T>;
+export type QueryConfig<T> = MergeQuery<T> | ReplaceQuery<T>;
 
 export const useNavigate = <T = any>() => {
   const history = useHistory();
@@ -55,6 +55,7 @@ export const useNavigate = <T = any>() => {
       });
     }, [history, location.pathname, convertSearchString]),
     mergeQuery,
-    replaceQuery,
+    replaceQuery: useCallback(replaceQuery, []),
+    convertSearchString,
   };
 };

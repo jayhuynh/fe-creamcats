@@ -19,7 +19,7 @@ export const getPosts = async () => {
 const mockPosts: any[] = [
   {
     id: 1,
-    postCover:
+    thumbnail:
       'https://images.squarespace-cdn.com/content/v1/5919021a1e5b6c940741bc9b/1576177860363-WGW3ZZ7WX7R5YOLMXZKJ/MT+TARANAKI+-+AGORAjpg.jpg',
     title: 'Resident Admissions Volunteer',
     content:
@@ -27,7 +27,7 @@ const mockPosts: any[] = [
   },
   {
     id: 2,
-    postCover:
+    thumbnail:
       'https://www.intheblack.com/-/media/intheblack/allimages/magazine-2021/04-april/empty-city-street.jpg?rev=d3b55cf125a14112bcb2d8b7054591d4',
     title: 'Helping orphan children',
     content:
@@ -35,7 +35,7 @@ const mockPosts: any[] = [
   },
   {
     id: 3,
-    postCover:
+    thumbnail:
       'https://www.brisbane.qld.gov.au/sites/default/files/styles/hero_image/public/images/2021-03/1600x900-sbp-brisbane-sign.jpg?itok=jiR58xQI',
     title: 'We are a family',
     content:
@@ -48,7 +48,7 @@ export const getMockPosts = async () => {
     (post: any) =>
       ({
         id: post.id,
-        title: post.id,
+        title: post.title,
         postCover: post.thumbnail,
         content: post.content,
       } as Post),

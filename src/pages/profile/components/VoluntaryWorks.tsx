@@ -9,7 +9,7 @@ export default function VoluntaryWorks(props: any) {
     return (
       <Grid key={item.title} item xs={4}>
         <PositionCard
-          coverURL={item.posCover}
+          coverURL={item.thumbnail}
           title={item.title}
           usage="personal"
           status={item.status}

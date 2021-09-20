@@ -12,7 +12,7 @@ export default function MyPosts(props: any) {
           key={item.title}
           coverURL={item.postCover}
           title={item.title}
-          description={item.description}
+          description={item.content}
         />
       </Grid>
     );

@@ -6,6 +6,8 @@ import rootReducer, {
   fromPositions,
   fromTags,
   fromProfile,
+  fromPosts,
+  fromApplications,
 } from './rootReducer';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -21,6 +23,7 @@ export {
   fromPositions,
   fromTags,
   fromProfile,
+  fromPosts,
+  fromApplications,
 };
 export default store;
-

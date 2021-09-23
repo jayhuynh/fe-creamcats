@@ -3,7 +3,9 @@ import Axios from 'axios';
 import { Post } from '../models';
 
 export const getPosts = async () => {
-  const posts: any = await Axios.get('/posts/me');
+  const posts: any = await Axios.get('/posts/me', {
+    headers: { Authorization: 'Bearer {my_token}' },
+  });
   return posts.map(
     (post: any) =>
       ({

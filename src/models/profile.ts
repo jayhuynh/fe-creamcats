@@ -1,7 +1,5 @@
-import { BaseModel } from './base';
-
-export interface Profile extends BaseModel {
-  id: number;
+export interface Profile {
+  id?: number;
   email?: string;
   fullname: string;
   gender: string;

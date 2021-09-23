@@ -3,7 +3,11 @@ import Axios from 'axios';
 import { Profile } from '../models';
 
 export const getProfile = async () => {
-  const profile: any = (await Axios.get('/users/me')).data;
+  const profile: any = (
+    await Axios.get('/users/me', {
+      headers: { Authorization: 'Bearer {my_token}' },
+    })
+  ).data;
   return {
     id: profile.id,
     email: profile.id,
@@ -24,3 +28,12 @@ export const getMockProfile = async () =>
     age: 24,
     password: 'AnonymousTesterAl3x',
   } as Profile);
+
+export const updateProfile = async (data: Profile) => {
+  const response: any = (
+    await Axios.post('/users/me', data, {
+      headers: { Authorization: 'Bearer {my_token}' },
+    })
+  ).data;
+  return response;
+};

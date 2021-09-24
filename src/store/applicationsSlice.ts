@@ -23,9 +23,16 @@ export const createInitialState = (): ApplicationsState => ({
 
 export const doFetchApplications = createAsyncThunk(
   'applications/fetch',
-  async (data, { rejectWithValue }) => {
+  async (
+    data: {
+      statusFilter: string;
+    },
+    { rejectWithValue },
+  ) => {
     try {
-      const applications = await ApplicationService.getMockApplications(); // Won't be mock once token is ready
+      const applications = await ApplicationService.getMockApplications(
+        data.statusFilter,
+      ); // Won't be mock once token is ready
       return {
         applications,
       };

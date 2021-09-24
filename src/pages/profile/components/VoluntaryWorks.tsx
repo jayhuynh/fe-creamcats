@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core';
 
 import PositionCard from '../../../utils/position-card';
+import { VoluntaryWorksFilter } from './index';
 
 export default function VoluntaryWorks(props: any) {
   const { works } = props;
@@ -21,8 +22,13 @@ export default function VoluntaryWorks(props: any) {
   });
 
   return (
-    <Grid container wrap="wrap" spacing={4}>
-      {positionCards}
+    <Grid container direction="column" spacing={4}>
+      <VoluntaryWorksFilter />
+      <Grid item>
+        <Grid container wrap="wrap" spacing={4}>
+          {positionCards}
+        </Grid>
+      </Grid>
     </Grid>
   );
 }

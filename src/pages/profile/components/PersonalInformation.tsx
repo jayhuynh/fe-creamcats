@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Grid, Card, Avatar, Typography, Button } from '@material-ui/core';
-import LoadingButton from '@material-ui/core';
+import {
+  Grid,
+  Card,
+  Avatar,
+  Typography,
+  Button,
+  CircularProgress,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { ProfileService } from '../../../services';
@@ -67,6 +73,7 @@ const useStyles = makeStyles(() => ({
     marginTop: 4,
   },
   editProfileButton: {
+    height: 36,
     backgroundColor: '#fa6980',
     color: 'white',
   },
@@ -74,6 +81,9 @@ const useStyles = makeStyles(() => ({
   cancelButton: {
     backgroundColor: '#f6f8f9',
     color: 'darkgrey',
+  },
+  circularProgress: {
+    color: 'white',
   },
 }));
 
@@ -85,10 +95,17 @@ export default function PersonalInformation(props: any) {
 
   const onSubmit = async (data: any) => {
     setIsSaving(true);
-    const response = await ProfileService.updateProfile(data);
-    console.log(response);
-    setIsSaving(false);
-    setIsEditing(false);
+    try {
+      const response = await ProfileService.updateProfile(data);
+      console.log(response);
+      setIsSaving(false);
+      setIsEditing(false);
+    } catch (error) {
+      setTimeout(() => {
+        setIsSaving(false);
+      }, 3000);
+      console.log(error);
+    }
   };
 
   const { avatar, fullname, gender, age } = props.personalInformations;
@@ -180,8 +197,18 @@ export default function PersonalInformation(props: any) {
               {isEditing ? (
                 <Grid container direction="row" spacing={3}>
                   <Grid item xs>
-                    <Button className={classes.editProfileButton} type="submit">
-                      Save
+                    <Button
+                      className={classes.editProfileButton}
+                      disabled={isSaving}
+                      type="submit"
+                    >
+                      {isSaving && (
+                        <CircularProgress
+                          size={14}
+                          className={classes.circularProgress}
+                        />
+                      )}
+                      {!isSaving && 'Save'}
                     </Button>
                   </Grid>
                   <Grid item xs>

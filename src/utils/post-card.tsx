@@ -9,6 +9,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import ShareIcon from '@material-ui/icons/Share';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import TimeTag from './time-tag';
 
@@ -65,7 +66,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
   },
   iconArea: {
-    width: '60%',
+    width: '50%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -122,6 +123,9 @@ export default function PostCard(props: any) {
             </Button>
             <Button className={classes.button} startIcon={<ShareIcon />}>
               Share
+            </Button>
+            <Button className={classes.button} startIcon={<DeleteIcon />}>
+              Delete
             </Button>
           </section>
         </CardContent>

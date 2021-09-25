@@ -89,7 +89,7 @@ const mockApplications: any[] = [
     status: 'APPLIED',
     description:
       'Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat. ',
-    releaseTime: '2021-09-11 00:00:00', //This should be calculated in future, e.g. use the current time minus the release time
+    releaseTime: '2021-09-11 00:00:00',
   },
   {
     id: 8,

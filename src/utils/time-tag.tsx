@@ -37,7 +37,7 @@ function tagText(
       //Parsing time and calculate the past time with moment
       return moment(time).fromNow() + (extraText === '' ? '' : ' ' + extraText);
     case 'personal':
-      if (status === 'Applied') {
+      if (status === 'Applied' || status === 'Posted') {
         return (
           status +
           ' ' +

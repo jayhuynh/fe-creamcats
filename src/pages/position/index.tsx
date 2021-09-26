@@ -34,15 +34,6 @@ const useStyles = makeStyles({
     width: '75%',
     marginBottom: 30,
   },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    fontStretch: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 'normal',
-    textAlign: 'left',
-    color: '#202124',
-  },
   relatedPositionsGrid: {
     width: '70%',
     marginBottom: 30,
@@ -60,13 +51,6 @@ const useStyles = makeStyles({
 });
 
 //---------------- Mock data ----------------
-
-//This mock data reamains because I didn't found any suitable data from the API
-const subtitle: any = {
-  title: 'Small Title - Subtitle',
-  releaseTime: '2021-08-26 23:09:01',
-  extraText: 'by Organisation',
-};
 
 //This mock data remains untill I realise the seperate CSS/LESS file to control the dangerous HTML's style
 const positionDetail: any = (
@@ -251,7 +235,27 @@ function Position() {
     dispatch(fromPositions.doFetchCurrentPosition({ id: Number(positionId) }));
     dispatch(fromPositions.doFetchPositions());
   }, [dispatch, positionId]);
-  const { brief, carouselItems, createdAt } = position;
+
+  const {
+    location,
+    startAt,
+    endAt,
+    createdAt,
+    requirements,
+    carouselItems,
+    numberOfApplicants,
+  } = position;
+
+  const briefInformations = {
+    location: location,
+    startAt: startAt,
+    endAt: endAt,
+    typesOfWork: ['Children care', 'Charity'],
+    numberOfApplicants: numberOfApplicants,
+    requirements: requirements,
+    organizationName: 'Test Organization',
+    createdAt: createdAt,
+  };
 
   console.log('This is the detail of position ' + positionId);
 
@@ -276,16 +280,7 @@ function Position() {
         >
           <Grid item xs={4}>
             <Grid container direction="column" spacing={3}>
-              <Brief brief={brief} />
-              <Grid item>
-                <Divider />
-              </Grid>
-              <Grid item>
-                <Typography className={classes.subtitle}>
-                  {subtitle.title}
-                </Typography>
-                <TimeTag time={createdAt} extraText={subtitle.extraText} />
-              </Grid>
+              <Brief briefInformations={briefInformations} />
             </Grid>
           </Grid>
           <Grid item>

@@ -4,15 +4,14 @@ import {
   CardContent,
   CardMedia,
   CardActionArea,
-  CardActions,
   Button,
-  Link,
 } from '@material-ui/core';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import PublicIcon from '@material-ui/icons/Public';
 import { makeStyles } from '@material-ui/core/styles';
+import EditIcon from '@material-ui/icons/Edit';
+import ShareIcon from '@material-ui/icons/Share';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import TimeTag from './time-tag';
 
 const useStyles = makeStyles({
   card: {
@@ -67,7 +66,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
   },
   iconArea: {
-    width: '35%',
+    width: '50%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -79,10 +78,9 @@ const useStyles = makeStyles({
     color: '#b4b9bf',
   },
   button: {
-    width: 130,
     height: 40,
-    backgroundColor: '#fa6980',
-    color: 'white',
+    backgroundColor: 'white',
+    fontSize: 14,
   },
 });
 
@@ -96,7 +94,7 @@ const useStyles = makeStyles({
 export default function PostCard(props: any) {
   let { coverURL } = props;
   const classes = useStyles();
-  const { title, usage, description } = props;
+  const { title, description, time } = props;
 
   coverURL =
     typeof coverURL === 'undefined'
@@ -118,20 +116,17 @@ export default function PostCard(props: any) {
           <Typography className={classes.description}>{description}</Typography>
           <section className={classes.postActions}>
             <section className={classes.iconArea}>
-              <Link href="#">
-                <InstagramIcon className={classes.icons} />
-              </Link>
-              <Link href="#">
-                <TwitterIcon className={classes.icons} />
-              </Link>
-              <Link href="#">
-                <FacebookIcon className={classes.icons} />
-              </Link>
-              <Link href="#">
-                <PublicIcon className={classes.icons} />
-              </Link>
+              <TimeTag usage="personal" time={time} status="Posted" />
             </section>
-            <Button className={classes.button}>EDIT</Button>
+            <Button className={classes.button} startIcon={<EditIcon />}>
+              Edit
+            </Button>
+            <Button className={classes.button} startIcon={<ShareIcon />}>
+              Share
+            </Button>
+            <Button className={classes.button} startIcon={<DeleteIcon />}>
+              Delete
+            </Button>
           </section>
         </CardContent>
       </CardActionArea>

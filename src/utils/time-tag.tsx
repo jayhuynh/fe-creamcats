@@ -37,12 +37,19 @@ function tagText(
       //Parsing time and calculate the past time with moment
       return moment(time).fromNow() + (extraText === '' ? '' : ' ' + extraText);
     case 'personal':
-      if (status === 'Applied') {
+      if (status === 'Applied' || status === 'Posted') {
         return (
           status +
           ' ' +
           moment(time).fromNow() +
           (extraText === '' ? '' : ' ' + extraText)
+        );
+      } else if (status === 'Pending' || status === 'Rejected') {
+        return (
+          status +
+          ' - Applied ' +
+          moment(time).fromNow() +
+          (extraText === '' ? ' ' : ' ' + extraText)
         );
       } else {
         return status;
@@ -50,6 +57,13 @@ function tagText(
   }
 }
 
+function statusParse(status: string) {
+  if (status === 'ONGOING') {
+    return 'On-going';
+  } else {
+    return status.slice(0, 1).toUpperCase() + status.slice(1).toLowerCase();
+  }
+}
 /**
  * This component calaulate the past time according to the release time
  * @param {string} [usage] This should be "public" or "personal", default as "public"
@@ -61,8 +75,10 @@ function tagText(
  */
 export default function TimeTag(props: any) {
   const classes = useStyles();
+
   let { usage, time, extraText, color, status } = props;
 
+  status = statusParse(status);
   extraText = typeof extraText === 'undefined' ? '' : extraText;
   color = typeof color === 'undefined' ? '#cbd0d3' : extraText;
 

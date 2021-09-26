@@ -1,5 +1,9 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Divider, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import moment from 'moment';
+
+import TimeTag from '../../../utils/time-tag';
 
 const useStyles = makeStyles({
   briefTitle: {
@@ -20,6 +24,18 @@ const useStyles = makeStyles({
     textAlign: 'left',
     color: '#a6adb4',
   },
+  chipRootGrid: {
+    paddingTop: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 'normal',
+    textAlign: 'left',
+    color: '#202124',
+  },
 });
 
 /**
@@ -29,17 +45,67 @@ const useStyles = makeStyles({
  * data fetched from the back-end
  */
 export default function Brief(props: any) {
-  const { brief } = props;
+  const {
+    location,
+    startAt,
+    endAt,
+    createdAt,
+    typesOfWork,
+    requirements,
+    organizationName,
+  } = props.briefInformations;
   const classes = useStyles();
 
-  return brief.map((item: any) => {
-    return (
-      <Grid item key={item.type}>
-        <Typography className={classes.briefTitle}>{item.type}</Typography>
+  return (
+    <Grid container direction="column" spacing={3}>
+      <Grid item>
+        <Typography className={classes.briefTitle}>Location</Typography>
+        <Typography className={classes.briefContent}>{location}</Typography>
+      </Grid>
+      <Grid item>
+        <Typography className={classes.briefTitle}>Duration</Typography>
         <Typography className={classes.briefContent}>
-          {typeof item.content === 'undefined' ? 'Unknown' : item.content}
+          {moment(startAt).format('DD/MM/YYYY') +
+            ' - ' +
+            moment(endAt).format('DD/MM/YYYY')}
         </Typography>
       </Grid>
-    );
-  });
+      <Grid item>
+        <Typography className={classes.briefTitle}>Tags</Typography>
+        <Typography className={classes.briefContent}>
+          <Grid
+            container
+            direction="row"
+            spacing={1}
+            className={classes.chipRootGrid}
+          >
+            {typesOfWork.map((tag: string) => (
+              <Grid item>
+                <Chip key={tag} label={tag} />
+              </Grid>
+            ))}
+          </Grid>
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography className={classes.briefTitle}>
+          Number of applicants
+        </Typography>
+        <Typography className={classes.briefContent}>45</Typography>
+      </Grid>
+      <Grid item>
+        <Typography className={classes.briefTitle}>
+          Other requirements
+        </Typography>
+        <Typography className={classes.briefContent}>{requirements}</Typography>
+      </Grid>
+      <Grid item>
+        <Divider />
+      </Grid>
+      <Grid item>
+        <Typography className={classes.subtitle}>{organizationName}</Typography>
+        <TimeTag time={createdAt} />
+      </Grid>
+    </Grid>
+  );
 }

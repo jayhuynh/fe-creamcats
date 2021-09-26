@@ -2,7 +2,10 @@ import Axios from 'axios';
 import qs from 'querystring';
 
 import { Position } from '../models';
-import { FilterFormInputs, parseQuery } from '../pages/home/components/filter/Filters';
+import {
+  FilterFormInputs,
+  parseQuery,
+} from '../pages/home/components/filter/Filters';
 
 export const getPositions = async (filters: FilterFormInputs) => {
   const queryString = qs.stringify(parseQuery(filters));
@@ -25,7 +28,7 @@ export const getPositions = async (filters: FilterFormInputs) => {
 export const getCurrentPosition = async (id: number) => {
   let currentPosition: any = {};
   let currentEvent: any = {};
-  let currentOrganization = { name: 'Placeholder' };
+  let organizationName = 'Unknown';
 
   //Is using promise right in here? Or I should create another fetch function and combine the data in UI?
   await new Promise(async resolve => {
@@ -35,59 +38,32 @@ export const getCurrentPosition = async (id: number) => {
     currentEvent = (await Axios.get(`/events/${eventId}`)).data;
   });
 
-  // Also need organization API here to fetch the organization name
+  console.log(currentPosition);
+
+  //   {
+  //     "id": 1,
+  //     "name": "Drive for Life",
+  //     "desc": "Atque possimus et ea et voluptas quos est explicabo ut. Repellendus quidem vel quo nisi eos. Ea itaque et. Veritatis molestias sint accusamus officia qui commodi molestiae.",
+  //     "gallery": [],
+  //     "startTime": "2021-09-26T15:46:31.623Z",
+  //     "endTime": "2021-09-28T06:23:31.007Z",
+  //     "location": "690, Gympie Road, LAWNTON QLD 4501",
+  //     "organizationId": 1
+  // }
 
   return {
     id: currentPosition.id,
-    thumbnail: currentPosition.thumbnail,
     name: currentPosition.name,
-    overview: currentPosition.desc,
-    carouselItems: currentEvent.gallery,
-    brief: [
-      {
-        type: 'Location',
-        content: currentEvent.location,
-      },
-      {
-        type: 'Type of work',
-        content: currentPosition.typesOfWork.join(' & '),
-      },
-      {
-        type: 'Commitment',
-        content: currentPosition.commitment,
-      },
-      {
-        type: 'Training',
-        content: currentPosition.training,
-      },
-      {
-        type: 'Time required',
-        content: currentPosition.timeRequired,
-      },
-      {
-        type: 'Number of applicants',
-        content:
-          typeof currentPosition.numberOfApplicants === 'undefined'
-            ? undefined
-            : currentPosition.numberOfApplicants + ' people',
-      },
-      {
-        type: 'Others',
-        content: currentPosition.others,
-      },
-    ],
-    createdAt: currentPosition.timeCreated,
-    eventId: currentPosition.eventId,
-
-    // Attribute(s) below are absent in the API
-    subtitle: currentPosition.subtitle,
-    organization: currentOrganization.name,
-    description: currentPosition.description,
-
-    //Attribute(s) below I don't know what for
+    description: currentPosition.desc,
     requirements: currentPosition.requirements,
-
-    //Attribute(s) below is required by Position interface (?)
-    typesOfWork: currentPosition.typesOfWork,
+    createdAt: currentPosition.timeCreated,
+    thumbnail: currentPosition.thumbnail,
+    eventId: currentPosition.eventId,
+    location: currentEvent.location,
+    //typesOfWork: currentPosition.typesOfWork,
+    carouselItems: currentEvent.gallery,
+    startAt: currentEvent.startTime,
+    endAt: currentEvent.endTime,
+    numberOfApplicants: 45,
   };
 };

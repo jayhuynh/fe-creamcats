@@ -41,36 +41,6 @@ export const createInitialState = (): PositionsState => ({
     overview: '',
     releaseTime: new Date(),
     carousel: [],
-    brief: [
-      {
-        type: 'Location',
-        content: 'Unknown',
-      },
-      {
-        type: 'Type of work',
-        content: 'Unknown',
-      },
-      {
-        type: 'Commitment',
-        content: 'Unknown',
-      },
-      {
-        type: 'Training',
-        content: 'Unknown',
-      },
-      {
-        type: 'Time required',
-        content: 'Unknown',
-      },
-      {
-        type: 'Number of applicants',
-        content: 'Unknown',
-      },
-      {
-        type: 'Others',
-        content: 'Unknown',
-      },
-    ],
     eventId: 1,
     subtitle: '',
     organization: '',

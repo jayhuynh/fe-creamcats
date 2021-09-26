@@ -27,6 +27,11 @@ const useStyles = makeStyles({
   chipRootGrid: {
     paddingTop: 8,
   },
+  chip: {
+    backgroundColor: '#f6f8f9',
+    border: '1px solid #a6adb4',
+    color: '#a6adb4',
+  },
   subtitle: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -81,7 +86,7 @@ export default function Brief(props: any) {
           >
             {typesOfWork.map((tag: string) => (
               <Grid item>
-                <Chip key={tag} label={tag} />
+                <Chip key={tag} label={tag} className={classes.chip} />
               </Grid>
             ))}
           </Grid>

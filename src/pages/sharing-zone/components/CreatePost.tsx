@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { CcDropZone, DialogTitle } from '../../../utils';
+import Editor from '../../../utils/Editor';
 
 
 const useStyles = makeStyles(theme => ({
@@ -23,6 +24,11 @@ const useStyles = makeStyles(theme => ({
   button: {
     border: '2px solid lightgrey',
     borderRadius: 6,
+  },
+  editor: {
+    '.ck-editor__editable_inline': {
+      'min-height': '500px',
+    },
   },
 }));
 
@@ -99,18 +105,8 @@ export const CreatePost = () => {
                     error={!!errors.title}
                   />
                 </Box>
-                <Box width={0.70}>
-                  <TextField
-                    variant="outlined"
-                    fullWidth
-                    required
-                    multiline
-                    rows={15}
-                    margin="normal"
-                    label="Content"
-                    {...register('body')}
-                    error={!!errors.body}
-                  />
+                <Box width={0.70} className={classes.editor}>
+                  <Editor/>
                 </Box>
                 <Box mt={2} width={0.70} marginBottom={2}>
                   <Grid

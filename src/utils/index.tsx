@@ -1,3 +1,11 @@
 import CcDatePicker from './CcDatePicker';
+import CcDropZone from './CcDropZone';
+import DialogTitle from './DialogTitle';
+import CcImageList from './CcImageList';
 
-export { CcDatePicker };
+export {
+  CcDatePicker,
+  CcDropZone,
+  DialogTitle,
+  CcImageList,
+};

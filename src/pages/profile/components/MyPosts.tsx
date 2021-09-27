@@ -3,6 +3,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
 import PostCard from '../../../utils/post-card';
+import CreatePost from '../../sharing-zone/components/CreatePost';
 
 const useStyles = makeStyles({
   button: {
@@ -32,9 +33,7 @@ export default function MyPosts(props: any) {
   return (
     <Grid container direction="column" spacing={4}>
       <Grid item xs>
-        <Button className={classes.button} startIcon={<AddIcon />}>
-          Create a new post
-        </Button>
+        <CreatePost/>
       </Grid>
       {postCards}
     </Grid>

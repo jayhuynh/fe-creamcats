@@ -9,7 +9,7 @@ import {
 
 export const getPositions = async (filters: FilterFormInputs) => {
   const queryString = qs.stringify(parseQuery(filters));
-  const positions = (await Axios.get(`/positions?${queryString}`)).data;
+  const positions = (await Axios.get(`/positions?${queryString}`)).data.data;
   return positions.map(
     (position: any) =>
       ({

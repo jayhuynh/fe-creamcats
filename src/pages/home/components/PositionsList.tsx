@@ -29,7 +29,7 @@ const PositionsList = () => {
                   coverURL={position.thumbnail}
                   title={position.name}
                   description={position.description}
-                  releaseTime={position.createdAt}
+                  time={position.createdAt}
                 />
               </Link>
             </Grid>

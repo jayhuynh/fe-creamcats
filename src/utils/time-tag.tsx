@@ -61,7 +61,7 @@ function statusParse(status: string) {
   if (status === 'ONGOING') {
     return 'On-going';
   } else {
-    return status.slice(0, 1).toUpperCase() + status.slice(1).toLowerCase();
+    return status ? status.slice(0, 1).toUpperCase() + status.slice(1).toLowerCase() : '';
   }
 }
 /**

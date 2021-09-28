@@ -18,6 +18,7 @@ import { QueryDictionary } from './useNavigate';
 import Position from '../pages/position';
 import Profile from '../pages/profile';
 import NotFound from '../pages/not-found';
+import SharingZone from '../pages/sharing-zone';
 
 export interface RouteConfig extends RouteProps {
   path: string;
@@ -108,10 +109,16 @@ export const profile: RouteConfig = {
   component: Profile,
 };
 
+export const sharingZone: RouteConfig = {
+  path: '/sharing-zone',
+  component: SharingZone,
+};
+
 export const notfound: RouteConfig = {
   path: '/*',
   component: NotFound,
 };
+
 
 const routes: RouteConfig[] = [
   {
@@ -122,6 +129,7 @@ const routes: RouteConfig[] = [
   home,
   position,
   profile,
+  sharingZone,
   notfound,
 ];
 

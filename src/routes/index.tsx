@@ -11,7 +11,6 @@ import {
 import qs from 'querystring';
 
 import ProtectedRoute from './ProtectedRoute';
-import Layout from '../layout';
 import Login from '../pages/login';
 import Home from '../pages/home';
 import { QueryDictionary } from './useNavigate';
@@ -19,6 +18,7 @@ import Position from '../pages/position';
 import Profile from '../pages/profile';
 import NotFound from '../pages/not-found';
 import SharingZone from '../pages/sharing-zone';
+import Test from '../pages/test';
 
 export interface RouteConfig extends RouteProps {
   path: string;
@@ -121,6 +121,10 @@ export const notfound: RouteConfig = {
   component: NotFound,
 };
 
+export const test: RouteConfig = {
+  path: '/test',
+  component: Test,
+};
 
 const routes: RouteConfig[] = [
   {
@@ -133,6 +137,7 @@ const routes: RouteConfig[] = [
   profile,
   sharingZone,
   login,
+  test,
   notfound,
 ];
 

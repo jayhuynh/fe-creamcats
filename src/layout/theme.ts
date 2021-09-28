@@ -6,6 +6,15 @@ const theme = createTheme({
       fontWeight: 'bold',
     },
   },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        ':host ::ng-deep .ck-editor__editable_inline': {
+          'min-height': '500px',
+        },
+      },
+    },
+  },
 });
 
 export default theme;

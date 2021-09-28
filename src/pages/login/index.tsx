@@ -33,12 +33,6 @@ interface LoginFormInputs {
   rememberMe: boolean;
 }
 
-interface LoginFormInputs {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
-
 export const Login = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();

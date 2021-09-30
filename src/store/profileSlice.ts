@@ -1,34 +1,18 @@
-import {
-  createAsyncThunk,
-  createSelector,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { SerializedException, exceptionOf, Profile } from '../models';
+import { exceptionOf, Profile, SerializedException } from '../models';
 import { ProfileService } from '../services';
 import { AppState } from './index';
 
 export const PROFILE_FEATURE_KEY = 'profile';
 interface ProfileState {
-  profile: Profile;
+  profile: Profile | null;
   loading: boolean;
   errors: SerializedException[];
 }
 
-// Create this object to simplify code. Not sure if this is the right way to do it.
-const initialProfile = {
-  id: -1,
-  email: '',
-  fullname: '',
-  gender: '',
-  age: -1,
-  password: '',
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
-
 export const createInitialState = (): ProfileState => ({
-  profile: initialProfile,
+  profile: null,
   loading: false,
   errors: [],
 });
@@ -37,8 +21,7 @@ export const doFetchProfile = createAsyncThunk(
   'profile/fetch',
   async (data, { rejectWithValue }) => {
     try {
-      const profile = await ProfileService.getMockProfile(); // Will be getProfile() when API is ready
-      return profile;
+      return await ProfileService.getProfile();
     } catch (e) {
       return rejectWithValue(exceptionOf(e).toJson());
     }
@@ -61,7 +44,7 @@ const profileSlice = createSlice({
     });
     builder.addCase(doFetchProfile.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
-      state.profile = initialProfile;
+      state.profile = null;
       state.loading = false;
       state.errors.push(payload);
     });
@@ -78,6 +61,11 @@ export const selectLoading = createSelector(
 export const selectProfile = createSelector(
   selectProfileFeature,
   state => state.profile,
+);
+
+export const selectIsHasProfile = createSelector(
+  selectProfileFeature,
+  state => !!state.profile,
 );
 
 export default profileSlice.reducer;

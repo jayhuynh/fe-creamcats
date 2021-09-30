@@ -5,7 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LockIcon from '@material-ui/icons/Lock';
 import { makeStyles } from '@material-ui/core/styles';
-import { fromAuth, useAppDispatch } from '../../../store';
+import { fromAuth, fromProfile, useAppDispatch } from '../../../store';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -37,7 +37,8 @@ const LoginForm = () => {
 
   const doLogin = async ({ email, password, rememberMe }: LoginFormInputs) => {
     const formattedEmail = email.toLowerCase();
-    await dispatch(fromAuth.doLogin({ credential: { email: formattedEmail, password }, rememberMe }));
+    await dispatch(fromAuth.doLogin({ credential: { email: formattedEmail, password, type: 'volunteer' }, rememberMe }));
+    await dispatch(fromProfile.doFetchProfile());
   };
 
   return (

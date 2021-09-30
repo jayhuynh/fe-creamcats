@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { login, useNavigate } from '.';
-import { fromAuth, useAppDispatch } from '../store';
+import { fromAuth, fromProfile, useAppDispatch } from '../store';
 import { useQuery } from './useQuery';
 
 // This hook can be moved into ProtectedRoute
@@ -14,8 +14,10 @@ export const useAuthenticate = () => {
   const location = useLocation();
   const { replaceQuery, replace } = useNavigate();
   const { get, clear, queryString, queryDictionary } = useQuery();
-  const user = useSelector(fromAuth.selectUser);
-  const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const user = useSelector(fromProfile.selectProfile);
+  const isTokenValid = useSelector(fromAuth.selectIsTokenValid);
+  const isHasProfile = useSelector(fromProfile.selectIsHasProfile);
+  const  isAuthenticated = isTokenValid && isHasProfile;
   const [isAfterResume, setIsAfterResume] = useState(false);
 
   useEffect(() => {

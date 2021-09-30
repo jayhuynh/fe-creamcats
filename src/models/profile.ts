@@ -1,8 +1,9 @@
-export interface Profile {
-  id?: number;
-  email?: string;
+import { BaseModel } from './base';
+
+export interface Profile extends BaseModel {
+  email: string;
   fullname: string;
   gender: string;
   age: number;
-  password?: string;
+  profilePic: string;
 }

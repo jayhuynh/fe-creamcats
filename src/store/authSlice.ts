@@ -9,6 +9,8 @@ import { profile } from '../routes';
 
 export const AUTH_FEATURE_KEY = 'auth';
 
+const TOKEN = 'cc.login';
+
 interface AuthState {
   token: Token | null;
   loading: boolean;
@@ -33,10 +35,12 @@ export const doLogin = createAsyncThunk(
     try {
       const token = await AuthService.login(data.credential);
       Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
+      if (data.rememberMe) localStorage.setItem(TOKEN, JSON.stringify(token));
 
       return token;
     } catch (e) {
       delete Axios.defaults.headers.common.Authorization;
+      localStorage.removeItem(TOKEN);
       return rejectWithValue(exceptionOf(e)
         .toJson());
     }
@@ -47,12 +51,14 @@ export const doResume = createAsyncThunk(
   'auth/resume',
   async (token: Token | undefined, { rejectWithValue }) => {
     try {
-      const token = { jwt: 'this_is_jwt_token' } as Token;
-      Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
+      const userToken = token ?? (JSON.parse(localStorage.getItem(TOKEN) || 'null') as Token);
+      Axios.defaults.headers.common.Authorization = `Bearer ${userToken.jwt}`;
+      localStorage.setItem(TOKEN, JSON.stringify(userToken));
 
-      return token;
+      return userToken;
     } catch (e) {
       delete Axios.defaults.headers.common.Authorization;
+      localStorage.removeItem(TOKEN);
       return rejectWithValue(exceptionOf(e)
         .toJson());
     }
@@ -111,7 +117,7 @@ export const selectErrors = createSelector(
 export const selectIsAuthenticated = createSelector(
   selectAuthFeature,
   selectProfileFeature,
-  (authState, profileState) => !!(profileState.profile && authState.token),
+  (authState, profileState) => !!(profileState.profile && authState.token) || !!localStorage.getItem(TOKEN),
 );
 
 export default authSlice.reducer;

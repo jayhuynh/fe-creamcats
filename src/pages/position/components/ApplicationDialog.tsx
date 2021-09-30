@@ -8,7 +8,8 @@ import { useForm } from 'react-hook-form';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
-import { fromApplications, fromProfile, useAppDispatch } from '../../../store';
+import { fromApplications, fromNotifications, fromProfile, useAppDispatch } from '../../../store';
+import { NotificationsType } from '../../../store/notificationsSlice';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,14 +52,19 @@ const ApplicationDialog = ({ postionId }: ApplicationDialogProps) => {
   };
 
   const doSubmitApplication = async ({ notes }: ApplicationFormInput) => {
-    // await dispatch(fromApplications.doCreateApplication({
-    //   application: {
-    //     userId: profile?.id || -1,
-    //     positionId: postionId,
-    //     notes: notes,
-    //   },
-    // }));
+    await dispatch(fromApplications.doCreateApplication({
+      application: {
+        userId: profile?.id || -1,
+        positionId: postionId,
+        notes: notes,
+      },
+    }));
     handleClose();
+    dispatch(fromNotifications.doPushNotification({
+      message: 'Successfully applied to this position',
+      key: new Date().getTime(),
+      type: NotificationsType.SUCCESS,
+    }));
   };
 
   return (

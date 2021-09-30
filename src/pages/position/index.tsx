@@ -5,14 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { fromAuth, fromPositions, fromProfile, useAppDispatch } from '../../store';
+import { fromAuth, fromPositions, useAppDispatch } from '../../store';
 
 import PositionCarousel from './components/PositionCarousel';
 import Brief from './components/Brief';
 import ApplicationDialog from './components/ApplicationDialog';
-import Login from '../login';
 import PositionCards from './components/PositionCards';
-import TimeTag from '../../utils/time-tag';
 
 interface ParamsTypes {
   positionId: string;
@@ -291,7 +289,7 @@ function Position() {
               {/* HTML embedding will be replaced in the future
               <div dangerouslySetInnerHTML={{ __html: positionDetail }} />*/}
               {positionDetail}
-              {isAuthenticated ? <ApplicationDialog postionId={position.id} /> : <Login />}
+              <ApplicationDialog postionId={position.id} />
             </section>
           </Grid>
         </Grid>

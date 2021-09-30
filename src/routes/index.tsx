@@ -102,6 +102,7 @@ export const home: RouteConfig = {
 export const position: RouteConfig = {
   path: '/positions/:positionId',
   component: Position,
+  requireAuth: true,
 };
 
 export const profile: RouteConfig = {
@@ -130,6 +131,7 @@ const routes: RouteConfig[] = [
   position,
   profile,
   sharingZone,
+  login,
   notfound,
 ];
 

@@ -26,6 +26,7 @@ export const useAuthenticate = () => {
           clear('access_token');
           replace(undefined, replaceQuery(queryDictionary()));
           await dispatch(fromAuth.doResume(jwt ? { jwt } : undefined));
+          await dispatch(fromProfile.doFetchMyProfile());
         }
       } finally {
         setIsAfterResume(true);

@@ -8,6 +8,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { fromAuth, fromProfile, useAppDispatch } from '../../../store';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useQuery } from '../../../routes';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,12 +37,20 @@ const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
     defaultValues: { email: '', password: '', rememberMe: true },
   });
+  const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const { get } = useQuery();
 
   const doLogin = async ({ email, password, rememberMe }: LoginFormInputs) => {
     const formattedEmail = email.toLowerCase();
-    await dispatch(fromAuth.doLogin({ credential: { email: formattedEmail, password, type: 'volunteer' }, rememberMe }));
+    await dispatch(fromAuth.doLogin({
+      credential: { email: formattedEmail, password, type: 'volunteer' }, rememberMe,
+    }));
     await dispatch(fromProfile.doFetchMyProfile());
   };
+
+  if (isAuthenticated) {
+    return <Redirect to={get('redirect') || '/home'} />;
+  }
 
   return (
     <form onSubmit={handleSubmit(doLogin)} className={classes.maxSize}>

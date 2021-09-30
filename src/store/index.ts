@@ -8,6 +8,9 @@ import rootReducer, {
   fromProfile,
   fromPosts,
   fromApplications,
+  fromOrganizationApplications,
+  fromOrganizationPositions,
+  fromEvents,
   fromNotifications,
   fromVoluntaryEvents,
 } from './rootReducer';
@@ -27,6 +30,9 @@ export {
   fromProfile,
   fromPosts,
   fromApplications,
+  fromOrganizationApplications,
+  fromOrganizationPositions,
+  fromEvents,
   fromNotifications,
   fromVoluntaryEvents,
 };

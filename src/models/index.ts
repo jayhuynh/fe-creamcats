@@ -8,5 +8,7 @@ export * from './application';
 export * from './tag';
 export * from './organization';
 export * from './voluntaryEvent';
+export * from './organization-application';
+export * from './event';
 
 export type GeneratedFields = 'id' | 'createdAt' | 'updatedAt';

@@ -5,6 +5,8 @@ import * as ProfileService from './profile';
 import * as PostService from './post';
 import * as ApplicationService from './application';
 import * as VoluntaryEventService from './voluntaryEvent';
+import * as OrganizationApplicationService from './organizationApplication';
+import * as EventService from './event';
 
 export {
   AuthService,
@@ -14,4 +16,6 @@ export {
   PostService,
   ApplicationService,
   VoluntaryEventService,
+  OrganizationApplicationService,
+  EventService,
 };

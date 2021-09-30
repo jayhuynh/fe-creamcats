@@ -6,6 +6,10 @@ import postsReducer, * as fromPosts from './postsSlice';
 import applicationsReducer, * as fromApplications from './applicationsSlice';
 import notificationsReducer, * as fromNotifications from './notificationsSlice';
 import voluntaryEventsReducer, * as fromVoluntaryEvents from './voluntaryEventsSlice';
+import organizationApplicationsReducer, * as fromOrganizationApplications from './organizationApplicationSlice';
+import organizationPositionsReducer, * as fromOrganizationPositions from './organizationPositionsSlice';
+import eventsReducer, * as fromEvents from './eventSlice';
+import notificationsReduce, * as fromNotifications from './notificationsSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
@@ -17,6 +21,12 @@ const rootReducer = combineReducers({
   [fromApplications.APPLICATIONS_FEATURE_KEY]: applicationsReducer,
   [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReducer,
   [fromVoluntaryEvents.VOLUNTARY_EVENTS_FEATURE_KEY]: voluntaryEventsReducer,
+  [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReduce,
+  [fromOrganizationApplications.ORGANIZATION_APPLICATIONS_FEATURE_KEY]:
+    organizationApplicationsReducer,
+  [fromOrganizationPositions.ORGANIZATION_POSITIONS_FEATURE_KEY]:
+    organizationPositionsReducer,
+  [fromEvents.EVENTS_FEATURE_KEY]: eventsReducer,
 });
 
 export {
@@ -28,5 +38,8 @@ export {
   fromApplications,
   fromNotifications,
   fromVoluntaryEvents,
+  fromOrganizationApplications,
+  fromOrganizationPositions,
+  fromEvents,
 };
 export default rootReducer;

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import {
   Grid,
   Table,
@@ -23,9 +25,15 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import moment from 'moment';
 
+import {
+  fromOrganizationApplications,
+  useAppDispatch,
+} from '../../../../store';
+import { OrganizationApplication } from '../../../../models';
+
 const useStyles = makeStyles({
   table: {
-    width: 930,
+    width: 1100,
   },
   tableContainer: {
     boxShadow: 'none',
@@ -72,106 +80,40 @@ const useStyles = makeStyles({
   },
 });
 
-//------------- Mock Data -------------
-const mockData = [
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'ACCEPTED',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'REJECTED',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-  {
-    name: 'Alisa Thompson',
-    gender: 'FEMALE',
-    event: 'Event Name',
-    position: 'Volunteer Marketer',
-    dateApplied: '2021-09-21',
-    pendingStatus: 'PENDING',
-  },
-];
-//------------- Mock Data -------------
-
-function parseData(data: any) {
+function parseData(data: OrganizationApplication[]) {
   return data.map((row: any) => {
     return {
-      name: row.name,
+      name: row.applicantName,
       gender: row.gender.slice(0, 1) + row.gender.slice(1).toLowerCase(),
-      event: row.event,
-      position: row.position,
-      dateApplied: moment(row.dateApplied).format('DD/MM/YYYY'),
-      pendingStatus: row.pendingStatus,
+      event: row.eventName,
+      position: row.positionName,
+      dateApplied: moment(row.appliedAt).format('DD/MM/YYYY'),
+      pendingStatus: row.status,
     };
   });
 }
 
 export default function ApplicationTable() {
   const classes = useStyles();
+
+  const organizationId = 1;
+
+  const organizationApplications = useSelector(
+    fromOrganizationApplications.selectOrganizationApplications,
+  );
+  const filters = useSelector(fromOrganizationApplications.selectFilters);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(
+      fromOrganizationApplications.doFetchOrganizationApplications({
+        organizationId: 1,
+        filters: filters,
+      }),
+    );
+  }, [dispatch, filters, organizationId]);
+
   return (
     <Grid item xs>
       <TableContainer component={Paper} className={classes.tableContainer}>
@@ -209,8 +151,11 @@ export default function ApplicationTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {parseData(mockData).map((row: any) => (
-              <TableRow key={row.name} className={classes.tableRow}>
+            {parseData(organizationApplications).map((row: any) => (
+              <TableRow
+                key={row.name + row.event + row.position}
+                className={classes.tableRow}
+              >
                 <TableCell
                   component="th"
                   scope="row"

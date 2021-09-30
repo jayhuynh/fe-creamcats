@@ -4,10 +4,14 @@ import Axios from 'axios';
 import { User, Token, SerializedException, exceptionOf } from '../models';
 import { AuthService } from '../services';
 import { AppState } from './index';
+import { selectProfile, selectProfileFeature } from './profileSlice';
+import { profile } from '../routes';
 
 export const AUTH_FEATURE_KEY = 'auth';
+
+const TOKEN = 'cc.login';
+
 interface AuthState {
-  user: User | null;
   token: Token | null;
   loading: boolean;
   errors: SerializedException[];
@@ -15,7 +19,6 @@ interface AuthState {
 
 export const createInitialState = (): AuthState => ({
   token: null,
-  user: null,
   loading: false,
   errors: [],
 });
@@ -32,14 +35,12 @@ export const doLogin = createAsyncThunk(
     try {
       const token = await AuthService.login(data.credential);
       Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
+      if (data.rememberMe) localStorage.setItem(TOKEN, JSON.stringify(token));
 
-      const user = await AuthService.me();
-      return {
-        user,
-        token,
-      };
+      return token;
     } catch (e) {
       delete Axios.defaults.headers.common.Authorization;
+      localStorage.removeItem(TOKEN);
       return rejectWithValue(exceptionOf(e)
         .toJson());
     }
@@ -50,16 +51,14 @@ export const doResume = createAsyncThunk(
   'auth/resume',
   async (token: Token | undefined, { rejectWithValue }) => {
     try {
-      const token = { jwt: 'this_is_jwt_token' } as Token;
-      Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
+      const userToken = token ?? (JSON.parse(localStorage.getItem(TOKEN) || 'null') as Token);
+      Axios.defaults.headers.common.Authorization = `Bearer ${userToken.jwt}`;
+      localStorage.setItem(TOKEN, JSON.stringify(userToken));
 
-      const user = await AuthService.me();
-      return {
-        user,
-        token,
-      };
+      return userToken;
     } catch (e) {
       delete Axios.defaults.headers.common.Authorization;
+      localStorage.removeItem(TOKEN);
       return rejectWithValue(exceptionOf(e)
         .toJson());
     }
@@ -76,14 +75,12 @@ const authSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doLogin.fulfilled, (state, action) => {
-      state.token = action.payload.token;
-      state.user = action.payload.user;
+      state.token = action.payload;
       state.loading = false;
       state.errors = [];
     });
     builder.addCase(doLogin.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
-      state.user = null;
       state.token = null;
       state.loading = false;
       state.errors.push(payload);
@@ -95,13 +92,11 @@ const authSlice = createSlice({
       state.errors = [];
     });
     builder.addCase(doResume.fulfilled, (state, action) => {
-      state.token = action.payload.token;
-      state.user = action.payload.user;
+      state.token = action.payload;
       state.loading = false;
     });
     builder.addCase(doResume.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
-      state.user = null;
       state.token = null;
       state.loading = false;
       state.errors.push(payload);
@@ -115,21 +110,14 @@ export const selectLoading = createSelector(
   selectAuthFeature,
   state => state.loading,
 );
-export const selectUser = createSelector(
-  selectAuthFeature,
-  state => state.user,
-);
-export const selectToken = createSelector(
-  selectAuthFeature,
-  state => state.token,
-);
 export const selectErrors = createSelector(
   selectAuthFeature,
   state => state.errors,
 );
 export const selectIsAuthenticated = createSelector(
   selectAuthFeature,
-  authState => !!(authState.user && authState.token),
+  selectProfileFeature,
+  (authState, profileState) => !!(profileState.profile && authState.token) || !!localStorage.getItem(TOKEN),
 );
 
 export default authSlice.reducer;

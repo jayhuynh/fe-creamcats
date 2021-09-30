@@ -96,7 +96,7 @@ export default function PersonalInformation(props: any) {
   const onSubmit = async (data: any) => {
     setIsSaving(true);
     try {
-      const response = await ProfileService.updateProfile(data);
+      const response = await ProfileService.updateMyProfile(data);
       console.log(response);
       setIsSaving(false);
       setIsEditing(false);

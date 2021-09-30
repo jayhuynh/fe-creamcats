@@ -56,7 +56,7 @@ export default function VoluntaryWorksFilter() {
 
   useEffect(() => {
     const subscription = watch(value => {
-      dispatch(fromApplications.doFetchApplications(value));
+      dispatch(fromApplications.doFetchMyApplications(value));
     });
     return () => subscription.unsubscribe();
   }, [watch, dispatch]);

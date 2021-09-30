@@ -7,6 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import { useForm } from 'react-hook-form';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { fromApplications, fromNotifications, fromProfile, useAppDispatch } from '../../../store';
+import { NotificationsType } from '../../../store/notificationsSlice';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,16 +27,20 @@ const useStyles = makeStyles(theme => ({
 
 interface ApplicationFormInput {
   email: string;
-  fullName: string;
-  phoneNumber: string;
   notes: string;
 }
 
-const ApplicationDialog = () => {
+interface ApplicationDialogProps {
+  postionId: number;
+}
+
+const ApplicationDialog = ({ postionId }: ApplicationDialogProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const profile = useSelector(fromProfile.selectProfile);
   const { register, handleSubmit, formState: { errors } } = useForm<ApplicationFormInput>({
-    defaultValues: { email: '', fullName: '', phoneNumber: '', notes: '' },
+    defaultValues: { email: profile?.email, notes: '' },
   });
 
   const handleClickOpen = () => {
@@ -44,8 +51,20 @@ const ApplicationDialog = () => {
     setOpen(false);
   };
 
-  const doSubmitApplication = async () => {
-    console.log('Submitted');
+  const doSubmitApplication = async ({ notes }: ApplicationFormInput) => {
+    await dispatch(fromApplications.doCreateApplication({
+      application: {
+        userId: profile?.id || -1,
+        positionId: postionId,
+        notes: notes,
+      },
+    }));
+    handleClose();
+    dispatch(fromNotifications.doPushNotification({
+      message: 'Successfully applied to this position',
+      key: new Date().getTime(),
+      type: NotificationsType.SUCCESS,
+    }));
   };
 
   return (
@@ -84,32 +103,13 @@ const ApplicationDialog = () => {
                         label="Email"
                         margin="normal"
                         fullWidth
+                        disabled
+                        {...register('email')}
+                        error={!!errors.email}
                         InputLabelProps={{
                           shrink: true,
                         }}
                       />
-                    </Box>
-                    <Box width={0.70}>
-                    <TextField
-                      variant="outlined"
-                      label="Full name"
-                      margin="normal"
-                      fullWidth
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                    </Box>
-                    <Box width={0.70}>
-                    <TextField
-                      variant="outlined"
-                      label="Phone number"
-                      margin="normal"
-                      fullWidth
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
                     </Box>
                     <Box width={0.70} mt={2}>
                     <TextField
@@ -126,6 +126,7 @@ const ApplicationDialog = () => {
                     <Box width={0.70} mt={2}>
                       <Button
                         variant="contained"
+                        type="submit"
                         color="secondary">
                         APPLY NOW
                       </Button>

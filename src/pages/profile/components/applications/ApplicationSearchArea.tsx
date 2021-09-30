@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 import {
   Grid,
@@ -13,6 +14,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 import Filters from './application-filter/Filters';
+import {
+  fromOrganizationApplications,
+  useAppDispatch,
+} from '../../../../store';
 
 const useStyles = makeStyles({
   search: {
@@ -30,9 +35,29 @@ const useStyles = makeStyles({
   },
 });
 
+export interface FilterFormInputs {
+  keyword: String;
+  sortBy: String;
+}
+
 export default function ApplicationSearchArea() {
   const classes = useStyles();
   const [filtersIsActivated, setFiltersIsActivated] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const { register, watch } = useForm<FilterFormInputs>({
+    defaultValues: {
+      keyword: '',
+      sortBy: '',
+    },
+  });
+
+  useEffect(() => {
+    const subscription = watch(value => {
+      dispatch(fromOrganizationApplications.doChangeFilters(value));
+    });
+  }, [watch]);
 
   return (
     <Grid item xs>
@@ -46,6 +71,7 @@ export default function ApplicationSearchArea() {
                 type="search"
                 variant="filled"
                 className={classes.search}
+                {...register('keyword')}
               />
             </Grid>
             <Grid item xs>
@@ -69,6 +95,7 @@ export default function ApplicationSearchArea() {
                   id="sortSelect"
                   defaultValue={''}
                   label="Sort by"
+                  {...register('sortBy')}
                 >
                   <MenuItem value="">
                     <em>None</em>

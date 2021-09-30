@@ -67,3 +67,52 @@ export const getCurrentPosition = async (id: number) => {
     numberOfApplicants: 45,
   };
 };
+
+const mockPositions: any[] = [
+  {
+    id: 1,
+    name: 'Driver',
+    eventId: 27,
+    organizationId: 4,
+  },
+  {
+    id: 2,
+    name: 'Emergency Relief Officer',
+    eventId: 27,
+    organizationId: 4,
+  },
+  {
+    id: 3,
+    name: 'Driver Mentor',
+    eventId: 29,
+    organizationId: 4,
+  },
+  {
+    id: 4,
+    name: 'Manager',
+    eventId: 31,
+    organizationId: 4,
+  },
+  {
+    id: 5,
+    name: 'Secretary',
+    eventId: 86,
+    organizationId: 12,
+  },
+  {
+    id: 6,
+    name: 'Emergency Relief Officer',
+    eventId: 88,
+    organizationId: 12,
+  },
+];
+
+export const getOrganizationPositions = async (organizationId: Number) => {
+  let organizationPositions: any = [];
+  mockPositions.forEach((position: any) => {
+    if (position.organizationId === organizationId) {
+      organizationPositions.push(position);
+    }
+  });
+  return organizationPositions;
+};

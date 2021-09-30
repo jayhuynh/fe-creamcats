@@ -1,12 +1,24 @@
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+
 import {
   Grid,
   Select,
   FormControl,
   InputLabel,
   MenuItem,
-  Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { Event, Position } from '../../../../../models';
+
+import {
+  fromEvents,
+  fromOrganizationPositions,
+  fromOrganizationApplications,
+  useAppDispatch,
+} from '../../../../../store';
 
 const useStyles = makeStyles({
   filterTitle: {
@@ -26,8 +38,62 @@ const useStyles = makeStyles({
   },
 });
 
+export interface SubFilterFormInputs {
+  gender: String;
+  event: Number;
+  position: Number;
+}
+
+function generateEventOptions(events: Event[]) {
+  return events.map((event: Event) => {
+    return (
+      <MenuItem key={event.id} value={event.id}>
+        {event.name}
+      </MenuItem>
+    );
+  });
+}
+
+function generatePositionOptions(positions: Position[]) {
+  return positions.map((position: Position) => (
+    <MenuItem key={position.id} value={position.id}>
+      {position.name}
+    </MenuItem>
+  ));
+}
+
 export default function Filters() {
   const classes = useStyles();
+
+  const organizationId = 4;
+
+  const events = useSelector(fromEvents.selectEvents);
+  const positions = useSelector(
+    fromOrganizationPositions.selectOrganizationPositions,
+  );
+  const dispatch = useAppDispatch();
+
+  const { register, watch } = useForm<SubFilterFormInputs>({
+    defaultValues: {
+      gender: '',
+      event: -1,
+      position: -1,
+    },
+  });
+
+  useEffect(() => {
+    const subscription = watch(value => {
+      dispatch(fromOrganizationApplications.doChangeSubFilters(value));
+    });
+    dispatch(
+      fromOrganizationPositions.doFetchOrganizationPositions({
+        organizationId: Number(organizationId),
+      }),
+    );
+    dispatch(
+      fromEvents.doFetchEvents({ organizationId: Number(organizationId) }),
+    );
+  }, [watch, dispatch, organizationId]);
 
   return (
     <Grid item>
@@ -40,6 +106,7 @@ export default function Filters() {
               id="genderSelect"
               defaultValue={''}
               label="Gender"
+              {...register('gender')}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -56,20 +123,14 @@ export default function Filters() {
             <Select
               labelId="eventSelectLabel"
               id="eventSelect"
-              defaultValue={''}
+              defaultValue={-1}
               label="event"
+              {...register('event')}
             >
-              <MenuItem value="">
+              <MenuItem value={-1}>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="AlphabetIncrement">Alphabet&nbsp;(A-Z)</MenuItem>
-              <MenuItem value="AlphabetDecrement">Alphabet&nbsp;(Z-A)</MenuItem>
-              <MenuItem value="dateIncrement">
-                Date&nbsp;applied&nbsp;(Newest)
-              </MenuItem>
-              <MenuItem value="dateDecrement">
-                Date&nbsp;applied&nbsp;(Oldest)
-              </MenuItem>
+              {generateEventOptions(events)}
             </Select>
           </FormControl>
         </Grid>
@@ -79,20 +140,14 @@ export default function Filters() {
             <Select
               labelId="positionSelectLabel"
               id="positionSelect"
-              defaultValue={''}
+              defaultValue={-1}
               label="Position"
+              {...register('position')}
             >
-              <MenuItem value="">
+              <MenuItem value={-1}>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="AlphabetIncrement">Alphabet&nbsp;(A-Z)</MenuItem>
-              <MenuItem value="AlphabetDecrement">Alphabet&nbsp;(Z-A)</MenuItem>
-              <MenuItem value="dateIncrement">
-                Date&nbsp;applied&nbsp;(Newest)
-              </MenuItem>
-              <MenuItem value="dateDecrement">
-                Date&nbsp;applied&nbsp;(Oldest)
-              </MenuItem>
+              {generatePositionOptions(positions)}
             </Select>
           </FormControl>
         </Grid>

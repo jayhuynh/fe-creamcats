@@ -11,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import { ProfileService } from '../../../services';
+import { Profile } from '../../../models';
 
 const questionMark =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1200px-Question_Mark.svg.png';
@@ -108,7 +109,7 @@ export default function PersonalInformation(props: any) {
     }
   };
 
-  const { avatar, fullname, gender, age } = props.personalInformations;
+  const { profilePic: avatar, fullname, gender, age } = props.personalInformations as Profile;
 
   return (
     <Grid item xs={3}>
@@ -174,7 +175,7 @@ export default function PersonalInformation(props: any) {
               {isEditing ? (
                 <input
                   {...register('age')}
-                  placeholder={age}
+                  value={age}
                   className={classes.formElements}
                 />
               ) : (

@@ -108,6 +108,7 @@ export const position: RouteConfig = {
 export const profile: RouteConfig = {
   path: '/profile',
   component: Profile,
+  requireAuth: true,
 };
 
 export const sharingZone: RouteConfig = {

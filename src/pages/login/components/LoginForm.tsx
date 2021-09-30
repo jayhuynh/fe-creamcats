@@ -38,7 +38,7 @@ const LoginForm = () => {
   const doLogin = async ({ email, password, rememberMe }: LoginFormInputs) => {
     const formattedEmail = email.toLowerCase();
     await dispatch(fromAuth.doLogin({ credential: { email: formattedEmail, password, type: 'volunteer' }, rememberMe }));
-    await dispatch(fromProfile.doFetchProfile());
+    await dispatch(fromProfile.doFetchMyProfile());
   };
 
   return (

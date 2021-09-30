@@ -21,7 +21,7 @@ export const createInitialState = (): ApplicationsState => ({
   errors: [],
 });
 
-export const doFetchApplications = createAsyncThunk(
+export const doFetchMyApplications = createAsyncThunk(
   'applications/fetch',
   async (
     data: {
@@ -30,11 +30,30 @@ export const doFetchApplications = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const applications = await ApplicationService.getMockApplications(
+      const applications = await ApplicationService.getMyApplications(
         data.statusFilter,
-      ); // Won't be mock once token is ready
+      );
       return {
         applications,
+      };
+    } catch (e) {
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
+
+export const doCreateApplication = createAsyncThunk(
+  'applications/create',
+  async (
+    data: {
+      application: Parameters<typeof ApplicationService['createApplication']>[0];
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const application = await ApplicationService.createApplication(data.application);
+      return {
+        application,
       };
     } catch (e) {
       return rejectWithValue(exceptionOf(e).toJson());
@@ -47,18 +66,33 @@ const applicationsSlice = createSlice({
   initialState: createInitialState(),
   reducers: {},
   extraReducers: builder => {
-    //Fetch posts
-    builder.addCase(doFetchApplications.pending, state => {
+    //Fetch my applications
+    builder.addCase(doFetchMyApplications.pending, state => {
       state.loading = true;
     });
-    builder.addCase(doFetchApplications.fulfilled, (state, action) => {
+    builder.addCase(doFetchMyApplications.fulfilled, (state, action) => {
       state.applications = action.payload.applications;
       state.loading = false;
       state.errors = [];
     });
-    builder.addCase(doFetchApplications.rejected, (state, action) => {
+    builder.addCase(doFetchMyApplications.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
       state.applications = [];
+      state.loading = false;
+      state.errors.push(payload);
+    });
+
+    //Create application
+    builder.addCase(doCreateApplication.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(doCreateApplication.fulfilled, (state, action) => {
+      state.applications.push(action.payload.application);
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(doCreateApplication.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
       state.loading = false;
       state.errors.push(payload);
     });

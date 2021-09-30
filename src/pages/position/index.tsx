@@ -225,8 +225,7 @@ const positionDetail: any = (
  */
 function Position() {
   const { positionId } = useParams<ParamsTypes>();
-  const isTokenValid = useSelector(fromAuth.selectIsTokenValid);
-  const isHasProfile = useSelector(fromProfile.selectIsHasProfile);
+  const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
 
   const position = useSelector(fromPositions.selectCurrentPosition);
   const positions = useSelector(fromPositions.selectPositions);
@@ -292,7 +291,7 @@ function Position() {
               {/* HTML embedding will be replaced in the future
               <div dangerouslySetInnerHTML={{ __html: positionDetail }} />*/}
               {positionDetail}
-              {(isTokenValid && isHasProfile) ? <ApplicationDialog /> : <Login />}
+              {isAuthenticated ? <ApplicationDialog postionId={position.id} /> : <Login />}
             </section>
           </Grid>
         </Grid>

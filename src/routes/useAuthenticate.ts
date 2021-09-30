@@ -15,9 +15,7 @@ export const useAuthenticate = () => {
   const { replaceQuery, replace } = useNavigate();
   const { get, clear, queryString, queryDictionary } = useQuery();
   const user = useSelector(fromProfile.selectProfile);
-  const isTokenValid = useSelector(fromAuth.selectIsTokenValid);
-  const isHasProfile = useSelector(fromProfile.selectIsHasProfile);
-  const  isAuthenticated = isTokenValid && isHasProfile;
+  const  isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
   const [isAfterResume, setIsAfterResume] = useState(false);
 
   useEffect(() => {

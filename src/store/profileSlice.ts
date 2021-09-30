@@ -17,11 +17,11 @@ export const createInitialState = (): ProfileState => ({
   errors: [],
 });
 
-export const doFetchProfile = createAsyncThunk(
+export const doFetchMyProfile = createAsyncThunk(
   'profile/fetch',
   async (data, { rejectWithValue }) => {
     try {
-      return await ProfileService.getProfile();
+      return await ProfileService.getMyProfile();
     } catch (e) {
       return rejectWithValue(exceptionOf(e).toJson());
     }
@@ -34,15 +34,15 @@ const profileSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     //Fetch profile
-    builder.addCase(doFetchProfile.pending, state => {
+    builder.addCase(doFetchMyProfile.pending, state => {
       state.loading = true;
     });
-    builder.addCase(doFetchProfile.fulfilled, (state, action) => {
+    builder.addCase(doFetchMyProfile.fulfilled, (state, action) => {
       state.profile = action.payload;
       state.loading = false;
       state.errors = [];
     });
-    builder.addCase(doFetchProfile.rejected, (state, action) => {
+    builder.addCase(doFetchMyProfile.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
       state.profile = null;
       state.loading = false;
@@ -51,7 +51,7 @@ const profileSlice = createSlice({
   },
 });
 
-const selectProfileFeature = (state: AppState) => state[PROFILE_FEATURE_KEY];
+export const selectProfileFeature = (state: AppState) => state[PROFILE_FEATURE_KEY];
 
 export const selectLoading = createSelector(
   selectProfileFeature,
@@ -61,11 +61,6 @@ export const selectLoading = createSelector(
 export const selectProfile = createSelector(
   selectProfileFeature,
   state => state.profile,
-);
-
-export const selectIsHasProfile = createSelector(
-  selectProfileFeature,
-  state => !!state.profile,
 );
 
 export default profileSlice.reducer;

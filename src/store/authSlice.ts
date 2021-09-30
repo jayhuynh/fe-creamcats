@@ -4,6 +4,8 @@ import Axios from 'axios';
 import { User, Token, SerializedException, exceptionOf } from '../models';
 import { AuthService } from '../services';
 import { AppState } from './index';
+import { selectProfile, selectProfileFeature } from './profileSlice';
+import { profile } from '../routes';
 
 export const AUTH_FEATURE_KEY = 'auth';
 
@@ -106,9 +108,10 @@ export const selectErrors = createSelector(
   selectAuthFeature,
   state => state.errors,
 );
-export const selectIsTokenValid = createSelector(
+export const selectIsAuthenticated = createSelector(
   selectAuthFeature,
-  authState => !!(authState.token),
+  selectProfileFeature,
+  (authState, profileState) => !!(profileState.profile && authState.token),
 );
 
 export default authSlice.reducer;

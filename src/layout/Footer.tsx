@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
     lineHeight: '30px',
     padding: '58px 142px 0',
     height: '198px',
-    background: '#a6adb4',
+    background: '#333333',
     boxSizing: 'border-box',
   },
   col: {
@@ -96,7 +96,7 @@ const Footer = () => {
               <Twitter fontSize="small" className={classes.icon} />
               <Instagram fontSize="small" className={classes.icon} />
             </Grid>
-            <div style={{ color: '#cbd0d3', fontSize: 12 }}>Subscribe us to receive the latest news!</div>
+            <div style={{ color: '#cbd0d3', fontSize: 12, marginTop:12 }}>Subscribe us to receive the latest news!</div>
           </Grid>
         </Grid>
       </Grid>

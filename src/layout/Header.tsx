@@ -37,7 +37,7 @@ const Header = () => {
           <Typography style={{ fontWeight:'bold' }}>OPPORTUNITIES</Typography>
         </span>
         <span>
-          <Typography style={{ fontWeight:'bold' }}>Sharing Zone</Typography>
+          <Typography style={{ fontWeight:'bold' }}>SHARING ZONE</Typography>
         </span>
       </Grid>
       <SearchIcon></SearchIcon>

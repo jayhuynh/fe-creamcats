@@ -31,7 +31,7 @@ const Home = () => {
   }, [queryDictionary, dispatch]);
 
   return (
-    <>
+    <Box style={{ background:'#f6f8f9' }}>
       <HighlightBanner/>
       <Grid
         justifyContent="center"
@@ -41,7 +41,7 @@ const Home = () => {
           <PositionsList/>
         </Box>
       </Grid>
-    </>
+    </Box>
   );
 };
 

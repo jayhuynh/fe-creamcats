@@ -19,6 +19,7 @@ import Position from '../pages/position';
 import Profile from '../pages/profile';
 import NotFound from '../pages/not-found';
 import SharingZone from '../pages/sharing-zone';
+import Organization from '../pages/organization';
 
 export interface RouteConfig extends RouteProps {
   path: string;
@@ -116,6 +117,12 @@ export const sharingZone: RouteConfig = {
   component: SharingZone,
 };
 
+export const orgnization: RouteConfig = {
+  path: '/organizations',
+  component: Organization,
+  requireAuth: true,
+};
+
 export const notfound: RouteConfig = {
   path: '/*',
   component: NotFound,
@@ -133,6 +140,7 @@ const routes: RouteConfig[] = [
   profile,
   sharingZone,
   login,
+  orgnization,
   notfound,
 ];
 

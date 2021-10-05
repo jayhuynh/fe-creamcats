@@ -4,7 +4,6 @@ import { useForm, Controller } from 'react-hook-form';
 import {
   Grid,
   Typography,
-  Checkbox,
   TextField,
   Button,
   FormControlLabel,
@@ -13,11 +12,12 @@ import {
   makeStyles,
 } from '@material-ui/core';
 
-interface LoginInputForm {
+interface RegisterInputForm {
   type: String;
+  phone: String;
   email: String;
   password: String;
-  rememberMe: Boolean;
+  confirmPassword: String;
 }
 
 const useStyle = makeStyles({
@@ -25,24 +25,25 @@ const useStyle = makeStyles({
   // Use ```className={classes.<style name>}``` in components to apply the styles
 });
 
-export default function Login(props: any) {
+export default function Register(props: any) {
   const classes = useStyle();
 
   const { register, watch, handleSubmit, control, getValues } =
-    useForm<LoginInputForm>({
+    useForm<RegisterInputForm>({
       defaultValues: {
-        type: 'Volunteer',
+        type: props.registerType,
+        phone: '',
         email: '',
         password: '',
-        rememberMe: false,
+        confirmPassword: '',
       },
     });
 
-  const onSubmit = (data: LoginInputForm) => console.log(data);
+  const onSubmit = (data: RegisterInputForm) => console.log(data);
 
   useEffect(() => {
     const subscription = watch(value => {
-      console.log(value);
+      props.setRegisterType(value.type);
     });
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -52,7 +53,7 @@ export default function Login(props: any) {
       <Grid container direction="column" spacing={6}>
         <Grid item>
           <Typography>Hello! Welcome back to our platform.</Typography>
-          <Typography>Login Here</Typography>
+          <Typography>Register Here</Typography>
         </Grid>
         <Grid item>
           <Controller
@@ -79,6 +80,12 @@ export default function Login(props: any) {
           <Grid container direction="row" spacing={4}>
             <Grid item>
               <Grid container direction="column" spacing={2}>
+                <Typography>Phone</Typography>
+                <TextField required type="tel" {...register('phone')} />
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container direction="column" spacing={2}>
                 <Typography>Email</Typography>
                 <TextField required type="email" {...register('email')} />
               </Grid>
@@ -86,25 +93,29 @@ export default function Login(props: any) {
             <Grid item>
               <Grid container direction="column" spacing={2}>
                 <Typography>Password</Typography>
-                <TextField required type="password" {...register('password')} />
+                <TextField required type="text" {...register('password')} />
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container direction="column" spacing={2}>
+                <Typography>Confirm password</Typography>
+                <TextField
+                  required
+                  type="text"
+                  {...register('confirmPassword')}
+                />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
         <Grid item>
-          <Checkbox defaultChecked={false} {...register('rememberMe')} />
-          Remember me
-        </Grid>
-        <Grid item>
           <Button
             onClick={() => {
-              props.goRegister('register');
+              props.setTab(1);
             }}
           >
-            Register now
+            Continue
           </Button>
-          <Button>Forget password?</Button>
-          <Button type="submit">Login</Button>
         </Grid>
       </Grid>
     </form>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -67,6 +67,8 @@ export default function Filters() {
 
   const organizationId = 4;
 
+  const [currentEventId, setCurrentEventId] = useState(-1);
+
   const events = useSelector(fromEvents.selectEvents);
   const positions = useSelector(
     fromOrganizationPositions.selectOrganizationPositions,
@@ -84,6 +86,7 @@ export default function Filters() {
   useEffect(() => {
     const subscription = watch(value => {
       dispatch(fromOrganizationApplications.doChangeSubFilters(value));
+      setCurrentEventId(Number(value.event));
     });
     dispatch(
       fromOrganizationPositions.doFetchOrganizationPositions({
@@ -134,23 +137,25 @@ export default function Filters() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs>
-          <FormControl variant="outlined" className={classes.sort}>
-            <InputLabel id="positionSelectLabel">Position</InputLabel>
-            <Select
-              labelId="positionSelectLabel"
-              id="positionSelect"
-              defaultValue={-1}
-              label="Position"
-              {...register('position')}
-            >
-              <MenuItem value={-1}>
-                <em>None</em>
-              </MenuItem>
-              {generatePositionOptions(positions)}
-            </Select>
-          </FormControl>
-        </Grid>
+        {currentEventId === -1 ? null : (
+          <Grid item xs>
+            <FormControl variant="outlined" className={classes.sort}>
+              <InputLabel id="positionSelectLabel">Position</InputLabel>
+              <Select
+                labelId="positionSelectLabel"
+                id="positionSelect"
+                defaultValue={-1}
+                label="Position"
+                {...register('position')}
+              >
+                <MenuItem value={-1}>
+                  <em>None</em>
+                </MenuItem>
+                {generatePositionOptions(positions)}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );

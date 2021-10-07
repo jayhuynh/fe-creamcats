@@ -34,7 +34,7 @@ export const getVoluntaryEvents = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      return  await VoluntaryEventService.getOrganizationVoluntaryEvents(data.organizationId);
+      return  await VoluntaryEventService.getOrganizationVoluntaryEvents(data.organizationId, 'ongoing');
     } catch (e) {
       return rejectWithValue(exceptionOf(e).toJson());
     }

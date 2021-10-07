@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Box, Tab, Tabs, AppBar } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import EventList from './EventList';
 import { VoluntaryEvent } from '../../../models';
 import { useSelector } from 'react-redux';
 import { fromProfile, fromVoluntaryEvents, useAppDispatch } from '../../../store';
+import { VoluntaryEventService } from '../../../services';
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -73,10 +74,15 @@ export default function OrganizationEvent() {
   const events = useSelector(fromVoluntaryEvents.selectAllVoluntaryEvents);
   const profile: any = useSelector(fromProfile.selectProfile);
   const dispatch = useAppDispatch();
+  const [pastEvents, setPastEvents] = useState<VoluntaryEvent[]>([]);
 
   useEffect(() => {
     dispatch(fromVoluntaryEvents.getVoluntaryEvents({ organizationId: profile.id }));
-  }, [dispatch, profile]);
+    (async () => {
+      const { data } = await VoluntaryEventService.getOrganizationVoluntaryEvents(profile.id, 'past');
+      setPastEvents(data);
+    })();
+  }, [dispatch, profile, setPastEvents]);
 
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -100,9 +106,10 @@ export default function OrganizationEvent() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <EventList events={events} />
+        <EventList events={events} showFilters={true} />
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <EventList events={pastEvents} />
       </TabPanel>
     </div>
   );

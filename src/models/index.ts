@@ -6,5 +6,6 @@ export * from './profile';
 export * from './post';
 export * from './application';
 export * from './tag';
+export * from './organization';
 
 export type GeneratedFields = 'id' | 'createdAt' | 'updatedAt';

@@ -4,6 +4,7 @@ import { fromApplications, fromPosts, fromProfile, useAppDispatch } from '../../
 import React, { useEffect } from 'react';
 import { Card, CardMedia, Grid } from '@material-ui/core';
 import { PersonalInformation, TabWrapper } from '../profile/components';
+import OrganizationInformation from './components/OrganizationInformation';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,7 +46,6 @@ const Organization = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fromProfile.doFetchMyProfile());
     dispatch(fromPosts.doFetchPosts());
     dispatch(fromApplications.doFetchMyApplications({ statusFilter: 'ALL' }));
   }, [dispatch]);
@@ -74,7 +74,7 @@ const Organization = () => {
           justifyContent="flex-start"
           spacing={4}
         >
-          <PersonalInformation personalInformations={profile} />
+          <OrganizationInformation profile={profile as any} />
           <Grid item className="HistoryWorksAndPosts" xs>
             <TabWrapper works={applications} posts={posts} />
           </Grid>

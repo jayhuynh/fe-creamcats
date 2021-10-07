@@ -22,11 +22,12 @@ export const useAuthenticate = () => {
     (async () => {
       try {
         const jwt = get('access_token');
+        const accountType = get('type') ?? (localStorage.getItem(fromAuth.TYPE) || 'volunteer');
         if (!!jwt || (isAuthenticated && !user)) {
           clear('access_token');
           replace(undefined, replaceQuery(queryDictionary()));
           await dispatch(fromAuth.doResume(jwt ? { jwt } : undefined));
-          await dispatch(fromProfile.doFetchMyProfile());
+          await dispatch(fromProfile.doFetchMyProfile({ type: accountType }));
         }
       } finally {
         setIsAfterResume(true);

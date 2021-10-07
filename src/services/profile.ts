@@ -6,6 +6,10 @@ export const getMyProfile = async () => {
   return (await Axios.get<Profile>('/users/me')).data;
 };
 
+export const getOrganizationProfile = async (id: number) => {
+  return (await Axios.get<Profile>(`/organizations/${id}`)).data;
+};
+
 export const updateMyProfile = async (data: Profile) => {
   const response: any = (
     await Axios.post('/users/me', data, {

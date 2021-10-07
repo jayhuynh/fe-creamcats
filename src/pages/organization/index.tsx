@@ -1,23 +1,12 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Card, CardMedia } from '@material-ui/core';
-
-import {
-  fromProfile,
-  fromPosts,
-  fromApplications,
-  useAppDispatch,
-} from '../../store';
-
-import {
-  PersonalInformation,
-  TabWrapper,
-  // Will need these two after refining <TabWrapper />
-  // VoluntaryWorks,
-  // MyPosts,
-} from './components';
+import { useSelector } from 'react-redux';
+import { fromApplications, fromPosts, fromProfile, fromVoluntaryEvents, useAppDispatch } from '../../store';
+import React, { useEffect } from 'react';
+import { Card, CardMedia, Grid } from '@material-ui/core';
+import OrganizationInformation from './components/OrganizationInformation';
+import OrganizationEvent from './components/OrganizationEvent';
+import { Organization } from '../../models';
+import OrganizationApplication from './components/OrganizationApplication';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,17 +40,8 @@ const imagesURL = {
  * Profile page component
  * @returns Object
  */
-const Profile = () => {
+const OrganizationPage = () => {
   const classes = useStyles();
-  const profile = useSelector(fromProfile.selectProfile);
-  const posts = useSelector(fromPosts.selectPosts);
-  const applications = useSelector(fromApplications.selectApplications);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fromPosts.doFetchPosts());
-    dispatch(fromApplications.doFetchMyApplications({ statusFilter: 'ALL' }));
-  }, [dispatch]);
 
   return (
     <div className={classes.root}>
@@ -87,9 +67,10 @@ const Profile = () => {
           justifyContent="flex-start"
           spacing={4}
         >
-          <PersonalInformation personalInformations={profile} />
+          <OrganizationInformation/>
           <Grid item className="HistoryWorksAndPosts" xs>
-            <TabWrapper works={applications} posts={posts} />
+            <OrganizationEvent/>
+            <OrganizationApplication/>
           </Grid>
         </Grid>
       </Grid>
@@ -97,4 +78,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default OrganizationPage;

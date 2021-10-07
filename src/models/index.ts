@@ -6,5 +6,7 @@ export * from './profile';
 export * from './post';
 export * from './application';
 export * from './tag';
+export * from './organization';
+export * from './voluntaryEvent';
 
 export type GeneratedFields = 'id' | 'createdAt' | 'updatedAt';

@@ -6,6 +6,7 @@ import { Card, CardMedia, Grid } from '@material-ui/core';
 import OrganizationInformation from './components/OrganizationInformation';
 import OrganizationEvent from './components/OrganizationEvent';
 import { Organization } from '../../models';
+import OrganizationApplication from './components/OrganizationApplication';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -69,6 +70,7 @@ const OrganizationPage = () => {
           <OrganizationInformation/>
           <Grid item className="HistoryWorksAndPosts" xs>
             <OrganizationEvent/>
+            <OrganizationApplication/>
           </Grid>
         </Grid>
       </Grid>

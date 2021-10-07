@@ -1,17 +1,15 @@
 import { Box, Button, Grid, MenuItem, Select, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Pagination from '@material-ui/lab/Pagination';
+import { useState } from 'react';
 
 import PositionCard from '../../../utils/position-card';
 import { VoluntaryEvent } from '../../../models';
-import { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 
 interface TitleProps {
   total: number;
   showFilters?: boolean;
 }
-
 
 const Title = ({ total, showFilters }: TitleProps) => {
   const sortOptions = [

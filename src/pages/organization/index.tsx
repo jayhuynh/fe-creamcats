@@ -1,10 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
-import { fromApplications, fromPosts, fromProfile, useAppDispatch } from '../../store';
+import { fromApplications, fromPosts, fromProfile, fromVoluntaryEvents, useAppDispatch } from '../../store';
 import React, { useEffect } from 'react';
 import { Card, CardMedia, Grid } from '@material-ui/core';
-import { PersonalInformation, TabWrapper } from '../profile/components';
 import OrganizationInformation from './components/OrganizationInformation';
+import OrganizationEvent from './components/OrganizationEvent';
+import { Organization } from '../../models';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -38,17 +39,8 @@ const imagesURL = {
  * Profile page component
  * @returns Object
  */
-const Organization = () => {
+const OrganizationPage = () => {
   const classes = useStyles();
-  const profile = useSelector(fromProfile.selectProfile);
-  const posts = useSelector(fromPosts.selectPosts);
-  const applications = useSelector(fromApplications.selectApplications);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fromPosts.doFetchPosts());
-    dispatch(fromApplications.doFetchMyApplications({ statusFilter: 'ALL' }));
-  }, [dispatch]);
 
   return (
     <div className={classes.root}>
@@ -74,9 +66,9 @@ const Organization = () => {
           justifyContent="flex-start"
           spacing={4}
         >
-          <OrganizationInformation profile={profile as any} />
+          <OrganizationInformation/>
           <Grid item className="HistoryWorksAndPosts" xs>
-            <TabWrapper works={applications} posts={posts} />
+            <OrganizationEvent/>
           </Grid>
         </Grid>
       </Grid>
@@ -84,4 +76,4 @@ const Organization = () => {
   );
 };
 
-export default Organization;
+export default OrganizationPage;

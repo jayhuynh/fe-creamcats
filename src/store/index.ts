@@ -9,6 +9,7 @@ import rootReducer, {
   fromPosts,
   fromApplications,
   fromNotifications,
+  fromVoluntaryEvents,
 } from './rootReducer';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -27,5 +28,6 @@ export {
   fromPosts,
   fromApplications,
   fromNotifications,
+  fromVoluntaryEvents,
 };
 export default store;

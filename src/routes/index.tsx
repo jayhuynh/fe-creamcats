@@ -20,6 +20,7 @@ import Profile from '../pages/profile';
 import NotFound from '../pages/not-found';
 import SharingZone from '../pages/sharing-zone';
 import Organization from '../pages/organization';
+import OrganizationPage from '../pages/organization';
 
 export interface RouteConfig extends RouteProps {
   path: string;
@@ -119,7 +120,7 @@ export const sharingZone: RouteConfig = {
 
 export const orgnization: RouteConfig = {
   path: '/organizations',
-  component: Organization,
+  component: OrganizationPage,
   requireAuth: true,
 };
 

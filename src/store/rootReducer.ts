@@ -4,7 +4,8 @@ import tagsReducer, * as fromTags from './tagsSlice';
 import profileReducer, * as fromProfile from './profileSlice';
 import postsReducer, * as fromPosts from './postsSlice';
 import applicationsReducer, * as fromApplications from './applicationsSlice';
-import notificationsReduce, * as fromNotifications from './notificationsSlice';
+import notificationsReducer, * as fromNotifications from './notificationsSlice';
+import voluntaryEventsReducer, * as fromVoluntaryEvents from './voluntaryEventsSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   [fromProfile.PROFILE_FEATURE_KEY]: profileReducer,
   [fromPosts.POSTS_FEATURE_KEY]: postsReducer,
   [fromApplications.APPLICATIONS_FEATURE_KEY]: applicationsReducer,
-  [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReduce,
+  [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReducer,
+  [fromVoluntaryEvents.VOLUNTARY_EVENTS_FEATURE_KEY]: voluntaryEventsReducer,
 });
 
 export {
@@ -25,5 +27,6 @@ export {
   fromPosts,
   fromApplications,
   fromNotifications,
+  fromVoluntaryEvents,
 };
 export default rootReducer;

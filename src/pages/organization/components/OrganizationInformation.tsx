@@ -12,6 +12,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { ProfileService } from '../../../services';
 import { Organization, Profile } from '../../../models';
+import { useSelector } from 'react-redux';
+import { fromProfile } from '../../../store';
 
 const questionMark =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1200px-Question_Mark.svg.png';
@@ -88,17 +90,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export interface OrganizationInformationProps {
-  profile: Organization;
-}
-
-export default function OrganizationInformation({
-  profile,
-}: OrganizationInformationProps) {
+export default function OrganizationInformation() {
   const classes = useStyles();
   const { register, handleSubmit } = useForm();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const profile: any = useSelector(fromProfile.selectProfile);
+
 
   const onSubmit = async (data: any) => {
     setIsSaving(true);

@@ -11,30 +11,32 @@ import { AppState } from './index';
 export const ORGANIZATION_POSITIONS_FEATURE_KEY = 'organizationPositions';
 
 interface OrganizationsPositionsState {
-  organizationPositions: any[];
+  eventPositions: any[];
   loading: boolean;
   errors: SerializedException[];
 }
 
 export const createInitialState = (): OrganizationsPositionsState => ({
-  organizationPositions: [],
+  eventPositions: [],
   loading: false,
   errors: [],
 });
 
-export const doFetchOrganizationPositions = createAsyncThunk(
+export const doFetchEventPositions = createAsyncThunk(
   'organizationPositions/fetch',
   async (
     data: {
-      organizationId: Number;
+      eventId: Number;
     },
     { rejectWithValue, getState },
   ) => {
     try {
-      const organizationPositions =
-        await PositionService.getOrganizationPositions(data.organizationId);
+      console.log(data.eventId);
+      const eventPositions = await PositionService.getEventPositions(
+        data.eventId,
+      );
       return {
-        organizationPositions,
+        eventPositions,
       };
     } catch (e) {
       return rejectWithValue(exceptionOf(e).toJson());
@@ -48,17 +50,17 @@ const organizationPositionsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     //Fetch organization positions
-    builder.addCase(doFetchOrganizationPositions.pending, state => {
+    builder.addCase(doFetchEventPositions.pending, state => {
       state.loading = true;
     });
-    builder.addCase(doFetchOrganizationPositions.fulfilled, (state, action) => {
-      state.organizationPositions = action.payload.organizationPositions;
+    builder.addCase(doFetchEventPositions.fulfilled, (state, action) => {
+      state.eventPositions = action.payload.eventPositions;
       state.loading = false;
       state.errors = [];
     });
-    builder.addCase(doFetchOrganizationPositions.rejected, (state, action) => {
+    builder.addCase(doFetchEventPositions.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
-      state.organizationPositions = [];
+      state.eventPositions = [];
       state.loading = false;
       state.errors.push(payload);
     });
@@ -73,9 +75,9 @@ export const selectLoading = createSelector(
   state => state.loading,
 );
 
-export const selectOrganizationPositions = createSelector(
+export const selectEventPositions = createSelector(
   selectOrganizationPositionsFeature,
-  state => state.organizationPositions,
+  state => state.eventPositions,
 );
 
 export default organizationPositionsSlice.reducer;

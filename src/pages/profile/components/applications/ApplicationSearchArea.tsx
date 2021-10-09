@@ -40,7 +40,7 @@ export interface FilterFormInputs {
   sortBy: String;
 }
 
-export default function ApplicationSearchArea() {
+export default function ApplicationSearchArea(props: any) {
   const classes = useStyles();
   const [filtersIsActivated, setFiltersIsActivated] = useState(false);
 
@@ -117,7 +117,9 @@ export default function ApplicationSearchArea() {
             </Grid>
           </Grid>
         </Grid>
-        {filtersIsActivated ? <Filters /> : null}
+        {filtersIsActivated ? (
+          <Filters organizationId={props.organizationId} />
+        ) : null}
       </Grid>
     </Grid>
   );

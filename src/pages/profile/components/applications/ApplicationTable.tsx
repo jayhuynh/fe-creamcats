@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -15,21 +15,20 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
-import {
-  MuiThemeProvider,
-  createTheme,
-  makeStyles,
-} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-
-import moment from 'moment';
 
 import {
   fromOrganizationApplications,
   useAppDispatch,
 } from '../../../../store';
-import { OrganizationApplication } from '../../../../models';
+
+import {
+  parseFilter,
+  parseApplications,
+} from '../../../../utils/registerParser';
+import { register } from '../../../../serviceWorker';
 
 const useStyles = makeStyles({
   table: {
@@ -80,36 +79,31 @@ const useStyles = makeStyles({
   },
 });
 
-function parseData(data: OrganizationApplication[]) {
-  return data.map((row: any) => {
-    return {
-      name: row.applicantName,
-      gender: row.gender.slice(0, 1) + row.gender.slice(1).toLowerCase(),
-      event: row.eventName,
-      position: row.positionName,
-      dateApplied: moment(row.appliedAt).format('DD/MM/YYYY'),
-      pendingStatus: row.status,
-    };
-  });
+export interface PaginationInputs {
+  limit: Number;
+  offset: Number;
 }
 
-export default function ApplicationTable() {
+export default function ApplicationTable(props: any) {
   const classes = useStyles();
 
-  const organizationId = 1;
+  const organizationId = props.organizationId;
 
   const organizationApplications = useSelector(
     fromOrganizationApplications.selectOrganizationApplications,
   );
   const filters = useSelector(fromOrganizationApplications.selectFilters);
+  const applicationNumber = useSelector(
+    fromOrganizationApplications.selectNumber,
+  );
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(
       fromOrganizationApplications.doFetchOrganizationApplications({
-        organizationId: 1,
-        filters: filters,
+        organizationId: organizationId,
+        filters: { ...parseFilter(filters) },
       }),
     );
   }, [dispatch, filters, organizationId]);
@@ -151,7 +145,7 @@ export default function ApplicationTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {parseData(organizationApplications).map((row: any) => (
+            {parseApplications(organizationApplications).map((row: any) => (
               <TableRow
                 key={row.name + row.event + row.position}
                 className={classes.tableRow}
@@ -204,11 +198,19 @@ export default function ApplicationTable() {
           </TableBody>
           <TableFooter>
             <Pagination
-              count={10}
+              count={Math.ceil(applicationNumber / filters.limit)}
               size="small"
               shape="rounded"
               color="primary"
               className={classes.pagination}
+              onChange={(event, pageNumber) => {
+                dispatch(
+                  fromOrganizationApplications.doChangePagination({
+                    limit: Number(filters.limit),
+                    offset: (pageNumber - 1) * filters.limit,
+                  }),
+                );
+              }}
             />
           </TableFooter>
         </Table>

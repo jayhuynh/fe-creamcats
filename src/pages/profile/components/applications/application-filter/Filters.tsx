@@ -40,8 +40,8 @@ const useStyles = makeStyles({
 
 export interface SubFilterFormInputs {
   gender: String;
-  event: Number;
-  position: Number;
+  event: any;
+  position: any;
 }
 
 function generateEventOptions(events: Event[]) {
@@ -62,24 +62,22 @@ function generatePositionOptions(positions: Position[]) {
   ));
 }
 
-export default function Filters() {
+export default function Filters(props: any) {
   const classes = useStyles();
 
-  const organizationId = 4;
+  const organizationId = props.organizationId;
 
   const [currentEventId, setCurrentEventId] = useState(-1);
 
   const events = useSelector(fromEvents.selectEvents);
-  const positions = useSelector(
-    fromOrganizationPositions.selectOrganizationPositions,
-  );
+  const positions = useSelector(fromOrganizationPositions.selectEventPositions);
   const dispatch = useAppDispatch();
 
   const { register, watch } = useForm<SubFilterFormInputs>({
     defaultValues: {
       gender: '',
-      event: -1,
-      position: -1,
+      event: '',
+      position: '',
     },
   });
 
@@ -87,12 +85,12 @@ export default function Filters() {
     const subscription = watch(value => {
       dispatch(fromOrganizationApplications.doChangeSubFilters(value));
       setCurrentEventId(Number(value.event));
+      dispatch(
+        fromOrganizationPositions.doFetchEventPositions({
+          eventId: Number(value.event),
+        }),
+      );
     });
-    dispatch(
-      fromOrganizationPositions.doFetchOrganizationPositions({
-        organizationId: Number(organizationId),
-      }),
-    );
     dispatch(
       fromEvents.doFetchEvents({ organizationId: Number(organizationId) }),
     );
@@ -107,12 +105,12 @@ export default function Filters() {
             <Select
               labelId="genderSelectLabel"
               id="genderSelect"
-              defaultValue={''}
+              defaultValue=""
               label="Gender"
               {...register('gender')}
             >
               <MenuItem value="">
-                <em>None</em>
+                <em>All</em>
               </MenuItem>
               <MenuItem value="FEMALE">Female</MenuItem>
               <MenuItem value="MALE">Male</MenuItem>
@@ -126,12 +124,12 @@ export default function Filters() {
             <Select
               labelId="eventSelectLabel"
               id="eventSelect"
-              defaultValue={-1}
+              defaultValue=""
               label="event"
               {...register('event')}
             >
-              <MenuItem value={-1}>
-                <em>None</em>
+              <MenuItem value="">
+                <em>All</em>
               </MenuItem>
               {generateEventOptions(events)}
             </Select>
@@ -144,12 +142,12 @@ export default function Filters() {
               <Select
                 labelId="positionSelectLabel"
                 id="positionSelect"
-                defaultValue={-1}
+                defaultValue=""
                 label="Position"
                 {...register('position')}
               >
-                <MenuItem value={-1}>
-                  <em>None</em>
+                <MenuItem value="">
+                  <em>All</em>
                 </MenuItem>
                 {generatePositionOptions(positions)}
               </Select>

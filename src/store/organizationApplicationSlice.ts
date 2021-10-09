@@ -13,6 +13,7 @@ import {
 
 import { OrganizationApplicationService } from '../services';
 import { AppState } from './index';
+import { PaginationInputs } from '../pages/profile/components/applications/ApplicationTable';
 import { SubFilterFormInputs } from '../pages/profile/components/applications/application-filter/Filters';
 import { FilterFormInputs } from '../pages/profile/components/applications/ApplicationSearchArea';
 
@@ -29,11 +30,13 @@ interface OrganizationApplicationsState {
 export const createInitialState = (): OrganizationApplicationsState => ({
   organizationApplications: [],
   filters: {
+    offset: 0,
+    limit: 10,
     keyword: '',
     sortBy: '',
     gender: '',
-    event: -1,
-    position: -1,
+    event: '',
+    position: '',
   },
   number: 0,
   loading: false,
@@ -47,17 +50,14 @@ export const doFetchOrganizationApplications = createAsyncThunk(
       organizationId: number;
       filters: any;
     },
-    { rejectWithValue, getState },
+    { rejectWithValue },
   ) => {
     try {
-      const state: OrganizationApplicationsState = (getState() as any)[
-        ORGANIZATION_APPLICATIONS_FEATURE_KEY
-      ];
       const organizationApplications =
-        await OrganizationApplicationService.getMockOrganizationApplications(
+        await OrganizationApplicationService.getApplications(
           data.organizationId,
-          state.filters,
-        ); // Won't be mock once token is ready
+          data.filters,
+        );
       return {
         organizationApplications,
       };
@@ -71,6 +71,9 @@ const organizationApplicationsSlice = createSlice({
   name: ORGANIZATION_APPLICATIONS_FEATURE_KEY,
   initialState: createInitialState(),
   reducers: {
+    doChangePagination: (state, action: PayloadAction<PaginationInputs>) => {
+      state.filters = { ...state.filters, ...action.payload };
+    },
     doChangeFilters: (state, action: PayloadAction<FilterFormInputs>) => {
       state.filters = { ...state.filters, ...action.payload };
     },
@@ -129,6 +132,6 @@ export const selectOrganizationApplications = createSelector(
   state => state.organizationApplications,
 );
 
-export const { doChangeFilters, doChangeSubFilters } =
+export const { doChangeFilters, doChangeSubFilters, doChangePagination } =
   organizationApplicationsSlice.actions;
 export default organizationApplicationsSlice.reducer;

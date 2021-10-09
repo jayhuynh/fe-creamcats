@@ -15,11 +15,14 @@ const theme = createTheme({
 });
 
 export default function Test() {
+  // Where should I get the organization ID?
+  const organizationId = 1;
+
   return (
     <MuiThemeProvider theme={theme}>
       <Grid container direction="column" spacing={4} alignItems="flex-start">
-        <ApplicationSearchArea />
-        <ApplicationTable />
+        <ApplicationSearchArea organizationId={organizationId} />
+        <ApplicationTable organizationId={organizationId} />
       </Grid>
     </MuiThemeProvider>
   );

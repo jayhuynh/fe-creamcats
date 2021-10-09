@@ -1,9 +1,9 @@
-import Login from '../login/components/Login';
+import RegisterAndLogin from '../login/RegisterAndLogin';
 
 export default function Test() {
   return (
     <div>
-      <Login />
+      <RegisterAndLogin />
     </div>
   );
 }

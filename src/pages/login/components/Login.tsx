@@ -72,7 +72,7 @@ const useStyle = makeStyles({
   },
 });
 
-export default function Login() {
+export default function Login(props: any) {
   const classes = useStyle();
 
   const { register, watch, handleSubmit, control, getValues } =

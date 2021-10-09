@@ -9,7 +9,6 @@ import voluntaryEventsReducer, * as fromVoluntaryEvents from './voluntaryEventsS
 import organizationApplicationsReducer, * as fromOrganizationApplications from './organizationApplicationSlice';
 import organizationPositionsReducer, * as fromOrganizationPositions from './organizationPositionsSlice';
 import eventsReducer, * as fromEvents from './eventSlice';
-import notificationsReduce, * as fromNotifications from './notificationsSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
@@ -21,7 +20,7 @@ const rootReducer = combineReducers({
   [fromApplications.APPLICATIONS_FEATURE_KEY]: applicationsReducer,
   [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReducer,
   [fromVoluntaryEvents.VOLUNTARY_EVENTS_FEATURE_KEY]: voluntaryEventsReducer,
-  [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReduce,
+  [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReducer,
   [fromOrganizationApplications.ORGANIZATION_APPLICATIONS_FEATURE_KEY]:
     organizationApplicationsReducer,
   [fromOrganizationPositions.ORGANIZATION_POSITIONS_FEATURE_KEY]:

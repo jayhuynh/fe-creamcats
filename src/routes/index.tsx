@@ -84,12 +84,12 @@ export const resolvePath = <T extends any>(
   params: Parameters<typeof generatePath>[1] = {},
   queries?: QueryDictionary<T>,
 ) =>
-  Array.of(
-    generatePath(`${route.basePath || ''}${route.path}`, params),
-    queries ? qs.stringify(queries) : '',
-  )
-    .filter(Boolean)
-    .join('?');
+    Array.of(
+      generatePath(`${route.basePath || ''}${route.path}`, params),
+      queries ? qs.stringify(queries) : '',
+    )
+      .filter(Boolean)
+      .join('?');
 
 export const login: RouteConfig = {
   path: '/login',

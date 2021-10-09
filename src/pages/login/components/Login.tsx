@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   RadioGroup,
   Radio,
+  Box,
   makeStyles,
 } from '@material-ui/core';
 
@@ -23,6 +24,52 @@ interface LoginInputForm {
 const useStyle = makeStyles({
   // Define the styles here
   // Use ```className={classes.<style name>}``` in components to apply the styles
+  radio:{
+    flexDirection: 'row',
+
+    '& .MuiFormControlLabel-root':{
+      width: '48%',
+    },
+    '& .MuiFormControlLabel-label.Mui-disabled':{
+      color:'#333',
+    },
+  },
+  bold:{
+    fontWeight:'bold',
+  },
+  input:{
+    background:'white',
+    marginTop:12,
+    '& .MuiInputBase-input':{
+      color:'#d5d5d5',
+      borderColor:'#eaeaea',
+    },
+  },
+  check:{
+    '& .MuiSvgIcon-root path':{
+      // color:'#eaeaea',
+    },
+  },
+  text:{
+    color:'#929699',
+    display:'inline-block',
+  },
+  btn:{
+    '&:hover':{
+      color: '#fa6980',
+    },
+    cursor:'pointer',
+    fontSize:14,
+    fontWeight:'bold',
+  },
+  login: {
+    boxShadow: 'none',
+    background:'#fa6980',
+    fontSize: 12,
+    padding:'12px 45px',
+    position:'relative',
+    top:0,
+  },
 });
 
 export default function Login() {
@@ -49,10 +96,10 @@ export default function Login() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container direction="column" spacing={6}>
+      <Grid container direction="column" spacing={6} style={{ width:960, padding:145, fontFamily:'HelveticaNeue' }}>
         <Grid item>
-          <Typography>Hello! Welcome back to our platform.</Typography>
-          <Typography>Login Here</Typography>
+          <Typography style={{ fontSize:36, fontWeight:'bold' }}>Hello! Welcome back to our platform.</Typography>
+          <Typography style={{ fontSize:48, fontWeight:'bold', color:'#fa6980' }}>Login Here</Typography>
         </Grid>
         <Grid item>
           <Controller
@@ -60,7 +107,7 @@ export default function Login() {
             defaultValue={getValues('type')}
             name="type"
             render={({ field }) => (
-              <RadioGroup {...field}>
+              <RadioGroup {...field} className={classes.radio}>
                 <FormControlLabel
                   value="Volunteer"
                   control={<Radio />}
@@ -77,29 +124,36 @@ export default function Login() {
         </Grid>
         <Grid item>
           <Grid container direction="row" spacing={4}>
-            <Grid item>
-              <Grid container direction="column" spacing={2}>
-                <Typography>Email</Typography>
-                <TextField required type="email" {...register('email')} />
+            <Grid item style={{ width: '47%' }}>
+              <Grid container direction="column" spacing={2} style={{ margin:0 }}>
+                <Typography className={classes.bold}>Email</Typography>
+                <TextField className={classes.input} required variant="outlined" type="email" {...register('email')} />
               </Grid>
             </Grid>
-            <Grid item>
-              <Grid container direction="column" spacing={2}>
-                <Typography>Password</Typography>
-                <TextField required type="password" {...register('password')} />
+            <Grid item style={{ width: '47%' }}>
+              <Grid container direction="column" spacing={2} style={{ margin:0 }}>
+                <Typography className={classes.bold}>Password</Typography>
+                <TextField required className={classes.input} variant="outlined" type="password" {...register('password')} />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <Checkbox defaultChecked={false} {...register('rememberMe')} />
-          Remember me
-        </Grid>
-        <Grid item>
-          <Button>Register now</Button>
-          <Button>Forget password?</Button>
-          <Button type="submit">Login</Button>
-        </Grid>
+        <Box style={{ padding:'0 12px' }}>
+          <Checkbox className={classes.check} defaultChecked={false} {...register('rememberMe')} />
+          <Box className={classes.text}>Remember me</Box>
+        </Box>
+        <Box style={{ display:'flex', alignItems:'flex-end', padding:'0 42px 0 16px', marginTop:250 }}>
+          <Box className={classes.text + ' ' + classes.btn}>Register now</Box>
+          <Box className={classes.text + ' ' + classes.btn} style={{ marginLeft: 77 }}>Forget password?</Box>
+          <Box style={{ flex:1 }}></Box>
+          <Button
+          className={classes.login}
+                        variant="contained"
+                        type="submit"
+                        color="secondary">
+                        Login
+                      </Button>
+        </Box>
       </Grid>
     </form>
   );

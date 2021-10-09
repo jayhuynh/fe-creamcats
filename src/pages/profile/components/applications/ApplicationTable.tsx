@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+
+import { useDebounce } from 'use-debounce';
 
 import {
   Grid,
@@ -28,7 +30,6 @@ import {
   parseFilter,
   parseApplications,
 } from '../../../../utils/registerParser';
-import { register } from '../../../../serviceWorker';
 
 const useStyles = makeStyles({
   table: {
@@ -93,6 +94,8 @@ export default function ApplicationTable(props: any) {
     fromOrganizationApplications.selectOrganizationApplications,
   );
   const filters = useSelector(fromOrganizationApplications.selectFilters);
+  const [debouncedFilters] = useDebounce(filters, 300);
+
   const applicationNumber = useSelector(
     fromOrganizationApplications.selectNumber,
   );
@@ -103,10 +106,10 @@ export default function ApplicationTable(props: any) {
     dispatch(
       fromOrganizationApplications.doFetchOrganizationApplications({
         organizationId: organizationId,
-        filters: { ...parseFilter(filters) },
+        filters: { ...parseFilter(debouncedFilters) },
       }),
     );
-  }, [dispatch, filters, organizationId]);
+  }, [dispatch, organizationId, debouncedFilters]);
 
   return (
     <Grid item xs>

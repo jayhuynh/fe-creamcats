@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+
+import { fromAuth, useAppDispatch } from '../../../store';
 
 import {
   Grid,
@@ -12,7 +15,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 
-interface RegisterInputForm {
+export interface RegisterInputForm {
   type: String;
   phone: String;
   email: String;
@@ -28,14 +31,14 @@ const useStyle = makeStyles({
 export default function Register(props: any) {
   const classes = useStyle();
 
+  const registerInputForm = useSelector(fromAuth.selectRegister);
+  const dispatch = useAppDispatch();
+
   const { register, watch, handleSubmit, control, getValues } =
     useForm<RegisterInputForm>({
       defaultValues: {
+        ...registerInputForm,
         type: props.registerType,
-        phone: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
       },
     });
 
@@ -44,9 +47,10 @@ export default function Register(props: any) {
   useEffect(() => {
     const subscription = watch(value => {
       props.setRegisterType(value.type);
+      dispatch(fromAuth.doChangeRegister(value));
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [dispatch, watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

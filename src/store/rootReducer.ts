@@ -20,7 +20,6 @@ const rootReducer = combineReducers({
   [fromApplications.APPLICATIONS_FEATURE_KEY]: applicationsReducer,
   [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReducer,
   [fromVoluntaryEvents.VOLUNTARY_EVENTS_FEATURE_KEY]: voluntaryEventsReducer,
-  [fromNotifications.NOTIFICATIONS_FEATURE_KEY]: notificationsReducer,
   [fromOrganizationApplications.ORGANIZATION_APPLICATIONS_FEATURE_KEY]:
     organizationApplicationsReducer,
   [fromOrganizationPositions.ORGANIZATION_POSITIONS_FEATURE_KEY]:

@@ -18,7 +18,6 @@ import Position from '../pages/position';
 import Profile from '../pages/profile';
 import NotFound from '../pages/not-found';
 import SharingZone from '../pages/sharing-zone';
-import Organization from '../pages/organization';
 import OrganizationPage from '../pages/organization';
 import Test from '../pages/test';
 

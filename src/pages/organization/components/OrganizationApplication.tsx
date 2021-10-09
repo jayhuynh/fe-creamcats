@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import { Typography, Box, Tab, Tabs, AppBar } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import EventList from './EventList';
-import { VoluntaryEvent } from '../../../models';
-import { useSelector } from 'react-redux';
-import { fromProfile, fromVoluntaryEvents, useAppDispatch } from '../../../store';
-import { VoluntaryEventService } from '../../../services';
 
+import { VoluntaryEvent } from '../../../models';
+import EventList from './EventList';
+import {
+  fromProfile,
+  fromVoluntaryEvents,
+  useAppDispatch,
+} from '../../../store';
+import { VoluntaryEventService } from '../../../services';
+import Applications from '../../profile/components/applications';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -44,20 +50,20 @@ function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
-        <div
-            style={{ backgroundColor: '#f6f8f9', paddingTop: 10 }}
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box p={3}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
+    <div
+      style={{ backgroundColor: '#f6f8f9', paddingTop: 10 }}
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
   );
 }
 
@@ -77,36 +83,39 @@ export default function OrganizationApplication() {
   const [pastEvents, setPastEvents] = useState<VoluntaryEvent[]>([]);
 
   useEffect(() => {
-    dispatch(fromVoluntaryEvents.getVoluntaryEvents({ organizationId: profile.id }));
+    dispatch(
+      fromVoluntaryEvents.getVoluntaryEvents({ organizationId: profile.id }),
+    );
     (async () => {
-      const { data } = await VoluntaryEventService.getOrganizationVoluntaryEvents(profile.id, 'past');
+      const { data } =
+        await VoluntaryEventService.getOrganizationVoluntaryEvents(
+          profile.id,
+          'past',
+        );
       setPastEvents(data);
     })();
   }, [dispatch, profile, setPastEvents]);
-
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
 
   return (
-        <div className={classes.root}>
-            <AppBar className={classes.appBar} position="static">
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="simple tabs example"
-                >
-                    <Tab
-                        className={classes.tab}
-                        label="Application"
-                        {...a11yProps(0)}
-                    />
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                Put your application table here @Alex
-            </TabPanel>
-        </div>
+    <div className={classes.root}>
+      <AppBar className={classes.appBar} position="static">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="simple tabs example"
+        >
+          <Tab className={classes.tab} label="Application" {...a11yProps(0)} />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        Hey Jay, I need to get current organization's id here.
+        You can ask me to do this quick fix or change it by yourself.
+        <Applications organizationId={1} />
+      </TabPanel>
+    </div>
   );
 }

@@ -14,9 +14,9 @@ const theme = createTheme({
   },
 });
 
-export default function Applications() {
+export default function Applications(props: any) {
   // Where should I get the organization ID?
-  const organizationId = 1;
+  const organizationId = props.organizationId;
 
   return (
     <MuiThemeProvider theme={theme}>

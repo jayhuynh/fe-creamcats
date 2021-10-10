@@ -14,13 +14,14 @@ import {
   Box,
 } from '@material-ui/core';
 
-interface RegisterInputForm {
+export interface RegisterInputForm {
   type: String;
   phone: String;
   email: String;
   password: String;
   confirmPassword: String;
 }
+
 
 const useStyles = makeStyles({
   // Define the styles here

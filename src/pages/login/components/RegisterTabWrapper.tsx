@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: '#333',
     boxShadow: 'none',
     borderBottom: 'solid 1px #e5e5e5',
+    '& .MuiTouchRipple-root':{
+      display: 'none',
+    },
   },
   tab: {
     fontFamily: 'HelveticaNeue',

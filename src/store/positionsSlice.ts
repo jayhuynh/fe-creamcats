@@ -1,7 +1,8 @@
 import {
   createAsyncThunk,
   createSelector,
-  createSlice, PayloadAction,
+  createSlice,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 
 import { SerializedException, exceptionOf, Position, Tag } from '../models';
@@ -55,9 +56,7 @@ export const createInitialState = (): PositionsState => ({
 
 export const doFetchPositions = createAsyncThunk(
   'positions/fetch',
-  async (
-    data,
-    { rejectWithValue, getState }) => {
+  async (data, { rejectWithValue, getState }) => {
     try {
       const state: PositionsState = (getState() as any)[POSITIONS_FEATURE_KEY];
       const positions = await PositionService.getPositions(state.filters);
@@ -65,8 +64,7 @@ export const doFetchPositions = createAsyncThunk(
         positions,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e)
-        .toJson());
+      return rejectWithValue(exceptionOf(e).toJson());
     }
   },
 );
@@ -85,8 +83,7 @@ export const doFetchCurrentPosition = createAsyncThunk(
         position,
       };
     } catch (e) {
-      return rejectWithValue(exceptionOf(e)
-        .toJson());
+      return rejectWithValue(exceptionOf(e).toJson());
     }
   },
 );
@@ -111,7 +108,7 @@ const positionsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doFetchPositions.fulfilled, (state, action) => {
-      state.positions = [ ...action.payload.positions, ...state.positions];
+      state.positions = [...action.payload.positions, ...state.positions];
       state.loading = false;
       state.errors = [];
     });

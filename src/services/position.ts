@@ -67,3 +67,8 @@ export const getCurrentPosition = async (id: number) => {
     numberOfApplicants: 45,
   };
 };
+
+export const getEventPositions = async (eventId: Number) => {
+  const eventPositions = (await Axios.get(`/events/${eventId}/positions`)).data;
+  return eventPositions;
+};

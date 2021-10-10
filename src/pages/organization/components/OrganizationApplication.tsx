@@ -7,12 +7,13 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { VoluntaryEvent } from '../../../models';
 import EventList from './EventList';
 import {
+  fromOrganizationApplications,
   fromProfile,
   fromVoluntaryEvents,
   useAppDispatch,
 } from '../../../store';
 import { VoluntaryEventService } from '../../../services';
-import Applications from '../../profile/components/applications';
+import Applications from './applications';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -78,6 +79,9 @@ export default function OrganizationApplication() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const events = useSelector(fromVoluntaryEvents.selectAllVoluntaryEvents);
+  const applicationNumber = useSelector(
+    fromOrganizationApplications.selectNumber,
+  );
   const profile: any = useSelector(fromProfile.selectProfile);
   const dispatch = useAppDispatch();
   const [pastEvents, setPastEvents] = useState<VoluntaryEvent[]>([]);
@@ -108,13 +112,15 @@ export default function OrganizationApplication() {
           onChange={handleChange}
           aria-label="simple tabs example"
         >
-          <Tab className={classes.tab} label="Application" {...a11yProps(0)} />
+          <Tab
+            className={classes.tab}
+            label={'Applications (' + applicationNumber + ')'}
+            {...a11yProps(0)}
+          />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        Hey Jay, I need to get current organization's id here.
-        You can ask me to do this quick fix or change it by yourself.
-        <Applications organizationId={1} />
+        <Applications />
       </TabPanel>
     </div>
   );

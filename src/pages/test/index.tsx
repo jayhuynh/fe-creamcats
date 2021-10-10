@@ -1,4 +1,4 @@
-import Applications from '../profile/components/applications';
+import Applications from '../organization/components/applications';
 
 export default function Test() {
   return (

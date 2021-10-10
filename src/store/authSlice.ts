@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from '@reduxjs/toolkit';
 import Axios from 'axios';
 
 import { User, Token, SerializedException, exceptionOf } from '../models';
@@ -13,6 +17,7 @@ const TOKEN = 'cc.login';
 export const TYPE = 'cc.type';
 
 interface AuthState {
+  organizationId?: Number;
   token: Token | null;
   loading: boolean;
   errors: SerializedException[];
@@ -28,8 +33,8 @@ export const doLogin = createAsyncThunk(
   'auth/login',
   async (
     data: {
-      credential: Parameters<typeof AuthService['login']>[0],
-      rememberMe: boolean
+      credential: Parameters<typeof AuthService['login']>[0];
+      rememberMe: boolean;
     },
     { rejectWithValue },
   ) => {
@@ -45,8 +50,7 @@ export const doLogin = createAsyncThunk(
     } catch (e) {
       delete Axios.defaults.headers.common.Authorization;
       localStorage.removeItem(TOKEN);
-      return rejectWithValue(exceptionOf(e)
-        .toJson());
+      return rejectWithValue(exceptionOf(e).toJson());
     }
   },
 );
@@ -55,15 +59,27 @@ export const doResume = createAsyncThunk(
   'auth/resume',
   async (token: Token | undefined, { rejectWithValue }) => {
     try {
-      const userToken = token ?? (JSON.parse(localStorage.getItem(TOKEN) || 'null') as Token);
+      const userToken =
+        token ?? (JSON.parse(localStorage.getItem(TOKEN) || 'null') as Token);
       Axios.defaults.headers.common.Authorization = `Bearer ${userToken.jwt}`;
 
       return userToken;
     } catch (e) {
       delete Axios.defaults.headers.common.Authorization;
       localStorage.removeItem(TOKEN);
-      return rejectWithValue(exceptionOf(e)
-        .toJson());
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
+
+export const doFetchOrganizationId = createAsyncThunk(
+  'auth/FetchOrganizationId',
+  async (data, { rejectWithValue }) => {
+    try {
+      const organizationId = await AuthService.getOrganizationId();
+      return organizationId;
+    } catch (e) {
+      return rejectWithValue(exceptionOf(e).toJson());
     }
   },
 );
@@ -104,10 +120,31 @@ const authSlice = createSlice({
       state.loading = false;
       state.errors.push(payload);
     });
+
+    // Fetch organization ID
+    builder.addCase(doFetchOrganizationId.pending, state => {
+      state.loading = true;
+      state.errors = [];
+    });
+    builder.addCase(doFetchOrganizationId.fulfilled, (state, action) => {
+      state.organizationId = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(doFetchOrganizationId.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
+      state.organizationId = -1;
+      state.loading = false;
+      state.errors.push(payload);
+    });
   },
 });
 
 const selectAuthFeature = (state: AppState) => state[AUTH_FEATURE_KEY];
+
+export const selectOrganizationId = createSelector(
+  selectAuthFeature,
+  state => state.organizationId,
+);
 
 export const selectLoading = createSelector(
   selectAuthFeature,
@@ -120,8 +157,9 @@ export const selectErrors = createSelector(
 export const selectIsAuthenticated = createSelector(
   selectAuthFeature,
   selectProfileFeature,
-  (authState, profileState) => !!(profileState.profile && authState.token) || !!localStorage.getItem(TOKEN),
+  (authState, profileState) =>
+    !!(profileState.profile && authState.token) ||
+    !!localStorage.getItem(TOKEN),
 );
 
 export default authSlice.reducer;
-

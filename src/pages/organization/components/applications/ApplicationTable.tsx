@@ -33,7 +33,7 @@ import {
 
 const useStyles = makeStyles({
   table: {
-    width: 1100,
+    width: 1000,
   },
   tableContainer: {
     boxShadow: 'none',

@@ -13,9 +13,9 @@ import {
 
 import { OrganizationApplicationService } from '../services';
 import { AppState } from './index';
-import { PaginationInputs } from '../pages/profile/components/applications/ApplicationTable';
-import { SubFilterFormInputs } from '../pages/profile/components/applications/application-filter/Filters';
-import { FilterFormInputs } from '../pages/profile/components/applications/ApplicationSearchArea';
+import { PaginationInputs } from '../pages/organization/components/applications/ApplicationTable';
+import { SubFilterFormInputs } from '../pages/organization/components/applications/application-filter/Filters';
+import { FilterFormInputs } from '../pages/organization/components/applications/ApplicationSearchArea';
 
 export const ORGANIZATION_APPLICATIONS_FEATURE_KEY = 'organizationApplications';
 

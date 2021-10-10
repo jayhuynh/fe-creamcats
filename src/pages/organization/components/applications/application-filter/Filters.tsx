@@ -67,13 +67,13 @@ export default function Filters(props: any) {
 
   const organizationId = props.organizationId;
 
-  const [currentEventId, setCurrentEventId] = useState(-1);
+  const [currentEventId, setCurrentEventId] = useState('');
 
   const events = useSelector(fromEvents.selectEvents);
   const positions = useSelector(fromOrganizationPositions.selectEventPositions);
   const dispatch = useAppDispatch();
 
-  const { register, watch } = useForm<SubFilterFormInputs>({
+  const { register, watch, getValues } = useForm<SubFilterFormInputs>({
     defaultValues: {
       gender: '',
       event: '',
@@ -83,11 +83,16 @@ export default function Filters(props: any) {
 
   useEffect(() => {
     const subscription = watch(value => {
-      dispatch(fromOrganizationApplications.doChangeSubFilters(value));
-      setCurrentEventId(Number(value.event));
+      let processedValue;
+      if (value.event === '') {
+        processedValue = { ...value, position: '' };
+      } else {
+        processedValue = value;
+      }
+      dispatch(fromOrganizationApplications.doChangeSubFilters(processedValue));
       dispatch(
         fromOrganizationPositions.doFetchEventPositions({
-          eventId: Number(value.event),
+          eventId: Number(processedValue.event),
         }),
       );
     });
@@ -135,7 +140,7 @@ export default function Filters(props: any) {
             </Select>
           </FormControl>
         </Grid>
-        {currentEventId === -1 ? null : (
+        {getValues().event === '' ? null : (
           <Grid item xs>
             <FormControl variant="outlined" className={classes.sort}>
               <InputLabel id="positionSelectLabel">Position</InputLabel>

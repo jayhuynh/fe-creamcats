@@ -8,17 +8,16 @@ import CreateVolunteerProfile from './CreateVolunteerProfile';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    backgroundColor: '#f6f8f9',
-    paddingBottom: 73,
+    paddingTop: '5vh',
   },
   tabRoot: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
   },
   appBar: {
-    backgroundColor: '#f6f8f9',
+    backgroundColor: 'transparent',
     color: '#333',
     boxShadow: 'none',
+    borderBottom: 'solid 1px #e5e5e5',
   },
   tab: {
     fontFamily: 'HelveticaNeue',
@@ -43,7 +42,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
-      style={{ backgroundColor: '#f6f8f9', paddingTop: 10 }}
+      style={{  }}
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
@@ -81,7 +80,7 @@ export default function RegisterTabWrapper(props: any) {
   return (
     <div className={classes.root}>
       <AppBar className={classes.appBar} position="static">
-        <Tabs value={currentTab} onChange={handleChange}>
+        <Tabs value={currentTab} onChange={handleChange} style={{ width: '60vw', margin:'0 auto' }}>
           <Tab className={classes.tab} label="Register" {...a11yProps(0)} />
           <Tab
             className={classes.tab}

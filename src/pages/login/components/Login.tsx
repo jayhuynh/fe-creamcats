@@ -21,7 +21,7 @@ interface LoginInputForm {
   rememberMe: Boolean;
 }
 
-const useStyle = makeStyles({
+export const useStyle = makeStyles({
   // Define the styles here
   // Use ```className={classes.<style name>}``` in components to apply the styles
   radio:{
@@ -96,7 +96,7 @@ export default function Login(props: any) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container direction="column" spacing={6} style={{ width:960, padding:145, fontFamily:'HelveticaNeue' }}>
+      <Grid container direction="column" spacing={6} style={{ width:'60vw', margin:'10vh auto 0', fontFamily:'HelveticaNeue' }}>
         <Grid item>
           <Typography style={{ fontSize:36, fontWeight:'bold' }}>Hello! Welcome back to our platform.</Typography>
           <Typography style={{ fontSize:48, fontWeight:'bold', color:'#fa6980' }}>Login Here</Typography>
@@ -142,7 +142,7 @@ export default function Login(props: any) {
           <Checkbox className={classes.check} defaultChecked={false} {...register('rememberMe')} />
           <Box className={classes.text}>Remember me</Box>
         </Box>
-        <Box style={{ display:'flex', alignItems:'flex-end', padding:'0 42px 0 16px', marginTop:250 }}>
+        <Box style={{ display:'flex', alignItems:'flex-end', padding:'0 66px 0 16px', marginTop:'20vh' }}>
           <Box className={classes.text + ' ' + classes.btn}>Register now</Box>
           <Box className={classes.text + ' ' + classes.btn} style={{ marginLeft: 77 }}>Forget password?</Box>
           <Box style={{ flex:1 }}></Box>

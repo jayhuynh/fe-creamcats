@@ -6,18 +6,23 @@ import theme from './theme';
 import ScrollToTop from '../routes/ScrollToTop';
 import LoadingProgress from '../LoadingProgress';
 import SnackNotification from './SnackNotification';
+import { useLocation } from 'react-router-dom';
 
-export const Layout = () => (
-  <MuiThemeProvider theme={theme}>
-    <CssBaseline />
-    {/*<ScrollToTop/>*/}
-    <LoadingProgress/>
-    <SnackNotification/>
-    <Header/>
-    <Routes routes={routes}/>
-    <Footer/>
-  </MuiThemeProvider>
-);
+export const Layout = () =>{
+  const { pathname } = useLocation();
+  
+  return (
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      {/*<ScrollToTop/>*/}
+      <LoadingProgress/>
+      <SnackNotification/>
+      {pathname !== '/test' && <Header/>}
+      <Routes routes={routes}/>
+      {pathname !== '/test' && <Footer/>}
+    </MuiThemeProvider>
+  );
+};
 
 export default Layout;
 

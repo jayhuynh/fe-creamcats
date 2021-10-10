@@ -26,7 +26,7 @@ export default function RegisterAndLogin() {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor:'#f6f8f9' }}>
       {/* Stylise the layout with attributes of `Grid`*/}
       <Grid container direction="row" spacing={4}>
         <Grid item xs={4}>
@@ -50,7 +50,7 @@ export default function RegisterAndLogin() {
             </RadioGroup>
           </FormControl>
         </Grid>
-        <Grid item>
+        <Grid item xs={8}>
           {currentTab === 'login' ? (
             <Login goRegister={setTab} />
           ) : (

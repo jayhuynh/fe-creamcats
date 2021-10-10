@@ -1,24 +1,16 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-
+import { useStyle } from '../components/Login';
 import {
   Grid,
   Typography,
   TextField,
   Button,
-  Select,
-  MenuItem,
   makeStyles,
-  IconButton,
+  Box,
 } from '@material-ui/core';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
-import { fromAuth, useAppDispatch } from '../../../store';
-import { CcDatePicker } from '../../../utils';
-
-export interface VolunteerProfileInputForm {
+interface VolunteerProfileInputForm {
   avatar: String;
   firstName: String;
   lastName: String;
@@ -26,76 +18,54 @@ export interface VolunteerProfileInputForm {
   gender: String;
 }
 
-const useStyle = makeStyles({
-  input: {
-    display: 'none',
-  },
+const useStyles = makeStyles({
   // Define the styles here
   // Use ```className={classes.<style name>}``` in components to apply the styles
 });
 
 export default function CreateVolunteerProfile(props: any) {
-  const classes = useStyle();
+  const classes = useStyles();
+  const loginCls = useStyle();
 
-  const registerInfo = useSelector(fromAuth.selectRegister);
-  const volunteerProfile = useSelector(fromAuth.selectVolunteerProfile);
-  const dispatch = useAppDispatch();
-
-  const { register, watch, handleSubmit, setValue } =
+  const { register, watch, handleSubmit, control, getValues } =
     useForm<VolunteerProfileInputForm>({
-      defaultValues: volunteerProfile,
+      defaultValues: {
+        avatar: '',
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+      },
     });
 
-  const onSubmit = (data: VolunteerProfileInputForm) =>
-    console.log({ ...registerInfo, ...data });
+  const onSubmit = (data: VolunteerProfileInputForm) => console.log(data);
 
   useEffect(() => {
     const subscription = watch(value => {
-      dispatch(fromAuth.doChangeVolunteerProfile(value));
+      // console.log(value);
     });
     return () => subscription.unsubscribe();
-  }, [dispatch, watch]);
+  }, [watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container direction="column" spacing={6}>
+      <Grid container direction="column" spacing={6} style={{ width:'60vw',  margin:'0 auto 0', fontFamily:'HelveticaNeue' }}>
         <Grid item>
-          <Typography>Thanks! Now setup Your Profile</Typography>
+          <Typography style={{ fontSize:36, fontWeight:'bold' }}>Thanks! Now setup&nbsp;
+          <Box style={{ fontSize:48, fontWeight:'bold', color:'#fa6980', display:'inline' }}>Your Profile</Box>
+          </Typography>
         </Grid>
         <Grid item>
           <Grid container direction="row" spacing={4}>
-            <Grid item>
-              <Grid container direction="column" spacing={2}>
-                <Grid item>
-                  <Typography>Set your avatar</Typography>
-                </Grid>
-                <Grid item>
-                  {/* Not completed. Save the url to Redux store after integrate the AWS3 API */}
-                  <input
-                    accept="image/*"
-                    className={classes.input}
-                    id="icon-button-file"
-                    type="file"
-                  />
-                  <label htmlFor="icon-button-file">
-                    <IconButton
-                      color="primary"
-                      aria-label="upload picture"
-                      component="span"
-                    >
-                      <PhotoCamera />
-                    </IconButton>
-                  </label>
-                </Grid>
-              </Grid>
-            </Grid>
+            <Grid item></Grid>
             <Grid item>
               <Grid container direction="column" spacing={4}>
                 <Grid item>
                   <Grid container direction="column" spacing={2}>
-                    <Typography>First name</Typography>
+                    <Typography className={loginCls.bold}>First name</Typography>
                     <TextField
                       required
+                      className={loginCls.input} variant="outlined" 
                       type="text"
                       {...register('firstName')}
                     />
@@ -103,8 +73,8 @@ export default function CreateVolunteerProfile(props: any) {
                 </Grid>
                 <Grid item>
                   <Grid container direction="column" spacing={2}>
-                    <Typography>Last name</Typography>
-                    <TextField required type="text" {...register('lastName')} />
+                    <Typography className={loginCls.bold}>Last name</Typography>
+                    <TextField className={loginCls.input} variant="outlined" required type="text" {...register('lastName')} />
                   </Grid>
                 </Grid>
               </Grid>
@@ -113,34 +83,16 @@ export default function CreateVolunteerProfile(props: any) {
         </Grid>
         <Grid item>
           <Grid container direction="row" spacing={4}>
-            <Grid item>
+            <Grid item style={{ width: '47%' }}>
               <Grid container direction="column" spacing={2}>
-                <Typography>Date of birth</Typography>
-                <CcDatePicker
-                  {...register('dateOfBirth')}
-                  value={watch('dateOfBirth')}
-                  onChange={(date: MaterialUiPickersDate) =>
-                    setValue('dateOfBirth', date?.toDate() || new Date())
-                  }
-                  animateYearScrolling
-                />
+                <Typography className={loginCls.bold}>Date of birth</Typography>
+                <TextField className={loginCls.input} variant="outlined" required type="text" {...register('dateOfBirth')} />
               </Grid>
             </Grid>
-            <Grid item>
+            <Grid item style={{ width: '47%' }}>
               <Grid container direction="column" spacing={2}>
-                <Typography>Gender</Typography>
-                <Select
-                  labelId="genderSelectLabel"
-                  id="genderSelect"
-                  defaultValue={''}
-                  label="Gender"
-                  {...register('gender')}
-                >
-                  <MenuItem value="">Absent</MenuItem>
-                  <MenuItem value="FEMALE">Female</MenuItem>
-                  <MenuItem value="MALE">Male</MenuItem>
-                  <MenuItem value="OTHER">Other</MenuItem>
-                </Select>
+                <Typography className={loginCls.bold}>Gender</Typography>
+                <TextField className={loginCls.input} variant="outlined" required type="text" {...register('gender')} />
               </Grid>
             </Grid>
           </Grid>
@@ -153,7 +105,7 @@ export default function CreateVolunteerProfile(props: any) {
           >
             Back
           </Button>
-          <Button type="submit">Register</Button>
+          <Button type="submit">Continue</Button>
         </Grid>
       </Grid>
     </form>

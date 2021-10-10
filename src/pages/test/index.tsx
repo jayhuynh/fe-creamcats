@@ -1,9 +1,9 @@
-import Applications from '../organization/components/applications';
+import RegisterAndLogin from '../login/RegisterAndLogin';
 
 export default function Test() {
   return (
     <div>
-      <Applications />
+      <RegisterAndLogin />
     </div>
   );
 }

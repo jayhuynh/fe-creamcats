@@ -58,7 +58,7 @@ const HighlightBanner = () => {
   const classes = useStyles();
 
   return (
-    <div style={{ display: 'flex', color: 'white' }}>
+    <div style={{ display: 'flex', color: 'white', background: 'white' }}>
       <div
         className={classes.bg}
         style={{

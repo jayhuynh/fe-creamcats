@@ -23,7 +23,7 @@ export const createInitialState = (): NotificationsState => ({
   notificationsPack: [],
 });
 
-const notificationssSlice = createSlice({
+const notificationsSlice = createSlice({
   name: NOTIFICATIONS_FEATURE_KEY,
   initialState: createInitialState(),
   reducers: {
@@ -43,6 +43,6 @@ export const selectNotificationPack = createSelector(
   state => state.notificationsPack,
 );
 
-export const { doSetNotification, doPushNotification } = notificationssSlice.actions;
-export default notificationssSlice.reducer;
+export const { doSetNotification, doPushNotification } = notificationsSlice.actions;
+export default notificationsSlice.reducer;
 

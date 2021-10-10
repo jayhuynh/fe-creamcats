@@ -7,12 +7,51 @@ import Box from '@material-ui/core/Box';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import { CcDropZone, DialogTitle } from '../../../utils';
+import CcDropZone from './CcDropZone';
+// import CcDropZone from '../../../utils/CcDropZone';
 import Editor from '../../../utils/Editor';
-
 
 const useStyles = makeStyles(theme => ({
   root: {
+    '& .MuiFormControl-root': {
+      display: 'block',
+    },
+    '& .MuiFilledInput-root':{
+      width: '100%',
+      borderRadius: 4,
+      background: '#f6f8f9',
+    },
+    '& .MuiFilledInput-input':{
+      padding: '12px',
+    },
+    '& .MuiFilledInput-multiline':{
+      padding: 0,
+    },
+    '& .MuiFilledInput-underline:before':{
+      display: 'none',
+    },
+    '& .MuiButton-containedSecondary':{
+      boxShadow: 'none',
+      background: '#fa6980',
+    },
+    '& .MuiButton-root':{
+      padding: '6px 30px',
+    },
+    '& .ck-content':{
+      minHeight: 240,
+    },
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    color: '#333',
+    marginBottom:40,
+  },
+  title2: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#666',
+    margin:'26px 0 15px',
   },
   maxSize: {
     width: '100%',
@@ -25,11 +64,6 @@ const useStyles = makeStyles(theme => ({
     border: '2px solid lightgrey',
     borderRadius: 6,
   },
-  editor: {
-    '.ck-editor__editable_inline': {
-      'min-height': '500px',
-    },
-  },
 }));
 
 interface CreatePostFormInputs {
@@ -41,7 +75,12 @@ interface CreatePostFormInputs {
 export const CreatePost = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm<CreatePostFormInputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<CreatePostFormInputs>({
     defaultValues: { image: '', title: '', body: '' },
   });
 
@@ -58,26 +97,18 @@ export const CreatePost = () => {
     // await dispatch(fromAuth.doCreatePost({ credential: { email: formattedEmail, password }, rememberMe }));
   };
 
-  const handleChangeImage = (event: any) => {
-
-  };
+  const handleChangeImage = (event: any) => {};
 
   return (
     <div>
-      <Button className={classes.button} onClick={handleClickOpen} startIcon={<AddIcon/>}>
+      <Button className={classes.button} onClick={handleClickOpen} startIcon={<AddIcon />}>
         Create a new post
       </Button>
-      <Dialog
-        fullWidth
-        maxWidth="md"
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title">
-        <DialogTitle id="create-post-dialog" onClose={handleClose}>
-          Create a new post
-        </DialogTitle>
-        <DialogContent className={classes.root}>
+      <Dialog maxWidth="md" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        {/* <DialogTitle  id="create-post-dialog" onClose={handleClose}>&nbsp;</DialogTitle> */}
+        <DialogContent className={classes.root} style={{ width:722, padding: '40px 76px' }}>
           <Grid container>
+           
             <form onSubmit={handleSubmit(doCreatePost)} className={classes.maxSize}>
               <Grid
                 container
@@ -86,38 +117,25 @@ export const CreatePost = () => {
                 direction="column"
                 className={classes.maxSize}
               >
-                <Box
-                  border={1}
-                  borderColor="grey.400"
-                  borderRadius={5}
-                  width={0.70}>
-                  <CcDropZone/>
+                 <Box width={1}>
+              <Typography className={classes.title}> Create a new post</Typography>
+            </Box>
+                <Box borderRadius={5} width={1}>
+                  <CcDropZone />
                 </Box>
-                <Box width={0.70}>
-                  <TextField
-                    variant="outlined"
-                    fullWidth
-                    required
-                    margin="normal"
-                    autoFocus
-                    label="Title"
-                    {...register('title')}
-                    error={!!errors.title}
-                  />
+                <Box width={1}>
+                  <Typography className={classes.title2}>Title of your post</Typography>
+                  <TextField variant="filled" placeholder="type something" />
                 </Box>
-                <Box width={0.70} className={classes.editor}>
-                  <Editor/>
+                <Box width={1}>
+                  <Typography className={classes.title2}>Content</Typography>
+                  <Editor></Editor>
                 </Box>
-                <Box mt={2} width={0.70} marginBottom={2}>
-                  <Grid
-                    container>
-                    <Grid container xs={6} justifyContent="flex-start" alignItems="center">
-                    </Grid>
+                <Box mt={2} width={1} marginBottom={2}>
+                  <Grid container>
+                    <Grid container xs={6} justifyContent="flex-start" alignItems="center"></Grid>
                     <Grid container xs={6} justifyContent="flex-end" alignItems="center">
-                      <Button
-                        variant="contained"
-                        type="submit"
-                        color="secondary">
+                      <Button variant="contained" type="submit" color="secondary">
                         Post
                       </Button>
                     </Grid>

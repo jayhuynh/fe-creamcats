@@ -1,16 +1,24 @@
-import { Avatar, Grid, Typography } from '@material-ui/core';
+import { Avatar, Grid, Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import SearchIcon from '@material-ui/icons/Search';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 const useStyles = makeStyles(() => ({
-  'top-menu':{
+  'top-menu': {
     color: 'gray',
     fontSize: '14px',
-    lineHeight: '30px',
-    '& span':{
+    display: 'flex',
+    alignItems: 'center',
+    height: '60px',
+    flex:1,
+    marginLeft: 40,
+    fontWeight:'bold',
+    
+    '& span': {
       display: 'inline-block',
       margin: '0 20px',
       cursor: 'pointer',
     },
-    '& span:hover':{
+    '& span:hover': {
       color: '#343638',
     },
   },
@@ -19,23 +27,23 @@ const useStyles = makeStyles(() => ({
 const Header = () => {
   const classes = useStyles();
   return (
-    <div style={{ display: 'flex', alignItems: 'center', height: 50, background: '#f6f8f9', padding: '0 10px' }}>
-      <Typography style={{ color: '#fa6980', fontSize: 13, flex: 1 }}>LOGO</Typography>
-
-      <Grid container>
-        <Grid container item justifyContent="flex-start"></Grid>
-        <Grid container item justifyContent="flex-end">
-          <Grid item className={classes['top-menu']}>
-            <span style={{ color:'#343638' }}><Typography>HOME</Typography></span>
-            <span ><Typography>OPPORTUNITIES</Typography></span>
-            <span ><Typography>ABOUT US</Typography></span>
-          </Grid>
-          <Grid item>
-            <Avatar style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft:10 }}>N</Avatar>
-          </Grid>
-        </Grid>
+    <Box style={{ fontFamily:'HelveticaNeue', display: 'flex', alignItems: 'center', height: 60, background: '#f6f8f9', padding: '0 60px' }}>
+      <Typography style={{ color: '#fa6980', fontSize: 14, fontWeight:'bold' }}>LOGO</Typography>
+      <Grid item className={classes['top-menu']}>
+        <span style={{ color: '#343638' }}>
+          <Typography style={{ fontWeight:'bold' }}>HOME</Typography>
+        </span>
+        <span>
+          <Typography style={{ fontWeight:'bold' }}>OPPORTUNITIES</Typography>
+        </span>
+        <span>
+          <Typography style={{ fontWeight:'bold' }}>SHARING ZONE</Typography>
+        </span>
       </Grid>
-    </div>
+      <SearchIcon></SearchIcon>
+      <NotificationsIcon style={{ marginLeft: 30 }}></NotificationsIcon>
+      <Avatar style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 30 }}>N</Avatar>
+    </Box>
   );
 };
 

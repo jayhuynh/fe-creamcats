@@ -10,6 +10,7 @@ import { profile } from '../routes';
 export const AUTH_FEATURE_KEY = 'auth';
 
 const TOKEN = 'cc.login';
+export const TYPE = 'cc.type';
 
 interface AuthState {
   token: Token | null;
@@ -35,7 +36,10 @@ export const doLogin = createAsyncThunk(
     try {
       const token = await AuthService.login(data.credential);
       Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
-      if (data.rememberMe) localStorage.setItem(TOKEN, JSON.stringify(token));
+      if (data.rememberMe) {
+        localStorage.setItem(TOKEN, JSON.stringify(token));
+        localStorage.setItem(TYPE, JSON.stringify(data.credential.type));
+      }
 
       return token;
     } catch (e) {
@@ -53,7 +57,6 @@ export const doResume = createAsyncThunk(
     try {
       const userToken = token ?? (JSON.parse(localStorage.getItem(TOKEN) || 'null') as Token);
       Axios.defaults.headers.common.Authorization = `Bearer ${userToken.jwt}`;
-      localStorage.setItem(TOKEN, JSON.stringify(userToken));
 
       return userToken;
     } catch (e) {

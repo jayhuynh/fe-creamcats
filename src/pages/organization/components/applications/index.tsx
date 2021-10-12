@@ -1,5 +1,11 @@
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import { Grid } from '@material-ui/core';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+
+import { fromAuth, useAppDispatch } from '../../../../store';
+
 import ApplicationSearchArea from './ApplicationSearchArea';
 import ApplicationTable from './ApplicationTable';
 
@@ -16,7 +22,13 @@ const theme = createTheme({
 
 export default function Applications(props: any) {
   // Where should I get the organization ID?
-  const organizationId = props.organizationId;
+  const organizationId = useSelector(fromAuth.selectOrganizationId);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fromAuth.doFetchOrganizationId());
+  }, [dispatch]);
 
   return (
     <MuiThemeProvider theme={theme}>

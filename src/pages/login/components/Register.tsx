@@ -13,6 +13,7 @@ import {
   makeStyles,
   Box,
 } from '@material-ui/core';
+import { fromAuth, useAppDispatch } from '../../../store';
 
 export interface RegisterInputForm {
   type: String;
@@ -31,6 +32,7 @@ const useStyles = makeStyles({
 export default function Register(props: any) {
   const classes = useStyles();
   const loginCls = useStyle();
+  const dispatch = useAppDispatch();
 
   const { register, watch, handleSubmit, control, getValues } =
     useForm<RegisterInputForm>({
@@ -47,6 +49,7 @@ export default function Register(props: any) {
 
   useEffect(() => {
     const subscription = watch(value => {
+      dispatch(fromAuth.doChangeRegister(value));
       props.setRegisterType(value.type);
     });
     return () => subscription.unsubscribe();
@@ -105,7 +108,7 @@ export default function Register(props: any) {
                 <Typography className={loginCls.bold}>Confirm password</Typography>
                 <TextField
                   required
-                  className={loginCls.input} 
+                  className={loginCls.input}
                   variant="outlined"
                   type="text"
                   {...register('confirmPassword')}

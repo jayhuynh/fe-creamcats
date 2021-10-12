@@ -14,7 +14,6 @@ import { OrganizationProfileInputForm } from '../pages/login/components/CreateOr
 import { AuthService } from '../services';
 import { AppState } from './index';
 import { selectProfile, selectProfileFeature } from './profileSlice';
-import { profile } from '../routes';
 
 export const AUTH_FEATURE_KEY = 'auth';
 

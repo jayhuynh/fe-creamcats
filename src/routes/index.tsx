@@ -19,7 +19,6 @@ import Profile from '../pages/profile';
 import NotFound from '../pages/not-found';
 import SharingZone from '../pages/sharing-zone';
 import OrganizationPage from '../pages/organization';
-import Test from '../pages/test';
 
 export interface RouteConfig extends RouteProps {
   path: string;
@@ -140,7 +139,6 @@ const routes: RouteConfig[] = [
   sharingZone,
   login,
   orgnization,
-  test,
   notfound,
 ];
 

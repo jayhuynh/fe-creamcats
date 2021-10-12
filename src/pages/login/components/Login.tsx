@@ -70,6 +70,22 @@ export const useStyle = makeStyles({
     position:'relative',
     top:0,
   },
+  back:{
+    fontSize: 12,
+    padding:'10px 45px',
+    borderRadius: 6,
+    border: 'solid 2px #d5d5d5',
+    color: '#bfc4c9',
+    marginRight:20,
+  },
+  imgBtn:{
+    width: 200,
+    height:200,
+    backgroundColor:'#eaeaea',
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
+  },
 });
 
 export default function Login(props: any) {

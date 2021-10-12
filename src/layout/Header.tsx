@@ -1,18 +1,18 @@
-import { Avatar, Grid, Typography, Box } from '@material-ui/core';
+import React from 'react';
+import { Avatar, Grid, Typography, Menu } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 const useStyles = makeStyles(() => ({
   'top-menu': {
     color: 'gray',
     fontSize: '14px',
-    display: 'flex',
-    alignItems: 'center',
-    height: '60px',
-    flex:1,
-    marginLeft: 40,
-    fontWeight:'bold',
-    
+    lineHeight: '30px',
     '& span': {
       display: 'inline-block',
       margin: '0 20px',
@@ -26,24 +26,86 @@ const useStyles = makeStyles(() => ({
 
 const Header = () => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+  const handleToggle = () => {
+    setOpen(prevOpen => !prevOpen);
+  };
+
+  const handleClose = (event: React.MouseEvent<EventTarget>) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event: React.KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current!.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
   return (
-    <Box style={{ fontFamily:'HelveticaNeue', display: 'flex', alignItems: 'center', height: 60, background: '#f6f8f9', padding: '0 60px' }}>
-      <Typography style={{ color: '#fa6980', fontSize: 14, fontWeight:'bold' }}>LOGO</Typography>
-      <Grid item className={classes['top-menu']}>
-        <span style={{ color: '#343638' }}>
-          <Typography style={{ fontWeight:'bold' }}>HOME</Typography>
-        </span>
-        <span>
-          <Typography style={{ fontWeight:'bold' }}>OPPORTUNITIES</Typography>
-        </span>
-        <span>
-          <Typography style={{ fontWeight:'bold' }}>SHARING ZONE</Typography>
-        </span>
+    <div style={{ display: 'flex', alignItems: 'center', height: 50, background: '#f6f8f9', padding: '0 10px' }}>
+      <Typography style={{ color: '#fa6980', fontSize: 13, flex: 1 }}>LOGO</Typography>
+
+      <Grid container>
+        <Grid container item justifyContent="flex-start"></Grid>
+        <Grid container item justifyContent="flex-end">
+          <Grid item className={classes['top-menu']}>
+            <span style={{ color: '#343638' }}>
+              <Typography>HOME</Typography>
+            </span>
+            <span>
+              <Typography>OPPORTUNITIES</Typography>
+            </span>
+            <span>
+              <Typography>ABOUT US</Typography>
+            </span>
+          </Grid>
+          <Grid item>
+            
+            <Avatar
+             onClick={handleToggle}
+              style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}
+            >
+            <span 
+             ref={anchorRef}
+             >N</span>
+            </Avatar>
+
+            <Popper open={open} anchorEl={anchorRef.current} placement='bottom-end' role={undefined} transition disablePortal>
+              {({ TransitionProps }) => (
+                <Grow
+                  {...TransitionProps}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList  id="menu-list-grow">
+                        <MenuItem onClick={handleClose}>Logout&nbsp; <ExitToAppIcon></ExitToAppIcon></MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
+          </Grid>
+        </Grid>
       </Grid>
-      <SearchIcon></SearchIcon>
-      <NotificationsIcon style={{ marginLeft: 30 }}></NotificationsIcon>
-      <Avatar style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 30 }}>N</Avatar>
-    </Box>
+    </div>
   );
 };
 

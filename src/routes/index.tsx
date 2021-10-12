@@ -128,11 +128,6 @@ export const notfound: RouteConfig = {
   component: NotFound,
 };
 
-export const test: RouteConfig = {
-  path: '/test',
-  component: Test,
-};
-
 const routes: RouteConfig[] = [
   {
     path: '/',

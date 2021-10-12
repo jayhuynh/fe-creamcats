@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useStyle } from '../components/Login';
+import { useSelector } from 'react-redux';
+
+import { fromAuth, useAppDispatch } from '../../../store';
+
 import {
   Grid,
   Typography,
   TextField,
   Button,
   makeStyles,
+  IconButton,
+  Box,
 } from '@material-ui/core';
-
-interface OrganizationProfileInputForm {
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+export interface OrganizationProfileInputForm {
   avatar: String;
   name: String;
   address: String;
@@ -17,6 +23,9 @@ interface OrganizationProfileInputForm {
 }
 
 const useStyles = makeStyles({
+  input: {
+    display: 'none',
+  },
   // Define the styles here
   // Use ```className={classes.<style name>}``` in components to apply the styles
 });
@@ -24,68 +33,97 @@ const useStyles = makeStyles({
 export default function CreateOrganizationProfile(props: any) {
   const classes = useStyles();
   const loginCls = useStyle();
+  const registerInfo = useSelector(fromAuth.selectRegister);
+  const organizationProfile = useSelector(fromAuth.selectOrganizationProfile);
+  const dispatch = useAppDispatch();
+
   const { register, watch, handleSubmit, control, getValues } =
     useForm<OrganizationProfileInputForm>({
-      defaultValues: {
-        avatar: '',
-        name: '',
-        address: '',
-        description: '',
-      },
+      defaultValues: organizationProfile,
     });
 
-  const onSubmit = (data: OrganizationProfileInputForm) => console.log(data);
+  const onSubmit = (data: OrganizationProfileInputForm) =>
+    console.log({ ...registerInfo, ...data });
 
   useEffect(() => {
     const subscription = watch(value => {
-      //   console.log(value);
+      dispatch(fromAuth.doChangeOrganizationProfile(value));
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [dispatch, watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container direction="column" spacing={6}>
-        <Grid item spacing={6} style={{ margin:'10vh auto 0', fontFamily:'HelveticaNeue' }}>
-          <Typography style={{ fontSize:36, fontWeight:'bold' }}>Thanks! Now setup</Typography>
-          <Typography style={{ fontSize:55, fontWeight:'bold', color:'#fa6980' }}>Your Page</Typography>
+      <Grid container direction="column" spacing={6} style={{ width:'60vw', margin:'0 auto 0', fontFamily:'HelveticaNeue' }}>
+        <Grid item spacing={6} >
+          <Typography style={{ fontSize:36, fontWeight:'bold' }}>Thanks! Now setup&nbsp;
+          <Box style={{ fontSize:48, fontWeight:'bold', color:'#fa6980', display:'inline' }}>Your Page</Box>
+          </Typography>
         </Grid>
         <Grid item>
           <Grid container direction="row" spacing={4}>
-            <Grid item></Grid>
-            <Grid item>
+          <Grid item style={{ width: '47%', padding:'0 24px' }}>
+              <Grid item>
+                  <Typography className={loginCls.bold}>Set your avatar</Typography>
+                </Grid>
+                <Grid item className={loginCls.imgBtn}>
+                  {/* Not completed. Save the url to Redux store after integrate the AWS3 API */}
+                  <input
+                    accept="image/*"
+                    className={classes.input}
+                    id="icon-button-file"
+                    type="file"
+                  />
+                  <label htmlFor="icon-button-file">
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      component="span"
+                    >
+                      <PhotoCamera />
+                    </IconButton>
+                  </label>
+                </Grid>
+          </Grid>
+            <Grid item style={{ width: '47%' }}>
               <Grid container direction="column" spacing={4}>
                 <Grid item>
                   <Grid container direction="column" spacing={2}>
-                    <Typography>Organisation name</Typography>
-                    <TextField required type="text" {...register('name')} />
+                    <Typography className={loginCls.bold}>Organisation name</Typography>
+                    <TextField  className={loginCls.input} variant="outlined"  required type="text" {...register('name')} />
                   </Grid>
                 </Grid>
                 <Grid item>
                   <Grid container direction="column" spacing={2}>
-                    <Typography>Address</Typography>
-                    <TextField required type="text" {...register('address')} />
+                    <Typography className={loginCls.bold}>Address</Typography>
+                    <TextField  className={loginCls.input} variant="outlined"  required type="text" {...register('address')} />
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <Grid container direction="column" spacing={2}>
-            <Typography>Description</Typography>
-            <TextField required type="text" {...register('description')} />
+        <Grid item style={{ width: '94%', paddingLeft:32 }}>
+          <Grid container direction="column" spacing={2} >
+            <Typography className={loginCls.bold} >Description</Typography>
+            <TextField  className={loginCls.input} multiline rows={3} variant="outlined"  required type="text" {...register('description')} />
           </Grid>
         </Grid>
-        <Grid item>
-          <Button
+        <Grid item style={{ display:'flex', alignItems:'flex-end', padding:'0 66px 0 16px', marginTop:'5vh' }}>
+        <Box style={{ flex:1 }}></Box>
+        <Button
+        className={loginCls.back}
             onClick={() => {
               props.setTab(0);
             }}
           >
             Back
           </Button>
-          <Button type="submit">Continue</Button>
+          <Button 
+          className={loginCls.login}
+          color="secondary"
+          variant="contained"
+          type="submit">Continue</Button>
         </Grid>
       </Grid>
     </form>

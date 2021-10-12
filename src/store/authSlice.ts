@@ -2,10 +2,15 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 import Axios from 'axios';
 
 import { User, Token, SerializedException, exceptionOf } from '../models';
+import { RegisterInputForm } from '../pages/login/components/Register';
+import { VolunteerProfileInputForm } from '../pages/login/components/CreateVolunteerProfile';
+import { OrganizationProfileInputForm } from '../pages/login/components/CreateOrganizationProfile';
+
 import { AuthService } from '../services';
 import { AppState } from './index';
 import { selectProfile, selectProfileFeature } from './profileSlice';
@@ -19,12 +24,35 @@ export const TYPE = 'cc.type';
 interface AuthState {
   organizationId?: Number;
   token: Token | null;
+  register: RegisterInputForm;
+  volunteerProfile: VolunteerProfileInputForm;
+  organizationProfile: OrganizationProfileInputForm;
   loading: boolean;
   errors: SerializedException[];
 }
 
 export const createInitialState = (): AuthState => ({
   token: null,
+  register: {
+    type: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  },
+  volunteerProfile: {
+    avatar: '',
+    firstName: '',
+    lastName: '',
+    dateOfBirth: new Date(),
+    gender: '',
+  },
+  organizationProfile: {
+    avatar: '',
+    name: '',
+    address: '',
+    description: '',
+  },
   loading: false,
   errors: [],
 });
@@ -87,7 +115,24 @@ export const doFetchOrganizationId = createAsyncThunk(
 const authSlice = createSlice({
   name: AUTH_FEATURE_KEY,
   initialState: createInitialState(),
-  reducers: {},
+  reducers: {
+    doChangeRegister: (state, action: PayloadAction<RegisterInputForm>) => {
+      state.register = action.payload;
+    },
+
+    doChangeVolunteerProfile: (
+      state,
+      action: PayloadAction<VolunteerProfileInputForm>,
+    ) => {
+      state.volunteerProfile = action.payload;
+    },
+    doChangeOrganizationProfile: (
+      state,
+      action: PayloadAction<OrganizationProfileInputForm>,
+    ) => {
+      state.organizationProfile = action.payload;
+    },
+  },
   extraReducers: builder => {
     // Login
     builder.addCase(doLogin.pending, state => {
@@ -161,5 +206,24 @@ export const selectIsAuthenticated = createSelector(
     !!(profileState.profile && authState.token) ||
     !!localStorage.getItem(TOKEN),
 );
+
+export const selectRegister = createSelector(
+  selectAuthFeature,
+  state => state.register,
+);
+export const selectVolunteerProfile = createSelector(
+  selectAuthFeature,
+  state => state.volunteerProfile,
+);
+export const selectOrganizationProfile = createSelector(
+  selectAuthFeature,
+  state => state.organizationProfile,
+);
+
+export const {
+  doChangeRegister,
+  doChangeVolunteerProfile,
+  doChangeOrganizationProfile,
+} = authSlice.actions;
 
 export default authSlice.reducer;

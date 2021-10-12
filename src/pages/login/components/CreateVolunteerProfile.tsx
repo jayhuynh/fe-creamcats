@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useStyle } from '../components/Login';
+import { useSelector } from 'react-redux';
 import {
   Grid,
   Typography,
@@ -8,9 +9,15 @@ import {
   Button,
   makeStyles,
   Box,
+  Select,
+  MenuItem,
+  IconButton,
 } from '@material-ui/core';
-
-interface VolunteerProfileInputForm {
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { fromAuth, useAppDispatch } from '../../../store';
+import { CcDatePicker } from '../../../utils';
+export interface VolunteerProfileInputForm {
   avatar: String;
   firstName: String;
   lastName: String;
@@ -19,33 +26,32 @@ interface VolunteerProfileInputForm {
 }
 
 const useStyles = makeStyles({
-  // Define the styles here
-  // Use ```className={classes.<style name>}``` in components to apply the styles
+  input: {
+    display: 'none',
+  },
 });
 
 export default function CreateVolunteerProfile(props: any) {
   const classes = useStyles();
   const loginCls = useStyle();
 
-  const { register, watch, handleSubmit, control, getValues } =
-    useForm<VolunteerProfileInputForm>({
-      defaultValues: {
-        avatar: '',
-        firstName: '',
-        lastName: '',
-        dateOfBirth: '',
-        gender: '',
-      },
-    });
+  const registerInfo = useSelector(fromAuth.selectRegister);
+  const volunteerProfile = useSelector(fromAuth.selectVolunteerProfile);
+  const dispatch = useAppDispatch();
+  const { register, watch, handleSubmit, setValue } =
+  useForm<VolunteerProfileInputForm>({
+    defaultValues: volunteerProfile,
+  });
 
-  const onSubmit = (data: VolunteerProfileInputForm) => console.log(data);
+  const onSubmit = (data: VolunteerProfileInputForm) =>
+    console.log({ ...registerInfo, ...data });
 
   useEffect(() => {
     const subscription = watch(value => {
-      // console.log(value);
+      dispatch(fromAuth.doChangeVolunteerProfile(value));
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [dispatch, watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -57,8 +63,32 @@ export default function CreateVolunteerProfile(props: any) {
         </Grid>
         <Grid item>
           <Grid container direction="row" spacing={4}>
-            <Grid item></Grid>
-            <Grid item>
+            <Grid item style={{ width: '47%', padding:'0 24px' }}>
+                <Grid container direction="column" spacing={2}>
+                <Grid item>
+                  <Typography className={loginCls.bold}>Set your avatar</Typography>
+                </Grid>
+                <Grid item className={loginCls.imgBtn}>
+                  {/* Not completed. Save the url to Redux store after integrate the AWS3 API */}
+                  <input
+                    accept="image/*"
+                    className={classes.input}
+                    id="icon-button-file"
+                    type="file"
+                  />
+                  <label htmlFor="icon-button-file">
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      component="span"
+                    >
+                      <PhotoCamera />
+                    </IconButton>
+                  </label>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item style={{ width: '47%' }}>
               <Grid container direction="column" spacing={4}>
                 <Grid item>
                   <Grid container direction="column" spacing={2}>
@@ -81,31 +111,55 @@ export default function CreateVolunteerProfile(props: any) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item style={{ marginTop:22, paddingLeft:32 }}>
           <Grid container direction="row" spacing={4}>
             <Grid item style={{ width: '47%' }}>
               <Grid container direction="column" spacing={2}>
                 <Typography className={loginCls.bold}>Date of birth</Typography>
-                <TextField className={loginCls.input} variant="outlined" required type="text" {...register('dateOfBirth')} />
+                
+                <CcDatePicker
+                  style={{ marginTop:12, backgroundColor:'white' }}
+                  {...register('dateOfBirth')}
+                  value={watch('dateOfBirth')}
+                  onChange={(date: MaterialUiPickersDate) =>
+                    setValue('dateOfBirth', date?.toDate() || new Date())
+                  }
+                  animateYearScrolling
+                />
               </Grid>
             </Grid>
             <Grid item style={{ width: '47%' }}>
               <Grid container direction="column" spacing={2}>
                 <Typography className={loginCls.bold}>Gender</Typography>
-                <TextField className={loginCls.input} variant="outlined" required type="text" {...register('gender')} />
+                <Select
+                  className={loginCls.input} variant="outlined"
+                  labelId="genderSelectLabel"
+                  id="genderSelect"
+                  defaultValue={''}
+                  {...register('gender')}
+                >
+                  <MenuItem value="">Absent</MenuItem>
+                  <MenuItem value="FEMALE">Female</MenuItem>
+                  <MenuItem value="MALE">Male</MenuItem>
+                  <MenuItem value="OTHER">Other</MenuItem>
+                </Select>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item style={{ display:'flex', alignItems:'flex-end', padding:'0 66px 0 16px', marginTop:'10vh' }}>
+        <Box style={{ flex:1 }}></Box>
           <Button
+            className={loginCls.back}
             onClick={() => {
               props.setTab(0);
             }}
           >
             Back
           </Button>
-          <Button type="submit">Continue</Button>
+          <Button className={loginCls.login}
+          color="secondary"
+          variant="contained" type="submit">Continue</Button>
         </Grid>
       </Grid>
     </form>

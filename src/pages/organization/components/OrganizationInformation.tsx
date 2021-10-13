@@ -114,8 +114,7 @@ export default function OrganizationInformation() {
   };
 
   return (
-    <Grid item xs={3}>
-      <Card className={classes.personalInformationsCard}>
+    <Card className={classes.personalInformationsCard}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid
             container
@@ -247,6 +246,5 @@ export default function OrganizationInformation() {
           </Grid>
         </form>
       </Card>
-    </Grid>
   );
 }

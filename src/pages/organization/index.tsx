@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
-import { Card, CardMedia, Grid } from '@material-ui/core';
+import { Box, Card, CardMedia, Grid } from '@material-ui/core';
 import OrganizationInformation from './components/OrganizationInformation';
 import OrganizationEvent from './components/OrganizationEvent';
 import OrganizationApplication from './components/OrganizationApplication';
@@ -57,19 +57,22 @@ const OrganizationPage = () => {
             image={imagesURL.banner}
           />
         </Card>
-        <Grid
-          container
-          className={classes.profileContent}
-          direction="row"
-          justifyContent="flex-start"
-          spacing={4}
-        >
-          <OrganizationInformation/>
-          <Grid item className="HistoryWorksAndPosts" xs>
-            <OrganizationEvent/>
-            <OrganizationApplication/>
+        <Box width={'95%'}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-start"
+            spacing={4}
+          >
+            <Grid item xs={3}>
+              <OrganizationInformation/>
+            </Grid>
+            <Grid item className="HistoryWorksAndPosts" xs={9}>
+              <OrganizationEvent/>
+              <OrganizationApplication/>
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Grid>
     </div>
   );

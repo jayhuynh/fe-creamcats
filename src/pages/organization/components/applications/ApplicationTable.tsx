@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useDebounce } from 'use-debounce';
@@ -30,6 +30,8 @@ import {
   parseFilter,
   parseApplications,
 } from '../../../../utils/registerParser';
+import ApplicationInfo from './application-info';
+import CreatePost from '../../../sharing-zone/components/CreatePost';
 
 const useStyles = makeStyles({
   table: {
@@ -64,6 +66,9 @@ const useStyles = makeStyles({
   },
   tableRow: {
     height: 80,
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   tableRowText: {
     fontFamily: 'HelveticaNeue',
@@ -102,6 +107,25 @@ export default function ApplicationTable(props: any) {
 
   const dispatch = useAppDispatch();
 
+  const [applicationInfo, setApplicationInfo] = useState({
+    isOpen: false,
+    data: {},
+  });
+
+  const handleOpenApplication = (data: any) => {
+    setApplicationInfo({
+      isOpen: true,
+      data: data,
+    });
+  };
+
+  const handleCloseApplication = () => {
+    setApplicationInfo({
+      isOpen: false,
+      data: {},
+    });
+  };
+
   useEffect(() => {
     dispatch(
       fromOrganizationApplications.doFetchOrganizationApplications({
@@ -113,6 +137,7 @@ export default function ApplicationTable(props: any) {
 
   return (
     <Grid item xs>
+      <ApplicationInfo applicationInformation={applicationInfo}  handlerCloseApplication={handleCloseApplication}/>
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableHead}>
@@ -148,56 +173,60 @@ export default function ApplicationTable(props: any) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {parseApplications(organizationApplications).map((row: any) => (
-              <TableRow
-                key={row.name + row.event + row.position}
-                className={classes.tableRow}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  className={classes.tableBodyFirstColumnText}
+            {parseApplications(organizationApplications)
+              .map((row: any) => (
+                <TableRow
+                  key={row.name + row.event + row.position}
+                  onClick={() => {
+                    handleOpenApplication(row);
+                  }}
+                  className={classes.tableRow}
                 >
-                  {row.name}
-                </TableCell>
-                <TableCell align="left">
-                  <Typography className={classes.tableRowText}>
-                    {row.gender}
-                  </Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography className={classes.tableRowText}>
-                    {row.event}
-                  </Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography className={classes.tableRowText}>
-                    {row.position}
-                  </Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography className={classes.tableRowText}>
-                    {row.dateApplied}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <IconButton
-                    color={
-                      row.pendingStatus === 'ACCEPTED' ? 'primary' : 'secondary'
-                    }
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    className={classes.tableBodyFirstColumnText}
                   >
-                    <CheckIcon />
-                  </IconButton>
-                  <IconButton
-                    color={
-                      row.pendingStatus === 'REJECTED' ? 'primary' : 'secondary'
-                    }
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography className={classes.tableRowText}>
+                      {row.gender}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography className={classes.tableRowText}>
+                      {row.event}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography className={classes.tableRowText}>
+                      {row.position}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography className={classes.tableRowText}>
+                      {row.dateApplied}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      color={
+                        row.pendingStatus === 'ACCEPTED' ? 'primary' : 'secondary'
+                      }
+                    >
+                      <CheckIcon/>
+                    </IconButton>
+                    <IconButton
+                      color={
+                        row.pendingStatus === 'REJECTED' ? 'primary' : 'secondary'
+                      }
+                    >
+                      <CloseIcon/>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
           <TableFooter>
             <Pagination

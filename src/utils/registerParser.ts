@@ -4,6 +4,7 @@ import { OrganizationApplication } from '../models';
 export function parseApplications(data: OrganizationApplication[]) {
   return data.map((row: any) => {
     return {
+      ...row,
       name: row.applicantName,
       gender: row.gender.slice(0, 1) + row.gender.slice(1).toLowerCase(),
       event: row.eventName,

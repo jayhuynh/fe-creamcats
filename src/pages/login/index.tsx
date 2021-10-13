@@ -9,6 +9,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import LoginForm from './components/LoginForm';
 import { Redirect } from 'react-router-dom';
+import RegisterAndLogin from './RegisterAndLogin';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,39 +37,7 @@ export const Login = () => {
   };
 
   return (
-    <div>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleClickOpen}>
-        REGISTER
-      </Button>
-      <Dialog
-        fullWidth
-        maxWidth="lg"
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title">
-        <DialogContent className={classes.root}>
-          <Grid container>
-            <Grid item xs={6}>
-              <Box className={classes.closeButton}>
-                <IconButton aria-label="close" onClick={handleClose}>
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-              <LoginForm/>
-            </Grid>
-            <Grid item xs={6}>
-              <img
-                className={classes.maxSize}
-                src="https://i.ibb.co/M8gxHJT/Screen-Shot-2021-09-01-at-1-05-49-am.png"
-                alt="Screen-Shot-2021-08-27-at-2-42-37-am"/>
-            </Grid>
-          </Grid>
-        </DialogContent>
-      </Dialog>
-    </div>
+      <RegisterAndLogin/>
   );
 };
 

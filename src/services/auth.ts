@@ -9,6 +9,13 @@ export const login = async (
   return { jwt: accessToken } as Token;
 };
 
+export const register = async (
+  credential: Required<Pick<User, 'email' | 'password' | 'type'>>,
+) => {
+  const { accessToken } = (await Axios.post('/auth/register', credential)).data;
+  return { jwt: accessToken } as Token;
+};
+
 export const getOrganizationId = async () => {
   const organizationProfile = (await Axios.get('/organizations/me')).data;
   return organizationProfile.id;

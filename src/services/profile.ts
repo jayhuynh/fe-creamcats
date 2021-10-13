@@ -1,20 +1,27 @@
 import Axios from 'axios';
 
-import { Profile } from '../models';
+import { Organization, Profile } from '../models';
 
 export const getMyProfile = async () => {
   return (await Axios.get<Profile>('/users/me')).data;
 };
 
-export const getOrganizationProfile = async (id: number) => {
-  return (await Axios.get<Profile>(`/organizations/${id}`)).data;
+export const getOrganizationProfile = async () => {
+  return (await Axios.get<Profile>('/organizations/me')).data;
 };
 
-export const updateMyProfile = async (data: Profile) => {
+export const updateMyProfile = async (data: any) => {
   const response: any = (
-    await Axios.post('/users/me', data, {
-      headers: { Authorization: 'Bearer {my_token}' },
-    })
+    await Axios.post('/users/me', data)
   ).data;
   return response;
+};
+
+export const updateOrganizationProfile = async (data: Organization) => {
+  // Open the comment when backend is ready
+
+  // const response: any = (
+  //   await Axios.post(`/organizations/${data.id}`, data)
+  // ).data;
+  // return response;
 };

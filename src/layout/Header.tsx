@@ -8,6 +8,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { fromAuth, useAppDispatch } from '../store';
 const useStyles = makeStyles(() => ({
   'top-menu': {
     color: 'gray',
@@ -28,16 +29,14 @@ const Header = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const dispatch = useAppDispatch();
 
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen);
   };
 
-  const handleClose = (event: React.MouseEvent<EventTarget>) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-
+  const handleClose = async (event: React.MouseEvent<EventTarget>) => {
+    await dispatch(fromAuth.doLogout());
     setOpen(false);
   };
 
@@ -77,12 +76,12 @@ const Header = () => {
             </span>
           </Grid>
           <Grid item>
-            
+
             <Avatar
              onClick={handleToggle}
               style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}
             >
-            <span 
+            <span
              ref={anchorRef}
              >N</span>
             </Avatar>

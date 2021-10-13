@@ -10,16 +10,16 @@ import { useLocation } from 'react-router-dom';
 
 export const Layout = () =>{
   const { pathname } = useLocation();
-  
+
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       {/*<ScrollToTop/>*/}
       <LoadingProgress/>
       <SnackNotification/>
-      {pathname !== '/test' && <Header/>}
+      {pathname !== '/login' && <Header/>}
       <Routes routes={routes}/>
-      {pathname !== '/test' && <Footer/>}
+      {pathname !== '/login' && <Footer/>}
     </MuiThemeProvider>
   );
 };

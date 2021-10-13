@@ -6,13 +6,13 @@ import {
 } from '@reduxjs/toolkit';
 import Axios from 'axios';
 
-import { User, Token, SerializedException, exceptionOf } from '../models';
+import { User, Token, SerializedException, exceptionOf, Profile, Organization } from '../models';
 import { RegisterInputForm } from '../pages/login/components/Register';
 import { VolunteerProfileInputForm } from '../pages/login/components/CreateVolunteerProfile';
 import { OrganizationProfileInputForm } from '../pages/login/components/CreateOrganizationProfile';
 
-import { AuthService } from '../services';
-import { AppState } from './index';
+import { AuthService, ProfileService } from '../services';
+import { AppState, fromProfile } from './index';
 import { selectProfile, selectProfileFeature } from './profileSlice';
 import { profile } from '../routes';
 
@@ -45,7 +45,7 @@ export const createInitialState = (): AuthState => ({
     firstName: '',
     lastName: '',
     dateOfBirth: new Date(),
-    gender: '',
+    gender: 'male',
   },
   organizationProfile: {
     avatar: '',
@@ -83,6 +83,42 @@ export const doLogin = createAsyncThunk(
   },
 );
 
+export const doRegister = createAsyncThunk(
+  'auth/register',
+  async (
+    data: {
+      credential: Parameters<typeof AuthService['login']>[0],
+      profile: any,
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const token = await AuthService.register(data.credential);
+      console.log(token);
+      Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
+      localStorage.setItem(TOKEN, JSON.stringify(token));
+      localStorage.setItem(TYPE, JSON.stringify(data.credential.type));
+
+
+      if (data.credential.type === 'volunteer') {
+        await ProfileService.updateMyProfile(data.profile);
+      } else {
+        const { id } = await ProfileService.getOrganizationProfile();
+        await ProfileService.updateOrganizationProfile({
+          ...data.profile,
+          id,
+        } as Organization);
+      }
+
+      return token;
+    } catch (e) {
+      delete Axios.defaults.headers.common.Authorization;
+      localStorage.removeItem(TOKEN);
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
+
 export const doResume = createAsyncThunk(
   'auth/resume',
   async (token: Token | undefined, { rejectWithValue }) => {
@@ -109,6 +145,19 @@ export const doFetchOrganizationId = createAsyncThunk(
     } catch (e) {
       return rejectWithValue(exceptionOf(e).toJson());
     }
+  },
+);
+
+export const doLogout = createAsyncThunk(
+  'auth/logout',
+  async (
+    data,
+    { rejectWithValue },
+  ) => {
+    fromProfile.doCleanProfile();
+    delete Axios.defaults.headers.common.Authorization;
+    localStorage.removeItem(TOKEN);
+    localStorage.removeItem(TYPE);
   },
 );
 
@@ -180,6 +229,35 @@ const authSlice = createSlice({
       state.organizationId = -1;
       state.loading = false;
       state.errors.push(payload);
+    });
+
+    // Register
+    builder.addCase(doRegister.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(doRegister.fulfilled, (state, action) => {
+      state.token = action.payload;
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(doRegister.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
+      state.token = null;
+      state.loading = false;
+      state.errors.push(payload);
+    });
+
+    // Logout
+    builder.addCase(doLogout.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(doLogout.fulfilled, (state, action) => {
+      state.token = null;
+      state.register = createInitialState().register;
+      state.volunteerProfile = createInitialState().volunteerProfile;
+      state.organizationProfile = createInitialState().organizationProfile;
+      state.loading = false;
+      state.errors = [];
     });
   },
 });

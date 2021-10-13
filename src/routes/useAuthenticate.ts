@@ -22,7 +22,7 @@ export const useAuthenticate = () => {
     (async () => {
       try {
         const jwt = get('access_token');
-        const accountType = get('type') ?? (localStorage.getItem(fromAuth.TYPE) || 'volunteer');
+        const accountType = get('type') ?? JSON.parse(localStorage.getItem(fromAuth.TYPE) || 'volunteer');
         if (!!jwt || (isAuthenticated && !user)) {
           clear('access_token');
           replace(undefined, replaceQuery(queryDictionary()));

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useStyle } from '../components/Login';
 import { useSelector } from 'react-redux';
 
-import { fromAuth, useAppDispatch } from '../../../store';
+import { fromAuth, fromProfile, useAppDispatch } from '../../../store';
 
 import {
   Grid,
@@ -15,11 +15,12 @@ import {
   Box,
 } from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import moment from 'moment';
 export interface OrganizationProfileInputForm {
-  avatar: String;
-  name: String;
-  address: String;
-  description: String;
+  avatar: string;
+  name: string;
+  address: string;
+  description: string;
 }
 
 const useStyles = makeStyles({
@@ -42,8 +43,26 @@ export default function CreateOrganizationProfile(props: any) {
       defaultValues: organizationProfile,
     });
 
-  const onSubmit = (data: OrganizationProfileInputForm) =>
-    console.log({ ...registerInfo, ...data });
+  const onSubmit = async (data: OrganizationProfileInputForm) => {
+    const info = { ...registerInfo, ...data };
+    const credential = {
+      email: info.email,
+      password: info.password,
+      type: info.type.toLowerCase(),
+    };
+
+    const profile = {
+      name: info.name,
+      addess: info.address,
+      email: info.email,
+      phone: info.phone,
+      description: info.phone,
+    };
+    console.log(credential.type);
+    await dispatch(fromAuth.doRegister({ credential, profile }));
+    await dispatch(fromProfile.doFetchMyProfile({ type: credential.type }));
+
+  };
 
   useEffect(() => {
     const subscription = watch(value => {
@@ -119,7 +138,7 @@ export default function CreateOrganizationProfile(props: any) {
           >
             Back
           </Button>
-          <Button 
+          <Button
           className={loginCls.login}
           color="secondary"
           variant="contained"

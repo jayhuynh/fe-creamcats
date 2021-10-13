@@ -43,7 +43,11 @@ export const doFetchMyProfile = createAsyncThunk(
 const profileSlice = createSlice({
   name: PROFILE_FEATURE_KEY,
   initialState: createInitialState(),
-  reducers: {},
+  reducers: {
+    doCleanProfile: state => {
+      state.profile = null;
+    },
+  },
   extraReducers: builder => {
     //Fetch profile
     builder.addCase(doFetchMyProfile.pending, state => {
@@ -77,4 +81,5 @@ export const selectProfile = createSelector(
   state => state.profile,
 );
 
+export const { doCleanProfile } = profileSlice.actions;
 export default profileSlice.reducer;

@@ -58,7 +58,7 @@ export default function CreateOrganizationProfile(props: any) {
       phone: info.phone,
       description: info.phone,
     };
-
+    console.log(credential.type);
     await dispatch(fromAuth.doRegister({ credential, profile }));
     await dispatch(fromProfile.doFetchMyProfile({ type: credential.type }));
 

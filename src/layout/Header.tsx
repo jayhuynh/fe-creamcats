@@ -8,6 +8,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { fromAuth, useAppDispatch } from '../store';
 const useStyles = makeStyles(() => ({
   'top-menu': {
     color: 'gray',
@@ -28,13 +29,14 @@ const Header = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const dispatch = useAppDispatch();
 
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen);
   };
 
-  const handleClose = (event: React.MouseEvent<EventTarget>) => {
-    console.log('Hello');
+  const handleClose = async (event: React.MouseEvent<EventTarget>) => {
+    await dispatch(fromAuth.doLogout());
     setOpen(false);
   };
 

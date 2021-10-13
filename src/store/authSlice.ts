@@ -12,7 +12,7 @@ import { VolunteerProfileInputForm } from '../pages/login/components/CreateVolun
 import { OrganizationProfileInputForm } from '../pages/login/components/CreateOrganizationProfile';
 
 import { AuthService, ProfileService } from '../services';
-import { AppState } from './index';
+import { AppState, fromProfile } from './index';
 import { selectProfile, selectProfileFeature } from './profileSlice';
 import { profile } from '../routes';
 
@@ -45,7 +45,7 @@ export const createInitialState = (): AuthState => ({
     firstName: '',
     lastName: '',
     dateOfBirth: new Date(),
-    gender: '',
+    gender: 'male',
   },
   organizationProfile: {
     avatar: '',
@@ -94,6 +94,7 @@ export const doRegister = createAsyncThunk(
   ) => {
     try {
       const token = await AuthService.register(data.credential);
+      console.log(token);
       Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
       localStorage.setItem(TOKEN, JSON.stringify(token));
       localStorage.setItem(TYPE, JSON.stringify(data.credential.type));
@@ -144,6 +145,19 @@ export const doFetchOrganizationId = createAsyncThunk(
     } catch (e) {
       return rejectWithValue(exceptionOf(e).toJson());
     }
+  },
+);
+
+export const doLogout = createAsyncThunk(
+  'auth/logout',
+  async (
+    data,
+    { rejectWithValue },
+  ) => {
+    fromProfile.doCleanProfile();
+    delete Axios.defaults.headers.common.Authorization;
+    localStorage.removeItem(TOKEN);
+    localStorage.removeItem(TYPE);
   },
 );
 
@@ -231,6 +245,19 @@ const authSlice = createSlice({
       state.token = null;
       state.loading = false;
       state.errors.push(payload);
+    });
+
+    // Logout
+    builder.addCase(doLogout.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(doLogout.fulfilled, (state, action) => {
+      state.token = null;
+      state.register = createInitialState().register;
+      state.volunteerProfile = createInitialState().volunteerProfile;
+      state.organizationProfile = createInitialState().organizationProfile;
+      state.loading = false;
+      state.errors = [];
     });
   },
 });

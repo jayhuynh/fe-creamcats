@@ -1,8 +1,11 @@
 import { useDropzone } from 'react-dropzone';
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Fade, Grid, Typography } from '@material-ui/core';
+import { Box, Button, CardMedia, Fade, Grid, Typography } from '@material-ui/core';
 import { CcImageList } from './index';
+import AddIcon from '@material-ui/icons/Add';
+import { useDebounce } from 'use-debounce';
+import { FileService } from '../services';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,23 +46,60 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
   },
   uploadBtn: {
-    height: '20rem',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   addIcon: {
     fontSize: '7rem',
   },
 }));
 
-const CcDropZone = (props: any) => {
+const UploadButton = ({ height }: any) => {
+  const classes = useStyles();
+
+  return (
+    <Box height={height}
+         bgcolor="#eaeaea"
+         className={classes.uploadBtn}
+         borderRadius={5}>
+      <Grid
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        className={classes.root}
+        container>
+        <AddIcon fontSize="large"/>
+        <Box>
+          Drag and drop your image
+        </Box>
+      </Grid>
+    </Box>
+  );
+};
+
+interface CcDropZoneProps {
+  onChange: (files: string[]) => void;
+  maxFiles: number;
+}
+
+const CcDropZone = ({ onChange, maxFiles }: CcDropZoneProps) => {
   const classes = useStyles();
   const [files, setFiles] = useState<any>([]);
   const [image, setImage] = useState<any>(null);
+  const [debouncedImage] = useDebounce(image, 300);
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
+    maxFiles: maxFiles,
     onDrop: acceptedFiles => {
-      setFiles(acceptedFiles.map(file => Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      })));
+      (async () => {
+        const urls = await FileService.uploadImages(acceptedFiles);
+        onChange(urls);
+        setFiles(acceptedFiles.map(file => Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })));
+      })();
+
     },
   });
 
@@ -87,23 +127,31 @@ const CcDropZone = (props: any) => {
         justifyContent="center"
         alignItems="center"
       >
-        <Fade in={image} mountOnEnter unmountOnExit timeout={300}>
-          <Box>
-            <img src={image} width={'100%'}/>
+        <Fade in={debouncedImage} mountOnEnter unmountOnExit timeout={300}>
+          <Box maxHeight={'100%'}>
+            <img src={debouncedImage} width={'100%'}/>
           </Box>
         </Fade>
-        <Box>
+        { !debouncedImage ? <Box width="100%">
           <div {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
-            <p>Drag 'n' drop some files here, or click to select files</p>
+            <UploadButton height={'500px'}/>
           </div>
-        </Box>
-        <Box width={'100%'}>
-          <CcImageList
-            items={files.map((file: any) => ({ path: file.preview, file: file }))}
-            handleRemoveImage={handleRemoveImage}
-            handleHoverImage={handleHoverImage}/>
-        </Box>
+        </Box> : <></>}
+        { files.length > 0 ? <Box width={'100%'} paddingTop={2}>
+          <Grid
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            container>
+            <Box width={'100%'}>
+              <CcImageList
+                items={files.map((file: any) => ({ path: file.preview, file: file }))}
+                handleRemoveImage={handleRemoveImage}
+                handleHoverImage={handleHoverImage}/>
+            </Box>
+          </Grid>
+        </Box> : <></>}
       </Grid>
     </Box>
   );

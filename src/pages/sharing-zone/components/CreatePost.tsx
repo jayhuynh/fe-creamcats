@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CcDropZone from '../../../utils/CcDropZone';
 import Editor from '../../../utils/Editor';
+import { fromNotifications, fromPosts, useAppDispatch } from '../../../store';
+import { NotificationsType } from '../../../store/notificationsSlice';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -65,7 +67,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface CreatePostFormInputs {
+export interface CreatePostFormInputs {
   image: string;
   title: string;
   body: string;
@@ -74,6 +76,8 @@ interface CreatePostFormInputs {
 export const CreatePost = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
@@ -91,9 +95,14 @@ export const CreatePost = () => {
     setOpen(false);
   };
 
-  const doCreatePost = async ({ image, title, body }: CreatePostFormInputs) => {
-    // const formattedEmail = email.toLowerCase();
-    // await dispatch(fromAuth.doCreatePost({ credential: { email: formattedEmail, password }, rememberMe }));
+  const doCreatePost = async (data: CreatePostFormInputs) => {
+    await dispatch(fromPosts.doCreatePost({ post: data }));
+    setOpen(false);
+    dispatch(fromNotifications.doPushNotification({
+      message: 'Successfully created a new post',
+      key: new Date().getTime(),
+      type: NotificationsType.SUCCESS,
+    }));
   };
 
   const handleChangeImage = (event: any) => {};
@@ -103,7 +112,7 @@ export const CreatePost = () => {
       <Button className={classes.button} onClick={handleClickOpen} startIcon={<AddIcon />}>
         Create a new post
       </Button>
-      <Dialog maxWidth="lg" fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog maxWidth="md" fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         {/* <DialogTitle  id="create-post-dialog" onClose={handleClose}>&nbsp;</DialogTitle> */}
         <DialogContent className={classes.root}>
           <Grid container>
@@ -120,15 +129,17 @@ export const CreatePost = () => {
               <Typography className={classes.title}> Create a new post</Typography>
             </Box>
                 <Box borderRadius={5} width={1}>
-                  <CcDropZone />
+                  <CcDropZone onChange={(files: string[]) => {
+                    setValue('image', files[0]);
+                  }} maxFiles={10}/>
                 </Box>
                 <Box width={1}>
                   <Typography className={classes.title2}>Title of your post</Typography>
-                  <TextField variant="filled" placeholder="type something" />
+                  <TextField {...register('title')} variant="filled" placeholder="type something" />
                 </Box>
                 <Box width={1}>
                   <Typography className={classes.title2}>Content</Typography>
-                  <Editor></Editor>
+                  <Editor onChange={(data: string) => {setValue('body', data);}}/>
                 </Box>
                 <Box mt={2} width={1} marginBottom={2}>
                   <Grid container>

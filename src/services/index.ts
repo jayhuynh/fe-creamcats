@@ -7,6 +7,7 @@ import * as ApplicationService from './application';
 import * as VoluntaryEventService from './voluntaryEvent';
 import * as OrganizationApplicationService from './organizationApplication';
 import * as EventService from './event';
+import * as FileService from './file';
 
 export {
   AuthService,
@@ -18,4 +19,5 @@ export {
   VoluntaryEventService,
   OrganizationApplicationService,
   EventService,
+  FileService,
 };

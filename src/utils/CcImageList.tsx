@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'space-around',
-      backgroundColor: theme.palette.background.paper,
     },
     imageList: {
       flexWrap: 'nowrap',
@@ -20,7 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
       transform: 'translateZ(0)',
     },
     imageListItem: {
-      borderRadius: '10px',
+      '& > div': {
+        borderRadius: '5px',
+      },
     },
     title: {
       color: theme.palette.primary.light,
@@ -47,9 +48,11 @@ const CcImageList = (props: CcImageListProps) => {
 
   return (
     <div className={classes.root}>
-      <ImageList className={classes.imageList} cols={3.5} gap={20}>
+      <ImageList className={classes.imageList} cols={items.length > 3 ? 3.5 : 2} gap={20}>
         {items.map(item => (
-          <ImageListItem className={classes.imageListItem} key={item.path} onMouseEnter={(event: any) => (handleHoverImage(item.file))}>
+          <ImageListItem className={classes.imageListItem}
+                         key={item.path}
+                         onMouseEnter={(event: any) => (handleHoverImage(item.file))}>
             <img src={item.path}/>
             <ImageListItemBar
               title=""

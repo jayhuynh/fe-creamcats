@@ -9,7 +9,7 @@ import store from './store';
 
 
 (async () => {
-  Axios.defaults.baseURL = 'http://127.0.0.1:6400';
+  Axios.defaults.baseURL = `${process.env.REACT_APP_API_ENDPOINT}:${process.env.REACT_APP_API_PORT}`;
 
   ReactDOM.render(
     <React.StrictMode>

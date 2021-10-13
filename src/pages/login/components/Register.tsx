@@ -16,11 +16,11 @@ import {
 import { fromAuth, useAppDispatch } from '../../../store';
 
 export interface RegisterInputForm {
-  type: String;
-  phone: String;
-  email: String;
-  password: String;
-  confirmPassword: String;
+  type: string;
+  phone: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
 

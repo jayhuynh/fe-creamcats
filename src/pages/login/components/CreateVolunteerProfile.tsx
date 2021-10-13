@@ -15,14 +15,16 @@ import {
 } from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { fromAuth, useAppDispatch } from '../../../store';
+import { fromAuth, fromProfile, useAppDispatch } from '../../../store';
 import { CcDatePicker } from '../../../utils';
+import moment from 'moment';
+
 export interface VolunteerProfileInputForm {
-  avatar: String;
-  firstName: String;
-  lastName: String;
+  avatar: string;
+  firstName: string;
+  lastName: string;
   dateOfBirth: Date;
-  gender: String;
+  gender: string;
 }
 
 const useStyles = makeStyles({
@@ -43,8 +45,24 @@ export default function CreateVolunteerProfile(props: any) {
     defaultValues: volunteerProfile,
   });
 
-  const onSubmit = (data: VolunteerProfileInputForm) =>
-    console.log({ ...registerInfo, ...data });
+  const onSubmit = async (data: VolunteerProfileInputForm) => {
+    const info = { ...registerInfo, ...data };
+    const credential = {
+      email: info.email,
+      password: info.password,
+      type: info.type.toLowerCase(),
+    };
+
+    const profile = {
+      fullname: `${info.firstName} ${info.lastName}`,
+      age: moment().diff(info.dateOfBirth, 'years'),
+      gender: info.gender,
+      profilePic: info.avatar,
+    };
+
+    await dispatch(fromAuth.doRegister({ credential, profile }));
+    await dispatch(fromProfile.doFetchMyProfile({ type: credential.type }));
+  };
 
   useEffect(() => {
     const subscription = watch(value => {
@@ -95,7 +113,7 @@ export default function CreateVolunteerProfile(props: any) {
                     <Typography className={loginCls.bold}>First name</Typography>
                     <TextField
                       required
-                      className={loginCls.input} variant="outlined" 
+                      className={loginCls.input} variant="outlined"
                       type="text"
                       {...register('firstName')}
                     />
@@ -116,7 +134,7 @@ export default function CreateVolunteerProfile(props: any) {
             <Grid item style={{ width: '47%' }}>
               <Grid container direction="column" spacing={2}>
                 <Typography className={loginCls.bold}>Date of birth</Typography>
-                
+
                 <CcDatePicker
                   style={{ marginTop:12, backgroundColor:'white' }}
                   {...register('dateOfBirth')}

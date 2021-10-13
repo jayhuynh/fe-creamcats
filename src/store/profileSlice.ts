@@ -29,7 +29,7 @@ export const doFetchMyProfile = createAsyncThunk(
       console.log(data.type);
       const profile = data.type === 'volunteer'
         ? await ProfileService.getMyProfile()
-        : await ProfileService.getOrganizationProfile(1);
+        : await ProfileService.getOrganizationProfile();
       return  {
         profile,
         type: data.type,

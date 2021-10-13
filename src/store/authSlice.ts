@@ -6,14 +6,15 @@ import {
 } from '@reduxjs/toolkit';
 import Axios from 'axios';
 
-import { User, Token, SerializedException, exceptionOf } from '../models';
+import { User, Token, SerializedException, exceptionOf, Profile, Organization } from '../models';
 import { RegisterInputForm } from '../pages/login/components/Register';
 import { VolunteerProfileInputForm } from '../pages/login/components/CreateVolunteerProfile';
 import { OrganizationProfileInputForm } from '../pages/login/components/CreateOrganizationProfile';
 
-import { AuthService } from '../services';
+import { AuthService, ProfileService } from '../services';
 import { AppState } from './index';
 import { selectProfile, selectProfileFeature } from './profileSlice';
+import { profile } from '../routes';
 
 export const AUTH_FEATURE_KEY = 'auth';
 
@@ -71,6 +72,41 @@ export const doLogin = createAsyncThunk(
       if (data.rememberMe) {
         localStorage.setItem(TOKEN, JSON.stringify(token));
         localStorage.setItem(TYPE, JSON.stringify(data.credential.type));
+      }
+
+      return token;
+    } catch (e) {
+      delete Axios.defaults.headers.common.Authorization;
+      localStorage.removeItem(TOKEN);
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
+
+export const doRegister = createAsyncThunk(
+  'auth/register',
+  async (
+    data: {
+      credential: Parameters<typeof AuthService['login']>[0],
+      profile: any,
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const token = await AuthService.register(data.credential);
+      Axios.defaults.headers.common.Authorization = `Bearer ${token.jwt}`;
+      localStorage.setItem(TOKEN, JSON.stringify(token));
+      localStorage.setItem(TYPE, JSON.stringify(data.credential.type));
+
+
+      if (data.credential.type === 'volunteer') {
+        await ProfileService.updateMyProfile(data.profile);
+      } else {
+        const { id } = await ProfileService.getOrganizationProfile();
+        await ProfileService.updateOrganizationProfile({
+          ...data.profile,
+          id,
+        } as Organization);
       }
 
       return token;
@@ -177,6 +213,22 @@ const authSlice = createSlice({
     builder.addCase(doFetchOrganizationId.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
       state.organizationId = -1;
+      state.loading = false;
+      state.errors.push(payload);
+    });
+
+    // Register
+    builder.addCase(doRegister.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(doRegister.fulfilled, (state, action) => {
+      state.token = action.payload;
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(doRegister.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
+      state.token = null;
       state.loading = false;
       state.errors.push(payload);
     });

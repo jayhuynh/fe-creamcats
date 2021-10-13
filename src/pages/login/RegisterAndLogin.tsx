@@ -11,6 +11,10 @@ import {
 
 import Login from './components/Login';
 import RegisterTabWrapper from './components/RegisterTabWrapper';
+import { useQuery } from '../../routes';
+import { useSelector } from 'react-redux';
+import { fromAuth } from '../../store';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles({
   // Define the styles here
@@ -27,10 +31,10 @@ const useStyles = makeStyles({
   radio:{
     '& .MuiRadio-root':{
       color:'white',
-    }, 
+    },
     '& .MuiRadio-colorSecondary.Mui-checked':{
       color:'#f50057',
-    }, 
+    },
     '& .MuiTypography-body1':{
       fontSize: 24,
     },
@@ -40,6 +44,13 @@ const useStyles = makeStyles({
 export default function RegisterAndLogin() {
   const classes = useStyles();
   const [currentTab, setTab] = useState('register');
+  const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const { get } = useQuery();
+
+  if (isAuthenticated) {
+    return <Redirect to={get('redirect') || '/home'} />;
+  }
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTab((event.target as HTMLInputElement).value);

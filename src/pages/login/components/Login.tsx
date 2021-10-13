@@ -13,12 +13,13 @@ import {
   Box,
   makeStyles,
 } from '@material-ui/core';
+import { fromAuth, fromProfile, useAppDispatch } from '../../../store';
 
 interface LoginInputForm {
-  type: String;
-  email: String;
-  password: String;
-  rememberMe: Boolean;
+  type: string;
+  email: string;
+  password: string;
+  rememberMe: boolean;
 }
 
 export const useStyle = makeStyles({
@@ -90,6 +91,7 @@ export const useStyle = makeStyles({
 
 export default function Login(props: any) {
   const classes = useStyle();
+  const dispatch = useAppDispatch();
 
   const { register, watch, handleSubmit, control, getValues } =
     useForm<LoginInputForm>({
@@ -101,7 +103,14 @@ export default function Login(props: any) {
       },
     });
 
-  const onSubmit = (data: LoginInputForm) => console.log(data);
+  const onSubmit = async (data: LoginInputForm) => {
+    const formattedEmail = data.email.toLowerCase();
+    await dispatch(fromAuth.doLogin({
+      credential: { email: formattedEmail, password: data.password, type: data.type.toLowerCase() }, rememberMe: data.rememberMe,
+    }));
+
+    await dispatch(fromProfile.doFetchMyProfile({ type: data.type.toLowerCase() }));
+  };
 
   useEffect(() => {
     const subscription = watch(value => {

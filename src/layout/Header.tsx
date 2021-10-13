@@ -34,10 +34,7 @@ const Header = () => {
   };
 
   const handleClose = (event: React.MouseEvent<EventTarget>) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-
+    console.log('Hello');
     setOpen(false);
   };
 
@@ -77,12 +74,12 @@ const Header = () => {
             </span>
           </Grid>
           <Grid item>
-            
+
             <Avatar
              onClick={handleToggle}
               style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}
             >
-            <span 
+            <span
              ref={anchorRef}
              >N</span>
             </Avatar>

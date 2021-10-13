@@ -35,9 +35,12 @@ const Header = () => {
     setOpen(prevOpen => !prevOpen);
   };
 
-  const handleClose = async (event: React.MouseEvent<EventTarget>) => {
-    await dispatch(fromAuth.doLogout());
+  const handleClose = (event: React.MouseEvent<EventTarget>) => {
     setOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await dispatch(fromAuth.doLogout());
   };
 
   function handleListKeyDown(event: React.KeyboardEvent) {
@@ -94,7 +97,7 @@ const Header = () => {
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
                       <MenuList  id="menu-list-grow">
-                        <MenuItem onClick={handleClose}>Logout&nbsp; <ExitToAppIcon></ExitToAppIcon></MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout&nbsp; <ExitToAppIcon></ExitToAppIcon></MenuItem>
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>

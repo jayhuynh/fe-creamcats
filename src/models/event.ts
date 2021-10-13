@@ -5,7 +5,7 @@ export interface Event extends BaseModel {
   name: string;
   description: string;
   gallery: string[];
-  orgnizationId: number;
+  organizationId: number;
   startAt: Date;
   endAt: Date;
   location: string;

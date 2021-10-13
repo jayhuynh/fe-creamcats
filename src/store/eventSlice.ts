@@ -12,16 +12,41 @@ import { AppState } from './index';
 export const EVENTS_FEATURE_KEY = 'events';
 
 interface EventsState {
+  currentEvent: Event;
   events: Event[];
   loading: boolean;
   errors: SerializedException[];
 }
 
 export const createInitialState = (): EventsState => ({
+  currentEvent: {
+    id: -1,
+    name: '',
+    description: '',
+    gallery: [],
+    organizationId: -1,
+    startAt: new Date(),
+    endAt: new Date(),
+    location: '',
+  },
   events: [],
   loading: false,
   errors: [],
 });
+
+export const doFetchEventById = createAsyncThunk(
+  'events/fetchById',
+  async (data: { eventId: number }, { rejectWithValue }) => {
+    try {
+      const event = await EventService.getEventById(data.eventId);
+      return {
+        event,
+      };
+    } catch (e) {
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
 
 export const doFetchEvents = createAsyncThunk(
   'events/fetch',
@@ -42,6 +67,31 @@ const eventsSlice = createSlice({
   initialState: createInitialState(),
   reducers: {},
   extraReducers: builder => {
+    // Fetch event by Id
+    builder.addCase(doFetchEventById.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(doFetchEventById.fulfilled, (state, action) => {
+      state.currentEvent = action.payload.event;
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(doFetchEventById.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
+      state.currentEvent = {
+        id: -1,
+        name: '',
+        description: '',
+        gallery: [],
+        organizationId: -1,
+        startAt: new Date(),
+        endAt: new Date(),
+        location: '',
+      };
+      state.loading = false;
+      state.errors.push(payload);
+    });
+
     // Fetch event
     builder.addCase(doFetchEvents.pending, state => {
       state.loading = true;
@@ -62,6 +112,10 @@ const eventsSlice = createSlice({
 
 const selectEventsFeature = (state: AppState) => state[EVENTS_FEATURE_KEY];
 
+export const selectCurrentEvent = createSelector(
+  selectEventsFeature,
+  state => state.currentEvent,
+);
 export const selectLoading = createSelector(
   selectEventsFeature,
   state => state.loading,

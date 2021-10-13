@@ -7,8 +7,7 @@ import Box from '@material-ui/core/Box';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import CcDropZone from './CcDropZone';
-// import CcDropZone from '../../../utils/CcDropZone';
+import CcDropZone from '../../../utils/CcDropZone';
 import Editor from '../../../utils/Editor';
 
 const useStyles = makeStyles(theme => ({
@@ -104,11 +103,11 @@ export const CreatePost = () => {
       <Button className={classes.button} onClick={handleClickOpen} startIcon={<AddIcon />}>
         Create a new post
       </Button>
-      <Dialog maxWidth="md" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog maxWidth="lg" fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         {/* <DialogTitle  id="create-post-dialog" onClose={handleClose}>&nbsp;</DialogTitle> */}
-        <DialogContent className={classes.root} style={{ width:722, padding: '40px 76px' }}>
+        <DialogContent className={classes.root}>
           <Grid container>
-           
+
             <form onSubmit={handleSubmit(doCreatePost)} className={classes.maxSize}>
               <Grid
                 container

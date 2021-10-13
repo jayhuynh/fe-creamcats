@@ -98,7 +98,7 @@ const CcDropZone = (props: any) => {
             <p>Drag 'n' drop some files here, or click to select files</p>
           </div>
         </Box>
-        <Box>
+        <Box width={'100%'}>
           <CcImageList
             items={files.map((file: any) => ({ path: file.preview, file: file }))}
             handleRemoveImage={handleRemoveImage}

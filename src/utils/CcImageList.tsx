@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
       // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
       transform: 'translateZ(0)',
     },
+    imageListItem: {
+      borderRadius: '10px',
+    },
     title: {
       color: theme.palette.primary.light,
     },
@@ -44,9 +47,9 @@ const CcImageList = (props: CcImageListProps) => {
 
   return (
     <div className={classes.root}>
-      <ImageList className={classes.imageList}>
+      <ImageList className={classes.imageList} cols={3.5} gap={20}>
         {items.map(item => (
-          <ImageListItem key={item.path} onMouseEnter={(event: any) => (handleHoverImage(item.file))}>
+          <ImageListItem className={classes.imageListItem} key={item.path} onMouseEnter={(event: any) => (handleHoverImage(item.file))}>
             <img src={item.path}/>
             <ImageListItemBar
               title=""

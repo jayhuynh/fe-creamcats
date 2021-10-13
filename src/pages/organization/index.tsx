@@ -1,11 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { useSelector } from 'react-redux';
-import { fromApplications, fromPosts, fromProfile, fromVoluntaryEvents, useAppDispatch } from '../../store';
 import React, { useEffect } from 'react';
 import { Card, CardMedia, Grid } from '@material-ui/core';
 import OrganizationInformation from './components/OrganizationInformation';
 import OrganizationEvent from './components/OrganizationEvent';
-import { Organization } from '../../models';
 import OrganizationApplication from './components/OrganizationApplication';
 
 const useStyles = makeStyles(() => ({

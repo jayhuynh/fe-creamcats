@@ -12,6 +12,7 @@ export const getApplications = async (organizationId: Number, filters: any) => {
   const applications = organizationApplications.data.map(
     (application: any) =>
       ({
+        ...application,
         applicantId: application.applicant.id,
         applicantName: application.applicant.fullname,
         gender: application.applicant.gender,

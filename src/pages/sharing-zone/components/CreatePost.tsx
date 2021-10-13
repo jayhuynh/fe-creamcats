@@ -105,15 +105,12 @@ export const CreatePost = () => {
     }));
   };
 
-  const handleChangeImage = (event: any) => {};
-
   return (
     <div>
       <Button className={classes.button} onClick={handleClickOpen} startIcon={<AddIcon />}>
         Create a new post
       </Button>
       <Dialog maxWidth="md" fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        {/* <DialogTitle  id="create-post-dialog" onClose={handleClose}>&nbsp;</DialogTitle> */}
         <DialogContent className={classes.root}>
           <Grid container>
 

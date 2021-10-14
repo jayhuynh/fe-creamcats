@@ -27,6 +27,10 @@ const useStyles = makeStyles({
   },
 });
 
+/**
+ * This component generate the content of an event including title, brief and description
+ * @param {Event} eventInfo A Event object that contains all the information of an event
+ */
 export default function EventContent(props: any) {
   const classes = useStyles();
   const { eventInfo } = props;

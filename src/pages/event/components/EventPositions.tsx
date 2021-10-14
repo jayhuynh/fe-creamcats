@@ -2,6 +2,11 @@ import { Grid } from '@material-ui/core';
 
 import PositionCard from '../../../utils/position-card';
 
+/**
+ * Generate position cards for event page
+ * Doesn't include the 'Position ({Number of position})' and the 'Add a position' button
+ * @param {Position[]} positionInfo A list of standard position information
+ */
 export default function EventPositions(props: any) {
   const positionCards = props.positionInfo.map((position: any) => {
     const { thumbnail, name, desc, timeCreated } = position;

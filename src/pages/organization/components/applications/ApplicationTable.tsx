@@ -108,7 +108,7 @@ export default function ApplicationTable(props: any) {
   const dispatch = useAppDispatch();
 
   const [applicationInfo, setApplicationInfo] = useState({
-    isOpen: false,
+    isOpen: true,
     data: {},
   });
 

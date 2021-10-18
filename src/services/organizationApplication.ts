@@ -2,6 +2,7 @@ import Axios from 'axios';
 import { stringify } from 'querystring';
 
 import { OrganizationApplication } from '../models/organization-application';
+import { Profile } from '../models';
 
 export const getApplications = async (organizationId: Number, filters: any) => {
   const organizationApplications: any = (
@@ -27,4 +28,8 @@ export const getApplications = async (organizationId: Number, filters: any) => {
     organizationApplications: applications,
     number: organizationApplications.total,
   };
+};
+
+export const getApplicantDetails = async (applicantId: number): Promise<Profile> => {
+  return (await Axios.get(`/users/${applicantId}`)).data;
 };

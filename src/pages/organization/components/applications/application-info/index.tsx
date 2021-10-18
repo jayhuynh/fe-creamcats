@@ -2,6 +2,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box, Avatar, Typography, Button } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { Profile } from '../../../../../models';
+import { OrganizationApplicationService } from '../../../../../services';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -73,6 +76,17 @@ interface ApplicationInfoProps {
 
 export const ApplicationInfo = ({ applicationInformation, handlerCloseApplication }: ApplicationInfoProps) => {
   const classes = useStyles();
+  const { data } = applicationInformation;
+  const [applicantDetails, setApplicantDetails] = useState<Profile>();
+  console.log(applicantDetails);
+  console.log(data);
+
+  useEffect(() => {
+    (async () => {
+      setApplicantDetails(await OrganizationApplicationService.getApplicantDetails(data.applicantId));
+    })();
+  }, [data]);
+
 
   return (
     <Dialog
@@ -83,26 +97,28 @@ export const ApplicationInfo = ({ applicationInformation, handlerCloseApplicatio
     >
       <DialogContent>
         <Box className={classes.card}>
-          <Box className={classes.title}>Bennett Franklin</Box>
+          <Box className={classes.title}>{data.name}</Box>
           <Grid container>
             <Grid item xs={6}>
-              <Avatar className={classes.avatar} />
+              <Avatar
+                src={applicantDetails?.profilePic}
+                className={classes.avatar} />
             </Grid>
             <Grid item xs={6}>
               <Grid container>
                 <Grid item xs={8}>
                   <Typography className={classes.name}>Gender</Typography>
-                  <Typography className={classes.content}>Male</Typography>
+                  <Typography className={classes.content}>{data.gender}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                   <Typography className={classes.name}>Age</Typography>
-                  <Typography className={classes.content}>25</Typography>
+                  <Typography className={classes.content}>{applicantDetails?.age}</Typography>
                 </Grid>
               </Grid>
               <Typography className={classes.name}>Phone number</Typography>
               <Typography className={classes.content}>+41 8982 1221</Typography>
               <Typography className={classes.name}>Email</Typography>
-              <Typography className={classes.content}>bennettfranklin@gmail.com</Typography>
+              <Typography className={classes.content}>{applicantDetails?.email}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography className={classes.content} style={{ marginBottom:7 }}>Joined Work</Typography>
@@ -119,7 +135,9 @@ export const ApplicationInfo = ({ applicationInformation, handlerCloseApplicatio
               </Typography>
             </Grid>
           </Grid>
-          <Box className={classes.close}>x</Box>
+          <Box
+            onClick={event => {handlerCloseApplication();}}
+            className={classes.close}>x</Box>
         </Box>
       </DialogContent>
     </Dialog>

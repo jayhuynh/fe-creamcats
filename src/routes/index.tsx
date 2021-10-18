@@ -20,6 +20,7 @@ import NotFound from '../pages/not-found';
 import SharingZone from '../pages/sharing-zone';
 import OrganizationPage from '../pages/organization';
 import OrganizationPublicPage from '../pages/organization/public';
+import Event from '../pages/event';
 
 export interface RouteConfig extends RouteProps {
   path: string;
@@ -128,6 +129,12 @@ export const orgnizationPublic: RouteConfig = {
   component: OrganizationPublicPage,
 };
 
+export const event: RouteConfig = {
+  path: '/event/:eventId',
+  component: Event,
+  requireAuth: true,
+};
+
 export const notfound: RouteConfig = {
   path: '/*',
   component: NotFound,
@@ -146,6 +153,7 @@ const routes: RouteConfig[] = [
   login,
   orgnization,
   orgnizationPublic,
+  event,
   notfound,
 ];
 

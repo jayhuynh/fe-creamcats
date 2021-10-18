@@ -15,6 +15,8 @@ const useStyles = makeStyles({
     boxShadow: 'none',
   },
   title: {
+    height: 20,
+    overflow: 'hidden',
     marginBottom: 10,
     fontSize: 16,
     fontWeight: 'bold',

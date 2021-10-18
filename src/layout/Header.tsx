@@ -61,8 +61,18 @@ const Header = () => {
   }, [open]);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', height: 50, background: '#f6f8f9', padding: '0 10px' }}>
-      <Typography style={{ color: '#fa6980', fontSize: 13, flex: 1 }}>LOGO</Typography>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        height: 50,
+        background: '#f6f8f9',
+        padding: '0 10px',
+      }}
+    >
+      <Typography style={{ color: '#fa6980', fontSize: 13, flex: 1 }}>
+        LOGO
+      </Typography>
 
       <Grid container>
         <Grid container item justifyContent="flex-start"></Grid>
@@ -79,25 +89,34 @@ const Header = () => {
             </span>
           </Grid>
           <Grid item>
-
             <Avatar
-             onClick={handleToggle}
-              style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}
+              onClick={handleToggle}
+              style={{
+                backgroundColor: 'orange',
+                width: 30,
+                height: 30,
+                marginLeft: 10,
+              }}
             >
-            <span
-             ref={anchorRef}
-             >N</span>
+              <span ref={anchorRef}>N</span>
             </Avatar>
 
-            <Popper open={open} anchorEl={anchorRef.current} placement='bottom-end' role={undefined} transition disablePortal>
+            <Popper
+              open={open}
+              anchorEl={anchorRef.current}
+              placement="bottom-end"
+              role={undefined}
+              transition
+              disablePortal
+            >
               {({ TransitionProps }) => (
-                <Grow
-                  {...TransitionProps}
-                >
+                <Grow {...TransitionProps}>
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
-                      <MenuList  id="menu-list-grow">
-                        <MenuItem onClick={handleLogout}>Logout&nbsp; <ExitToAppIcon></ExitToAppIcon></MenuItem>
+                      <MenuList id="menu-list-grow">
+                        <MenuItem onClick={handleClose}>
+                          Logout&nbsp; <ExitToAppIcon></ExitToAppIcon>
+                        </MenuItem>
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>

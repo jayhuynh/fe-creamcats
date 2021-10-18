@@ -82,7 +82,7 @@ export default function OrganizationApplication() {
   const applicationNumber = useSelector(
     fromOrganizationApplications.selectNumber,
   );
-  const profile: any = useSelector(fromProfile.selectProfile);
+  const profile: any = useSelector(fromProfile.selectProfile) || {};
   const dispatch = useAppDispatch();
   const [pastEvents, setPastEvents] = useState<VoluntaryEvent[]>([]);
 

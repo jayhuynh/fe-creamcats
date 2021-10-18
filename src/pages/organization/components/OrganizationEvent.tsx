@@ -72,7 +72,7 @@ export default function OrganizationEvent() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const events = useSelector(fromVoluntaryEvents.selectAllVoluntaryEvents);
-  const profile: any = useSelector(fromProfile.selectProfile);
+  const profile: any = useSelector(fromProfile.selectProfile) || {};
   const dispatch = useAppDispatch();
   const [pastEvents, setPastEvents] = useState<VoluntaryEvent[]>([]);
 

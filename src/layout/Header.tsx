@@ -69,13 +69,13 @@ const Header = () => {
         <Grid container item justifyContent="flex-end">
           <Grid item className={classes['top-menu']}>
             <span style={{ color: '#343638' }}>
-              <Typography>HOME</Typography>
+              <Typography>Home</Typography>
             </span>
             <span>
-              <Typography>OPPORTUNITIES</Typography>
+              <Typography>Opportunities</Typography>
             </span>
             <span>
-              <Typography>ABOUT US</Typography>
+              <Typography>About us</Typography>
             </span>
           </Grid>
           <Grid item>

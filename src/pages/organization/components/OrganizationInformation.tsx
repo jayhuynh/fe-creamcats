@@ -21,15 +21,14 @@ const questionMark =
 const useStyles = makeStyles(() => ({
   personalInformationsCard: {
     backgroundColor: 'white',
-    height: 633,
     paddingTop: 43,
     boxShadow: 'none',
+    paddingBottom:50,
   },
   avatar: {
     width: 140,
     height: 140,
     marginBottom: 20,
-    border: '3px solid #fa6980',
   },
   personalInformationTitle: {
     width: '100%',
@@ -47,7 +46,6 @@ const useStyles = makeStyles(() => ({
   },
   personalInformationContent: {
     width: '100%',
-    height: 28,
     fontFamily: 'HelveticaNeue',
     fontSize: 24,
     fontWeight: 'bold',
@@ -59,9 +57,14 @@ const useStyles = makeStyles(() => ({
     color: '#333',
     marginTop: 7,
   },
+  contentOverwrite:{
+    fontSize:14,
+    fontWeight:'normal',
+    width: 210,
+    wordBreak:'break-word',
+  },
   formElements: {
     width: 240,
-    height: 28,
     fontFamily: 'HelveticaNeue',
     fontSize: 20,
     fontWeight: 'bold',
@@ -76,9 +79,14 @@ const useStyles = makeStyles(() => ({
     marginTop: 4,
   },
   editProfileButton: {
-    height: 36,
-    backgroundColor: '#fa6980',
     color: 'white',
+    boxShadow: 'none',
+    background:'#fa6980',
+    fontSize: 12,
+    padding:'12px 45px',
+    '&:hover':{
+      background:'#fa6980',
+    },
   },
   saveButton: {},
   cancelButton: {
@@ -95,7 +103,7 @@ export default function OrganizationInformation() {
   const { register, handleSubmit } = useForm();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const profile: any = useSelector(fromProfile.selectProfile);
+  const profile: any = useSelector(fromProfile.selectProfile) || {};
 
 
   const onSubmit = async (data: any) => {
@@ -145,7 +153,7 @@ export default function OrganizationInformation() {
                   className={classes.formElements}
                 />
               ) : (
-                <Typography className={classes.personalInformationContent}>
+                <Typography className={`${classes.personalInformationContent} ${classes.contentOverwrite}`}>
                   {profile.email}
                 </Typography>
               )}
@@ -161,7 +169,7 @@ export default function OrganizationInformation() {
                       className={classes.formElements}
                   />
               ) : (
-                  <Typography className={classes.personalInformationContent}>
+                  <Typography className={`${classes.personalInformationContent} ${classes.contentOverwrite}`}>
                     {profile.phone}
                   </Typography>
               )}
@@ -181,7 +189,7 @@ export default function OrganizationInformation() {
                   <option value="OTHER">OTHER</option>
                 </select>
               ) : (
-                  <Typography className={classes.personalInformationContent}>
+                  <Typography className={`${classes.personalInformationContent} ${classes.contentOverwrite}`}>
                   {profile.addr}
                 </Typography>
               )}
@@ -198,7 +206,7 @@ export default function OrganizationInformation() {
                       className={classes.formElements}
                   />
               ) : (
-                  <Typography className={classes.personalInformationContent}>
+                  <Typography className={`${classes.personalInformationContent} ${classes.contentOverwrite}`}>
                     {profile.desc}
                   </Typography>
               )}
@@ -223,6 +231,7 @@ export default function OrganizationInformation() {
                   </Grid>
                   <Grid item xs>
                     <Button
+                    
                       className={classes.cancelButton}
                       onClick={() => {
                         setIsEditing(false);
@@ -234,6 +243,8 @@ export default function OrganizationInformation() {
                 </Grid>
               ) : (
                 <Button
+                color="secondary"
+                 variant="contained"
                   className={classes.editProfileButton}
                   onClick={() => {
                     setIsEditing(true);

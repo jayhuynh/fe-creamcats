@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { fromAuth, useAppDispatch } from '../store';
+import SearchIcon from '@material-ui/icons/Search';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 const useStyles = makeStyles(() => ({
   'top-menu': {
     color: 'gray',
@@ -63,6 +65,7 @@ const Header = () => {
   return (
     <div
       style={{
+        fontFamily: 'HelveticaNeue-bold',
         display: 'flex',
         alignItems: 'center',
         height: 50,
@@ -70,9 +73,9 @@ const Header = () => {
         padding: '0 10px',
       }}
     >
-      <Typography style={{ color: '#fa6980', fontSize: 13, flex: 1 }}>
-        LOGO
-      </Typography>
+      <Grid container style={{ display: 'flex', flex: 1 }}>
+        <Grid container item style={{ display: 'flex', flex: 1 }}>
+          <Typography style={{ color: '#fa6980', lineHeight: '30px', marginRight: 42 }}>LOGO</Typography>
 
       <Grid container>
         <Grid container item justifyContent="flex-start"></Grid>
@@ -85,45 +88,41 @@ const Header = () => {
               <Typography>Opportunities</Typography>
             </span>
             <span>
-              <Typography>About us</Typography>
+              <Typography>About Us</Typography>
             </span>
           </Grid>
-          <Grid item>
-            <Avatar
-              onClick={handleToggle}
-              style={{
-                backgroundColor: 'orange',
-                width: 30,
-                height: 30,
-                marginLeft: 10,
-              }}
-            >
-              <span ref={anchorRef}>N</span>
-            </Avatar>
+        </Grid>
 
-            <Popper
-              open={open}
-              anchorEl={anchorRef.current}
-              placement="bottom-end"
-              role={undefined}
-              transition
-              disablePortal
-            >
-              {({ TransitionProps }) => (
-                <Grow {...TransitionProps}>
-                  <Paper>
-                    <ClickAwayListener onClickAway={handleClose}>
-                      <MenuList id="menu-list-grow">
-                        <MenuItem onClick={handleClose}>
-                          Logout&nbsp; <ExitToAppIcon></ExitToAppIcon>
-                        </MenuItem>
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
-          </Grid>
+      </Grid>
+      <Grid style={{ display: 'flex', alignItems: 'center' }}>
+          <SearchIcon></SearchIcon>
+          <NotificationsIcon style={{ margin:'0 20px' }}></NotificationsIcon>
+          <Avatar onClick={handleToggle} style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}>
+            <span ref={anchorRef}>N</span>
+          </Avatar>
+
+          <Popper
+            open={open}
+            anchorEl={anchorRef.current}
+            placement="bottom-end"
+            role={undefined}
+            transition
+            disablePortal
+          >
+            {({ TransitionProps }) => (
+              <Grow {...TransitionProps}>
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList id="menu-list-grow">
+                      <MenuItem onClick={handleLogout}>
+                        Logout&nbsp; <ExitToAppIcon></ExitToAppIcon>
+                      </MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
         </Grid>
       </Grid>
     </div>

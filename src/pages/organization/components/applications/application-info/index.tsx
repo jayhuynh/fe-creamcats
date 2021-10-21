@@ -78,8 +78,6 @@ export const ApplicationInfo = ({ applicationInformation, handlerCloseApplicatio
   const classes = useStyles();
   const { data } = applicationInformation;
   const [applicantDetails, setApplicantDetails] = useState<Profile>();
-  console.log(applicantDetails);
-  console.log(data);
 
   useEffect(() => {
     (async () => {

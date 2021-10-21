@@ -18,7 +18,7 @@ import { profile } from '../routes';
 
 export const AUTH_FEATURE_KEY = 'auth';
 
-const TOKEN = 'cc.login';
+export const TOKEN = 'cc.login';
 export const TYPE = 'cc.type';
 
 interface AuthState {

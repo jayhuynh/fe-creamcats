@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import {
@@ -21,6 +21,7 @@ import {
 
 import EventContent from './components/EventContent';
 import EventPositions from './components/EventPositions';
+import CreatePositionDialog from './components/CreatePositionDialog';
 
 //This should be deleted when submit to avoid copyright issue
 const backupURL =
@@ -130,6 +131,7 @@ interface ParamsTypes {
 
 export default function Event() {
   const { eventId } = useParams<ParamsTypes>();
+  const history = useHistory();
 
   const classes = useStyles();
 
@@ -170,6 +172,7 @@ export default function Event() {
             >
               <Grid item>
                 <Button
+                  onClick={() => {history.goBack();}}
                   className={classes.backButton}
                   startIcon={<ArrowBackIosIcon />}
                 >
@@ -214,9 +217,7 @@ export default function Event() {
                 </Typography>
               </Grid>
               <Grid item>
-                <Button className={classes.button} startIcon={<AddIcon />}>
-                  Create a position
-                </Button>
+                <CreatePositionDialog eventId={Number(eventId)}/>
               </Grid>
             </Grid>
           </Grid>

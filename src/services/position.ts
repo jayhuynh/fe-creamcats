@@ -6,6 +6,7 @@ import {
   FilterFormInputs,
   parseQuery,
 } from '../pages/home/components/filter/Filters';
+import { CreatePositionFormInputs } from '../pages/event/components/CreatePositionDialog';
 
 export const getPositions = async (filters: FilterFormInputs) => {
   const queryString = qs.stringify(parseQuery(filters));
@@ -71,4 +72,9 @@ export const getCurrentPosition = async (id: number) => {
 export const getEventPositions = async (eventId: Number) => {
   const eventPositions = (await Axios.get(`/events/${eventId}/positions`)).data;
   return eventPositions;
+};
+
+export const createPostion = async (position: CreatePositionFormInputs) => {
+  // await
+  return position;
 };

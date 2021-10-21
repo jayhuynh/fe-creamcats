@@ -104,7 +104,6 @@ export const home: RouteConfig = {
 export const position: RouteConfig = {
   path: '/positions/:positionId',
   component: Position,
-  requireAuth: true,
 };
 
 export const profile: RouteConfig = {
@@ -118,13 +117,13 @@ export const sharingZone: RouteConfig = {
   component: SharingZone,
 };
 
-export const orgnization: RouteConfig = {
+export const organization: RouteConfig = {
   path: '/organizations/admin',
   component: OrganizationPage,
   requireAuth: true,
 };
 
-export const orgnizationPublic: RouteConfig = {
+export const organizationPublic: RouteConfig = {
   path: '/organizations/:organizationId',
   component: OrganizationPublicPage,
 };
@@ -151,8 +150,8 @@ const routes: RouteConfig[] = [
   profile,
   sharingZone,
   login,
-  orgnization,
-  orgnizationPublic,
+  organization,
+  organizationPublic,
   event,
   notfound,
 ];

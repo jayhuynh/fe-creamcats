@@ -12,6 +12,7 @@ import {
   TableHead,
   TableRow,
   TableFooter,
+  TablePagination,
   Paper,
   IconButton,
   Typography,
@@ -35,7 +36,7 @@ import CreatePost from '../../../sharing-zone/components/CreatePost';
 
 const useStyles = makeStyles({
   table: {
-    width: 1000,
+    width: 1400,
   },
   tableContainer: {
     boxShadow: 'none',
@@ -137,7 +138,10 @@ export default function ApplicationTable(props: any) {
 
   return (
     <Grid item xs>
-      <ApplicationInfo applicationInformation={applicationInfo}  handlerCloseApplication={handleCloseApplication}/>
+      <ApplicationInfo
+        applicationInformation={applicationInfo}
+        handlerCloseApplication={handleCloseApplication}
+      />
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableHead}>
@@ -173,60 +177,60 @@ export default function ApplicationTable(props: any) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {parseApplications(organizationApplications)
-              .map((row: any) => (
-                <TableRow
-                  key={row.name + row.event + row.position}
-                  onClick={() => {
-                    handleOpenApplication(row);
-                  }}
-                  className={classes.tableRow}
+            {parseApplications(organizationApplications).map((row: any) => (
+              <TableRow
+                hover
+                key={row.name + row.event + row.position}
+                onClick={() => {
+                  handleOpenApplication(row);
+                }}
+                className={classes.tableRow}
+              >
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className={classes.tableBodyFirstColumnText}
                 >
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    className={classes.tableBodyFirstColumnText}
+                  {row.name}
+                </TableCell>
+                <TableCell align="left">
+                  <Typography className={classes.tableRowText}>
+                    {row.gender}
+                  </Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography className={classes.tableRowText}>
+                    {row.event}
+                  </Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography className={classes.tableRowText}>
+                    {row.position}
+                  </Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography className={classes.tableRowText}>
+                    {row.dateApplied}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    color={
+                      row.pendingStatus === 'ACCEPTED' ? 'primary' : 'secondary'
+                    }
                   >
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography className={classes.tableRowText}>
-                      {row.gender}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography className={classes.tableRowText}>
-                      {row.event}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography className={classes.tableRowText}>
-                      {row.position}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography className={classes.tableRowText}>
-                      {row.dateApplied}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      color={
-                        row.pendingStatus === 'ACCEPTED' ? 'primary' : 'secondary'
-                      }
-                    >
-                      <CheckIcon/>
-                    </IconButton>
-                    <IconButton
-                      color={
-                        row.pendingStatus === 'REJECTED' ? 'primary' : 'secondary'
-                      }
-                    >
-                      <CloseIcon/>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <CheckIcon />
+                  </IconButton>
+                  <IconButton
+                    color={
+                      row.pendingStatus === 'REJECTED' ? 'primary' : 'secondary'
+                    }
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
           <TableFooter>
             <Pagination

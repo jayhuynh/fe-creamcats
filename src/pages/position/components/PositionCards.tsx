@@ -9,7 +9,9 @@ import PositionCard from '../../../utils/position-card';
 export default function PositionCards(props: any) {
   const { positionInfoList } = props;
 
-  return positionInfoList.map((item: any) => {
+  const positionSlice = positionInfoList.slice(0, 6);
+
+  return positionSlice.map((item: any) => {
     return (
       // `xs={4}` makes sure there will be three grid in each line
       <Grid item xs={4} key={item.name}>

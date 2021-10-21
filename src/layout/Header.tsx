@@ -77,9 +77,6 @@ const Header = () => {
         <Grid container item style={{ display: 'flex', flex: 1 }}>
           <Typography style={{ color: '#fa6980', lineHeight: '30px', marginRight: 42 }}>LOGO</Typography>
 
-      <Grid container>
-        <Grid container item justifyContent="flex-start"></Grid>
-        <Grid container item justifyContent="flex-end">
           <Grid item className={classes['top-menu']}>
             <span style={{ color: '#343638' }}>
               <Typography>Home</Typography>
@@ -95,35 +92,34 @@ const Header = () => {
 
       </Grid>
       <Grid style={{ display: 'flex', alignItems: 'center' }}>
-          <SearchIcon></SearchIcon>
-          <NotificationsIcon style={{ margin:'0 20px' }}></NotificationsIcon>
-          <Avatar onClick={handleToggle} style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}>
-            <span ref={anchorRef}>N</span>
-          </Avatar>
+        <SearchIcon></SearchIcon>
+        <NotificationsIcon style={{ margin:'0 20px' }}></NotificationsIcon>
+        <Avatar onClick={handleToggle} style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}>
+          <span ref={anchorRef}>N</span>
+        </Avatar>
 
-          <Popper
-            open={open}
-            anchorEl={anchorRef.current}
-            placement="bottom-end"
-            role={undefined}
-            transition
-            disablePortal
-          >
-            {({ TransitionProps }) => (
-              <Grow {...TransitionProps}>
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList id="menu-list-grow">
-                      <MenuItem onClick={handleLogout}>
-                        Logout&nbsp; <ExitToAppIcon></ExitToAppIcon>
-                      </MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
-        </Grid>
+        <Popper
+          open={open}
+          anchorEl={anchorRef.current}
+          placement="bottom-end"
+          role={undefined}
+          transition
+          disablePortal
+        >
+          {({ TransitionProps }) => (
+            <Grow {...TransitionProps}>
+              <Paper>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList id="menu-list-grow">
+                    <MenuItem onClick={handleLogout}>
+                      Logout&nbsp; <ExitToAppIcon></ExitToAppIcon>
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
       </Grid>
     </div>
   );

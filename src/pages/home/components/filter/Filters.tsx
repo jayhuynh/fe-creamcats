@@ -160,7 +160,7 @@ const Filters = () => {
         </OptionContainer>
       </Grid>
       <Grid item xs={4}>
-        <OptionContainer label="Tags" quickClear>
+        <OptionContainer label="Tags">
           <TagsMultiSelect
             onTagsChange={handleChangeTags}
             limitTags={2}

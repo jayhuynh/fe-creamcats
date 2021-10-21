@@ -8,8 +8,10 @@ import { useForm } from 'react-hook-form';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
-import { fromApplications, fromNotifications, fromProfile, useAppDispatch } from '../../../store';
+import { fromApplications, fromAuth, fromNotifications, fromProfile, useAppDispatch } from '../../../store';
 import { NotificationsType } from '../../../store/notificationsSlice';
+import { login, useNavigate, useQuery } from '../../../routes';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,12 +41,27 @@ const ApplicationDialog = ({ postionId }: ApplicationDialogProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const profile = useSelector(fromProfile.selectProfile);
+  const { replaceQuery, navigate, replace } = useNavigate();
+  const  isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const { get, clear, queryString, queryDictionary } = useQuery();
+  const location = useLocation();
   const { register, handleSubmit, formState: { errors } } = useForm<ApplicationFormInput>({
     defaultValues: { email: profile?.email, notes: '' },
   });
 
   const handleClickOpen = () => {
-    setOpen(true);
+    (async () => {
+      if (!isAuthenticated) {
+        navigate(
+          login.path,
+          replaceQuery({ redirect: `${location.pathname}?${queryString()}` }),
+        );
+      }
+      const accountType = JSON.parse(localStorage.getItem(fromAuth.TYPE) || 'volunteer');
+      await dispatch(fromAuth.doResume(undefined));
+      await dispatch(fromProfile.doFetchMyProfile({ type: accountType }));
+      setOpen(true);
+    })();
   };
 
   const handleClose = () => {

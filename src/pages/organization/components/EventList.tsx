@@ -63,7 +63,7 @@ const Title = ({ total, showFilters }: TitleProps) => {
                                     style={{ padding: '15px' }}
                                     variant="outlined"
                                     startIcon={<AddIcon/>}>
-                                    Create a new post
+                                    Create an event
                                 </Button>
                             </Grid>
                         </Grid>

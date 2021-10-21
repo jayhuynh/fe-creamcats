@@ -74,6 +74,7 @@ export const getEventPositions = async (eventId: Number) => {
   return eventPositions;
 };
 
-export const createPostion = async (postion: CreatePositionFormInputs) => {
+export const createPostion = async (position: CreatePositionFormInputs) => {
   // await
+  return position;
 };

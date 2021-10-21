@@ -83,6 +83,7 @@ export const CreatePost = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<CreatePostFormInputs>({
     defaultValues: { image: '', title: '', body: '' },
   });
@@ -97,6 +98,7 @@ export const CreatePost = () => {
 
   const doCreatePost = async (data: CreatePostFormInputs) => {
     await dispatch(fromPosts.doCreatePost({ post: data }));
+    reset();
     setOpen(false);
     dispatch(fromNotifications.doPushNotification({
       message: 'Successfully created a new post',

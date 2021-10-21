@@ -44,27 +44,27 @@ export const doFetchEventPositions = createAsyncThunk(
     }
   },
 );
-//
-// export const deCreateEventPosition = createAsyncThunk(
-//   'organizationPositions/create',
-//   async (
-//     data: {
-//       position: CreatePositionFormInputs;
-//     },
-//     { rejectWithValue, getState },
-//   ) => {
-//     try {
-//       const eventPositions = await PositionService.getEventPositions(
-//         data.eventId,
-//       );
-//       return {
-//         eventPositions,
-//       };
-//     } catch (e) {
-//       return rejectWithValue(exceptionOf(e).toJson());
-//     }
-//   },
-// );
+
+export const deCreateEventPosition = createAsyncThunk(
+  'organizationPositions/create',
+  async (
+    data: {
+      position: CreatePositionFormInputs;
+    },
+    { rejectWithValue, getState },
+  ) => {
+    try {
+      const eventPosition = await PositionService.createPostion(
+        data.position,
+      );
+      return {
+        eventPosition,
+      };
+    } catch (e) {
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
 
 const organizationPositionsSlice = createSlice({
   name: ORGANIZATION_POSITIONS_FEATURE_KEY,
@@ -81,6 +81,22 @@ const organizationPositionsSlice = createSlice({
       state.errors = [];
     });
     builder.addCase(doFetchEventPositions.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
+      state.eventPositions = [];
+      state.loading = false;
+      state.errors.push(payload);
+    });
+
+    //Create organization positions
+    builder.addCase(deCreateEventPosition.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(deCreateEventPosition.fulfilled, (state, action) => {
+      state.eventPositions = [...state.eventPositions, action.payload.eventPosition];
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(deCreateEventPosition.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
       state.eventPositions = [];
       state.loading = false;

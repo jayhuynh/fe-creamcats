@@ -13,7 +13,7 @@ import Login from './components/Login';
 import RegisterTabWrapper from './components/RegisterTabWrapper';
 import { useQuery } from '../../routes';
 import { useSelector } from 'react-redux';
-import { fromAuth } from '../../store';
+import { fromAuth, fromProfile } from '../../store';
 import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -45,10 +45,17 @@ export default function RegisterAndLogin() {
   const classes = useStyles();
   const [currentTab, setTab] = useState('register');
   const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const userType = useSelector(fromProfile.selectType);
   const { get } = useQuery();
 
-  if (isAuthenticated) {
-    return <Redirect to={get('redirect') || '/home'} />;
+  if (isAuthenticated && userType) {
+    if (get('redirect')) {
+      return <Redirect to={get('redirect') || '/home'} />;
+    }
+    if (userType === 'organization') {
+      return <Redirect to={'/organizations/admin'} />;
+    }
+    return <Redirect to={'/home'} />;
   }
 
 

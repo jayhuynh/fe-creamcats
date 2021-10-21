@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import {
@@ -131,6 +131,7 @@ interface ParamsTypes {
 
 export default function Event() {
   const { eventId } = useParams<ParamsTypes>();
+  const history = useHistory();
 
   const classes = useStyles();
 
@@ -171,6 +172,7 @@ export default function Event() {
             >
               <Grid item>
                 <Button
+                  onClick={() => {history.goBack();}}
                   className={classes.backButton}
                   startIcon={<ArrowBackIosIcon />}
                 >

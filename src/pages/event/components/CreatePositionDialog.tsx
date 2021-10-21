@@ -13,6 +13,7 @@ import { fromNotifications, fromOrganizationPositions, fromPosts, useAppDispatch
 import { NotificationsType } from '../../../store/notificationsSlice';
 import { Tag } from '../../../models';
 import TagsMultiSelect from '../../home/components/filter/components/TagsMultiSelect';
+import { deCreateEventPosition } from '../../../store/organizationPositionsSlice';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -100,6 +101,7 @@ const CreatePositionionDialog = ({ eventId }: CreatePositionionDialogProps) => {
     formState: { errors },
     watch,
     setValue,
+    reset,
   } = useForm<CreatePositionFormInputs>({
     defaultValues: {
       name: '',
@@ -125,14 +127,14 @@ const CreatePositionionDialog = ({ eventId }: CreatePositionionDialogProps) => {
   };
 
   const doCreatePosition = async (data: CreatePositionFormInputs) => {
-    // dispatch(fromOrganizationPositions.doAddNewPosition(data));
-    // await dispatch(fromPosts.doCreatePosition({ post: data }));
-    // setOpen(false);
-    // dispatch(fromNotifications.doPushNotification({
-    //   message: 'Successfully created a new post',
-    //   key: new Date().getTime(),
-    //   type: NotificationsType.SUCCESS,
-    // }));
+    dispatch(fromOrganizationPositions.deCreateEventPosition({ position: data }));
+    reset();
+    setOpen(false);
+    dispatch(fromNotifications.doPushNotification({
+      message: 'Successfully created a new position',
+      key: new Date().getTime(),
+      type: NotificationsType.SUCCESS,
+    }));
   };
 
   return (

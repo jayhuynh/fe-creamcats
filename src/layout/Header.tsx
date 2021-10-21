@@ -8,9 +8,14 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { fromAuth, useAppDispatch } from '../store';
+import { fromAuth, fromProfile, useAppDispatch } from '../store';
 import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { AccountBox } from '@material-ui/icons';
+import { useSelector } from 'react-redux';
+import { home, login, organization, profile, useNavigate, useQuery } from '../routes';
+import { Token } from '../models';
+import { useLocation } from 'react-router-dom';
 const useStyles = makeStyles(() => ({
   'top-menu': {
     color: 'gray',
@@ -32,9 +37,36 @@ const Header = () => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const dispatch = useAppDispatch();
+  const userType = useSelector(fromProfile.selectType);
+  const { replaceQuery, navigate, replace } = useNavigate();
+  const  isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const { get, clear, queryString, queryDictionary } = useQuery();
+  const location = useLocation();
+
+
+  const redirectToProfile = () => {
+    if (userType === 'organization') {
+      navigate(organization.path, replaceQuery({}));
+    } else {
+      navigate(profile.path, replaceQuery({}));
+    }
+  };
+
 
   const handleToggle = () => {
-    setOpen(prevOpen => !prevOpen);
+    (async () => {
+      if (!isAuthenticated) {
+        navigate(
+          login.path,
+          replaceQuery({ redirect: `${location.pathname}?${queryString()}` }),
+        );
+      }
+      const accountType = JSON.parse(localStorage.getItem(fromAuth.TYPE) || 'volunteer');
+      await dispatch(fromAuth.doResume(undefined));
+      await dispatch(fromProfile.doFetchMyProfile({ type: accountType }));
+      setOpen(prevOpen => !prevOpen);
+
+    })();
   };
 
   const handleClose = (event: React.MouseEvent<EventTarget>) => {
@@ -43,6 +75,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     await dispatch(fromAuth.doLogout());
+    navigate(login.path, replaceQuery({}));
   };
 
   function handleListKeyDown(event: React.KeyboardEvent) {
@@ -78,7 +111,9 @@ const Header = () => {
           <Typography style={{ color: '#fa6980', lineHeight: '30px', marginRight: 42 }}>LOGO</Typography>
 
           <Grid item className={classes['top-menu']}>
-            <span style={{ color: '#343638' }}>
+            <span
+              onClick={() => {navigate(home.path, replaceQuery({}));}}
+              style={{ color: '#343638' }}>
               <Typography>Home</Typography>
             </span>
             <span>
@@ -111,6 +146,9 @@ const Header = () => {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList id="menu-list-grow">
+                    <MenuItem onClick={redirectToProfile}>
+                      Profile&nbsp; <AccountBox></AccountBox>
+                    </MenuItem>
                     <MenuItem onClick={handleLogout}>
                       Logout&nbsp; <ExitToAppIcon></ExitToAppIcon>
                     </MenuItem>

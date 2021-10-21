@@ -26,7 +26,6 @@ export const doFetchMyProfile = createAsyncThunk(
   },
   { rejectWithValue }) => {
     try {
-      console.log(data.type);
       const profile = data.type === 'volunteer'
         ? await ProfileService.getMyProfile()
         : await ProfileService.getOrganizationProfile();
@@ -79,6 +78,11 @@ export const selectLoading = createSelector(
 export const selectProfile = createSelector(
   selectProfileFeature,
   state => state.profile,
+);
+
+export const selectType = createSelector(
+  selectProfileFeature,
+  state => state.type,
 );
 
 export const { doCleanProfile } = profileSlice.actions;

@@ -161,7 +161,10 @@ const Filters = () => {
       </Grid>
       <Grid item xs={4}>
         <OptionContainer label="Tags" quickClear>
-          <TagsMultiSelect onTagsChange={handleChangeTags} selectedTags={watch('tags') || []}/>
+          <TagsMultiSelect
+            onTagsChange={handleChangeTags}
+            limitTags={2}
+            selectedTags={watch('tags') || []}/>
         </OptionContainer>
       </Grid>
       <Grid item xs={4}>

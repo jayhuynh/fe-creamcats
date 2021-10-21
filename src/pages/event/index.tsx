@@ -21,6 +21,7 @@ import {
 
 import EventContent from './components/EventContent';
 import EventPositions from './components/EventPositions';
+import CreatePositionDialog from './components/CreatePositionDialog';
 
 //This should be deleted when submit to avoid copyright issue
 const backupURL =
@@ -214,9 +215,7 @@ export default function Event() {
                 </Typography>
               </Grid>
               <Grid item>
-                <Button className={classes.button} startIcon={<AddIcon />}>
-                  Create a position
-                </Button>
+                <CreatePositionDialog eventId={Number(eventId)}/>
               </Grid>
             </Grid>
           </Grid>

@@ -9,9 +9,10 @@ import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
 interface TagsMultiSelectProps {
   selectedTags: Tag[];
   onTagsChange: (value: Tag[]) => unknown;
+  limitTags: number;
 }
 
-const TagsMultiSelect = ({ onTagsChange, selectedTags }: TagsMultiSelectProps) => {
+const TagsMultiSelect = ({ onTagsChange, selectedTags, limitTags }: TagsMultiSelectProps) => {
   const tags = useSelector(fromTags.selectTags);
   const dispatch = useAppDispatch();
 
@@ -22,7 +23,7 @@ const TagsMultiSelect = ({ onTagsChange, selectedTags }: TagsMultiSelectProps) =
   return (
     <Autocomplete
       multiple
-      limitTags={2}
+      limitTags={limitTags}
       options={tags}
       disableCloseOnSelect
       fullWidth

@@ -1,12 +1,14 @@
 import {
   createAsyncThunk,
   createSelector,
-  createSlice,
+  createSlice, PayloadAction,
 } from '@reduxjs/toolkit';
 
 import { SerializedException, exceptionOf } from '../models';
 import { PositionService } from '../services';
 import { AppState } from './index';
+import { RegisterInputForm } from '../pages/login/components/Register';
+import { CreatePositionFormInputs } from '../pages/event/components/CreatePositionDialog';
 
 export const ORGANIZATION_POSITIONS_FEATURE_KEY = 'organizationPositions';
 
@@ -31,7 +33,6 @@ export const doFetchEventPositions = createAsyncThunk(
     { rejectWithValue, getState },
   ) => {
     try {
-      console.log(data.eventId);
       const eventPositions = await PositionService.getEventPositions(
         data.eventId,
       );
@@ -43,6 +44,27 @@ export const doFetchEventPositions = createAsyncThunk(
     }
   },
 );
+//
+// export const deCreateEventPosition = createAsyncThunk(
+//   'organizationPositions/create',
+//   async (
+//     data: {
+//       position: CreatePositionFormInputs;
+//     },
+//     { rejectWithValue, getState },
+//   ) => {
+//     try {
+//       const eventPositions = await PositionService.getEventPositions(
+//         data.eventId,
+//       );
+//       return {
+//         eventPositions,
+//       };
+//     } catch (e) {
+//       return rejectWithValue(exceptionOf(e).toJson());
+//     }
+//   },
+// );
 
 const organizationPositionsSlice = createSlice({
   name: ORGANIZATION_POSITIONS_FEATURE_KEY,

@@ -2,6 +2,7 @@ import { Box, Button, Grid, MenuItem, Select, Typography } from '@material-ui/co
 import AddIcon from '@material-ui/icons/Add';
 import Pagination from '@material-ui/lab/Pagination';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import PositionCard from '../../../utils/position-card';
 import { VoluntaryEvent } from '../../../models';
@@ -88,13 +89,15 @@ export default function EventList({ events, showFilters }: EventListProps) {
   const positionCards = events.slice((page - 1) * (pageSize), page * (pageSize)).map((item: VoluntaryEvent) => {
     return (
             <Grid key={item.name} item xs={4}>
+              <Link to={`/event/${item.id}`} style={{ textDecoration: 'none' }}>
                 <PositionCard
-                    title={item.name}
-                    usage="personal"
-                    status="ONGOING"
-                    description={item.desc}
-                    time={item.startTime}
+                  title={item.name}
+                  usage="personal"
+                  status="ONGOING"
+                  description={item.desc}
+                  time={item.startTime}
                 />
+              </Link>
             </Grid>
     );
   });

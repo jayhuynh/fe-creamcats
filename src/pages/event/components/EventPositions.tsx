@@ -1,4 +1,5 @@
 import { Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 import PositionCard from '../../../utils/position-card';
 
@@ -9,15 +10,17 @@ import PositionCard from '../../../utils/position-card';
  */
 export default function EventPositions(props: any) {
   const positionCards = props.positionInfo.map((position: any) => {
-    const { thumbnail, name, desc, timeCreated } = position;
+    const { thumbnail, name, desc, timeCreated, id } = position;
     return (
       <Grid item xs={4} key={name}>
-        <PositionCard
-          coverURL={thumbnail}
-          title={name}
-          description={desc}
-          time={timeCreated}
-        />
+        <Link to={`/positions/${id}`} style={{ textDecoration: 'none' }}>
+          <PositionCard
+            coverURL={thumbnail}
+            title={name}
+            description={desc}
+            time={timeCreated}
+          />
+        </Link>
       </Grid>
     );
   });

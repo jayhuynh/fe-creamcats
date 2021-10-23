@@ -33,3 +33,14 @@ export const getApplications = async (organizationId: Number, filters: any) => {
 export const getApplicantDetails = async (applicantId: number): Promise<Profile> => {
   return (await Axios.get(`/users/${applicantId}`)).data;
 };
+
+export const updateApplication = async (applicationId: number, status: string, feedback: string): Promise<any> => {
+  const application = (await Axios.patch(`/applications/${applicationId}`, {
+    status,
+    feedback,
+  })).data;
+  return {
+    applicationId,
+    status,
+  };
+};

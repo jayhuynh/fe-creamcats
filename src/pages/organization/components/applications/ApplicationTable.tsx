@@ -171,7 +171,7 @@ export default function ApplicationTable(props: any) {
               </TableCell>
               <TableCell align="left">
                 <Typography className={classes.tableHeadText}>
-                  Pending
+                  Status
                 </Typography>
               </TableCell>
             </TableRow>

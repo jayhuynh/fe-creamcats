@@ -220,7 +220,7 @@ const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
                   <Grid container>
                     <Grid container xs={6} justifyContent="flex-start" alignItems="center"></Grid>
                     <Grid container xs={6} justifyContent="flex-end" alignItems="center">
-                      <Button variant="contained" type="submit" color="secondary">
+                      <Button variant="contained" type="submit" color="primary">
                         Post
                       </Button>
                     </Grid>

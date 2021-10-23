@@ -249,7 +249,7 @@ export default function Login(props: any) {
             className={classes.login}
             variant="contained"
             type="submit"
-            color="secondary"
+            color="primary"
           >
             Login
           </Button>

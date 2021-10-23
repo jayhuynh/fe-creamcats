@@ -9,8 +9,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CcDropZone from '../../../utils/CcDropZone';
 import Editor from '../../../utils/Editor';
-import { fromNotifications, fromPosts, useAppDispatch } from '../../../store';
+import { fromNotifications, fromPosts, fromProfile, useAppDispatch } from '../../../store';
 import { NotificationsType } from '../../../store/notificationsSlice';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,11 +72,13 @@ export interface CreatePostFormInputs {
   image: string;
   title: string;
   body: string;
+  userId: number;
 }
 
 export const CreatePost = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const profile = useSelector(fromProfile.selectProfile);
   const dispatch = useAppDispatch();
 
   const {
@@ -85,7 +88,7 @@ export const CreatePost = () => {
     setValue,
     reset,
   } = useForm<CreatePostFormInputs>({
-    defaultValues: { image: '', title: '', body: '' },
+    defaultValues: { image: '', title: '', body: '', userId: profile?.id },
   });
 
   const handleClickOpen = () => {
@@ -144,7 +147,7 @@ export const CreatePost = () => {
                   <Grid container>
                     <Grid container xs={6} justifyContent="flex-start" alignItems="center"></Grid>
                     <Grid container xs={6} justifyContent="flex-end" alignItems="center">
-                      <Button variant="contained" type="submit" color="secondary">
+                      <Button variant="contained" type="submit" color="primary">
                         Post
                       </Button>
                     </Grid>

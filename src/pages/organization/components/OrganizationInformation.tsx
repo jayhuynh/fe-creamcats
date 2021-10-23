@@ -203,7 +203,7 @@ export default function OrganizationInformation() {
               </Grid>
             ) : (
               <Button
-                color="secondary"
+                color="primary"
                 variant="contained"
                 className={classes.editProfileButton}
                 onClick={() => {

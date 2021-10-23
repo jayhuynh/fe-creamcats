@@ -41,7 +41,7 @@ const PositionsList = () => {
         <Box m={4}>
           <Button variant="contained"
                   onClick={() => { dispatch(fromPositions.doLoadMore()); }}
-                  color="secondary">LOAD MORE</Button>
+                  color="primary">LOAD MORE</Button>
         </Box>
       </Grid>
     </>

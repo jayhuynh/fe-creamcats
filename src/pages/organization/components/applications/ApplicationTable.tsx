@@ -15,7 +15,7 @@ import {
   TablePagination,
   Paper,
   IconButton,
-  Typography,
+  Typography, Box,
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -83,6 +83,7 @@ const useStyles = makeStyles({
   },
   pagination: {
     margin: '20px 0 20px 10px',
+    color: '#ffffff',
   },
 });
 
@@ -232,25 +233,28 @@ export default function ApplicationTable(props: any) {
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <Pagination
-              count={Math.ceil(applicationNumber / filters.limit)}
-              size="small"
-              shape="rounded"
-              color="primary"
-              className={classes.pagination}
-              onChange={(event, pageNumber) => {
-                dispatch(
-                  fromOrganizationApplications.doChangePagination({
-                    limit: Number(filters.limit),
-                    offset: (pageNumber - 1) * filters.limit,
-                  }),
-                );
-              }}
-            />
-          </TableFooter>
         </Table>
       </TableContainer>
+      <Box width={1}>
+        <Grid justifyContent="flex-end"
+              alignItems="center"
+              container>
+          <Pagination
+            count={Math.ceil(applicationNumber / filters.limit)}
+            shape="rounded"
+            color="primary"
+            className={classes.pagination}
+            onChange={(event, pageNumber) => {
+              dispatch(
+                fromOrganizationApplications.doChangePagination({
+                  limit: Number(filters.limit),
+                  offset: (pageNumber - 1) * filters.limit,
+                }),
+              );
+            }}
+          />
+        </Grid>
+      </Box>
     </Grid>
   );
 }

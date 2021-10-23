@@ -9,7 +9,7 @@ export const getPosts = async () => {
     (post: any) =>
       ({
         id: post.id,
-        title: post.id,
+        title: post.title,
         postCover: post.thumbnail,
         content: post.content,
       } as Post),
@@ -17,7 +17,12 @@ export const getPosts = async () => {
 };
 
 export const createPost = async (data: CreatePostFormInputs) => {
-  console.log('Created post', data);
+  const response = (await Axios.post('/posts', {
+    title: data.title,
+    thumbnail: data.image,
+    content: data.body,
+    userId: data.userId,
+  })).data;
   return {
     title: data.title,
     postCover: data.image,

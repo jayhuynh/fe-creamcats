@@ -1,4 +1,4 @@
-import { Box, Button, Grid, MenuItem, Select, Typography } from '@material-ui/core';
+import { Box, Button, FormControl, Grid, MenuItem, Select, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Pagination from '@material-ui/lab/Pagination';
 import { useState } from 'react';
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import PositionCard from '../../../utils/position-card';
 import { VoluntaryEvent } from '../../../models';
+import CreateEventDialog from './CreateEventDialog';
 
 interface TitleProps {
   total: number;
@@ -47,24 +48,22 @@ const Title = ({ total, showFilters }: TitleProps) => {
                         alignItems="center"
                         spacing={3}>
                             <Grid item>
+                              <FormControl
+                                size={'small'}
+                                variant={'outlined'}>
                                 <Select
-                                    style={{ minWidth: '150px' }}
-                                    defaultValue='all'
-                                    variant="outlined"
-                                    displayEmpty
+                                  style={{ minWidth: '150px' }}
+                                  defaultValue='all'
+                                  displayEmpty
                                 >
-                                    {sortOptions.map(opt => (
-                                        <MenuItem value={opt.value} key={opt.value}>{opt.label}</MenuItem>
-                                    ))}
+                                  {sortOptions.map(opt => (
+                                    <MenuItem value={opt.value} key={opt.value}>{opt.label}</MenuItem>
+                                  ))}
                                 </Select>
+                              </FormControl>
                             </Grid>
                             <Grid item>
-                                <Button
-                                    style={{ padding: '15px' }}
-                                    variant="outlined"
-                                    startIcon={<AddIcon/>}>
-                                    Create an event
-                                </Button>
+                              <CreateEventDialog organizationId={1}/>
                             </Grid>
                         </Grid>
                     </Box>

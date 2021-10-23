@@ -1,7 +1,7 @@
 import { useDropzone } from 'react-dropzone';
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, CardMedia, Fade, Grid, Typography } from '@material-ui/core';
+import { Box, Button, CardMedia, CircularProgress, Fade, Grid, Typography } from '@material-ui/core';
 import { CcImageList } from './index';
 import AddIcon from '@material-ui/icons/Add';
 import { useDebounce } from 'use-debounce';
@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const UploadButton = ({ height }: any) => {
+const UploadButton = ({ height, isLoading }: any) => {
   const classes = useStyles();
 
   return (
@@ -69,10 +69,14 @@ const UploadButton = ({ height }: any) => {
         alignItems="center"
         className={classes.root}
         container>
-        <AddIcon fontSize="large"/>
-        <Box>
-          Drag and drop your image
-        </Box>
+        {isLoading ? <CircularProgress /> : <>
+          <AddIcon fontSize="large"/>
+          <Box>
+            Drag and drop your image
+          </Box>
+        </>}
+
+
       </Grid>
     </Box>
   );
@@ -87,14 +91,17 @@ const CcDropZone = ({ onChange, maxFiles }: CcDropZoneProps) => {
   const classes = useStyles();
   const [files, setFiles] = useState<any>([]);
   const [image, setImage] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
   const [debouncedImage] = useDebounce(image, 300);
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     maxFiles: maxFiles,
     onDrop: acceptedFiles => {
       (async () => {
+        setLoading(true);
         const urls = await FileService.uploadImages(acceptedFiles);
         onChange(urls);
+        setLoading(false);
         setFiles(acceptedFiles.map(file => Object.assign(file, {
           preview: URL.createObjectURL(file),
         })));
@@ -135,7 +142,7 @@ const CcDropZone = ({ onChange, maxFiles }: CcDropZoneProps) => {
         { !debouncedImage ? <Box width="100%">
           <div {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
-            <UploadButton height={'500px'}/>
+            <UploadButton height={'500px'} isLoading={loading}/>
           </div>
         </Box> : <></>}
         { files.length > 0 ? <Box width={'100%'} paddingTop={2}>

@@ -8,6 +8,7 @@ import { SerializedException, exceptionOf, VoluntaryEvent } from '../models';
 import { VoluntaryEventService } from '../services';
 import { AppState } from './index';
 import { EntityState } from '@reduxjs/toolkit/dist/entities';
+import { CreateEventFormInputs } from '../pages/organization/components/CreateEventDialog';
 
 export const VOLUNTARY_EVENTS_FEATURE_KEY = 'voluntaryEvents';
 
@@ -41,6 +42,22 @@ export const getVoluntaryEvents = createAsyncThunk(
   },
 );
 
+export const createVoluntaryEvent = createAsyncThunk(
+  'voluntaryEvents/create',
+  async (
+    data: {
+      event: CreateEventFormInputs,
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      return  await VoluntaryEventService.createOrganizationVoluntaryEvents(data.event);
+    } catch (e) {
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
+
 const voluntaryEventsSlice = createSlice({
   name: VOLUNTARY_EVENTS_FEATURE_KEY,
   initialState: createInitialState(),
@@ -58,6 +75,22 @@ const voluntaryEventsSlice = createSlice({
       state.errors = [];
     });
     builder.addCase(getVoluntaryEvents.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
+      state.loading = false;
+      state.errors.push(payload);
+    });
+
+    //Create new event
+    builder.addCase(createVoluntaryEvent.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(createVoluntaryEvent.fulfilled, (state, action) => {
+      voluntaryEventAdapter.addOne(state, action.payload);
+      state.total += 1;
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(createVoluntaryEvent.rejected, (state, action) => {
       const payload = action.payload as SerializedException;
       state.loading = false;
       state.errors.push(payload);

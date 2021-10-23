@@ -16,6 +16,7 @@ import { AppState } from './index';
 import { PaginationInputs } from '../pages/organization/components/applications/ApplicationTable';
 import { SubFilterFormInputs } from '../pages/organization/components/applications/application-filter/Filters';
 import { FilterFormInputs } from '../pages/organization/components/applications/ApplicationSearchArea';
+import { organization } from '../routes';
 
 export const ORGANIZATION_APPLICATIONS_FEATURE_KEY = 'organizationApplications';
 
@@ -67,6 +68,28 @@ export const doFetchOrganizationApplications = createAsyncThunk(
   },
 );
 
+export const doUpdateOrganizationApplications = createAsyncThunk(
+  'organizationApplications/update',
+  async (
+    data: {
+      applicationId: number;
+      status: string;
+      feedback: string;
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      return await OrganizationApplicationService.updateApplication(
+        data.applicationId,
+        data.status,
+        data.feedback,
+      );
+    } catch (e) {
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
+
 const organizationApplicationsSlice = createSlice({
   name: ORGANIZATION_APPLICATIONS_FEATURE_KEY,
   initialState: createInitialState(),
@@ -98,6 +121,35 @@ const organizationApplicationsSlice = createSlice({
     );
     builder.addCase(
       doFetchOrganizationApplications.rejected,
+      (state, action) => {
+        const payload = action.payload as SerializedException;
+        state.organizationApplications = [];
+        state.number = 0;
+        state.loading = false;
+        state.errors.push(payload);
+      },
+    );
+
+    //Update organization
+    builder.addCase(doUpdateOrganizationApplications.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(
+      doUpdateOrganizationApplications.fulfilled,
+      (state, action) => {
+        const { applicationId, status } = action.payload;
+        state.organizationApplications = state.organizationApplications.map((application: OrganizationApplication) => {
+          if (application.id === applicationId) {
+            application.status = status;
+          }
+          return application;
+        });
+        state.loading = false;
+        state.errors = [];
+      },
+    );
+    builder.addCase(
+      doUpdateOrganizationApplications.rejected,
       (state, action) => {
         const payload = action.payload as SerializedException;
         state.organizationApplications = [];

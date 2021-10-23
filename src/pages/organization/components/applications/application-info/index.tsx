@@ -5,6 +5,8 @@ import { Grid, Box, Avatar, Typography, Button } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Profile } from '../../../../../models';
 import { OrganizationApplicationService } from '../../../../../services';
+import { fromNotifications, fromOrganizationApplications, useAppDispatch } from '../../../../../store';
+import { NotificationsType } from '../../../../../store/notificationsSlice';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -64,6 +66,9 @@ const useStyles = makeStyles(() => ({
     cursor:'pointer',
     fontSize:22,
   },
+  button: {
+    color:'#ffffff',
+  },
 }));
 
 interface ApplicationInfoProps {
@@ -78,12 +83,28 @@ export const ApplicationInfo = ({ applicationInformation, handlerCloseApplicatio
   const classes = useStyles();
   const { data } = applicationInformation;
   const [applicantDetails, setApplicantDetails] = useState<Profile>();
+  const dispatch = useAppDispatch();
+
 
   useEffect(() => {
     (async () => {
       setApplicantDetails(await OrganizationApplicationService.getApplicantDetails(data.applicantId));
     })();
   }, [data]);
+
+  const updateApplication = (status: string) => {
+    dispatch(fromOrganizationApplications.doUpdateOrganizationApplications({
+      applicationId: data.id,
+      status,
+      feedback: '',
+    }));
+    handlerCloseApplication();
+    dispatch(fromNotifications.doPushNotification({
+      message: 'Successfully update a application',
+      key: new Date().getTime(),
+      type: NotificationsType.SUCCESS,
+    }));
+  };
 
 
   return (
@@ -131,6 +152,30 @@ export const ApplicationInfo = ({ applicationInformation, handlerCloseApplicatio
                 purus. Nam sed euismod diam. In diam lectus, lobortis vitae elit vitae, scelerisque pellentesque velit.
                 Suspendisse id \mollis est, sed placerat odio. Sed eu leo non diam scelerisque maximus.
               </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+                container>
+                <Grid item>
+                  <Button
+                    className={classes.button}
+                    color="primary"
+                    type="button"
+                    onClick={() => {updateApplication('ACCEPTED');}}
+                      variant={'contained'}>Appprove</Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    className={classes.button}
+                    color="primary"
+                    type="button"
+                    onClick={() => {updateApplication('REJECTED');}}
+                    variant={'contained'}>Reject</Button>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <Box

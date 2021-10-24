@@ -102,10 +102,11 @@ export default function OrganizationEvent() {
             label="On-going events"
             {...a11yProps(0)}
           />
-          <Tab className={classes.tab} label="Pass events" {...a11yProps(1)} />
+          <Tab className={classes.tab} label="Past events" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel
+        value={value} index={0}>
         <EventList events={events} showFilters={true} />
       </TabPanel>
       <TabPanel value={value} index={1}>

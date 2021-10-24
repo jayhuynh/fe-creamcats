@@ -128,7 +128,7 @@ const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
       desc: '',
       startTime: new Date(),
       endTime: new Date(),
-      organizationId: 0,
+      organizationId,
     },
   });
 
@@ -141,7 +141,7 @@ const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
   };
 
   const doCreateEvent = async (data: CreateEventFormInputs) => {
-    dispatch(fromVoluntaryEvents.createVoluntaryEvent({ event: data }));
+    await dispatch(fromVoluntaryEvents.createVoluntaryEvent({ event: data }));
     reset();
     setOpen(false);
     dispatch(fromNotifications.doPushNotification({
@@ -220,7 +220,7 @@ const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
                   <Grid container>
                     <Grid container xs={6} justifyContent="flex-start" alignItems="center"></Grid>
                     <Grid container xs={6} justifyContent="flex-end" alignItems="center">
-                      <Button variant="contained" type="submit" color="secondary">
+                      <Button variant="contained" type="submit" color="primary">
                         Post
                       </Button>
                     </Grid>

@@ -32,7 +32,7 @@ export const createInitialState = (): PositionsState => ({
     endDate: moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
     limit: 9,
     offset: 0,
-    sort: 'applications',
+    sort: 'timecreated',
     order: 'desc',
   },
   currentPosition: {

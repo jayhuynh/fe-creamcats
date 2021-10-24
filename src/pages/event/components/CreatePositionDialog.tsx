@@ -174,14 +174,14 @@ const CreatePositionionDialog = ({ eventId }: CreatePositionionDialogProps) => {
                   <Grid
                     container>
                     <Box width={0.75} marginRight={5}>
-                      <Typography className={classes.title2}>Requirements</Typography>
+                      <Typography className={classes.title2}>Tags</Typography>
                       <TagsMultiSelect
                         onTagsChange={handleChangeTags}
                         limitTags={3}
                         selectedTags={watch('tags') || []}/>
                     </Box>
                     <Box width={0.2}>
-                      <Typography className={classes.title2}>Content</Typography>
+                      <Typography className={classes.title2}>Gender</Typography>
                       <Select
                         {...register('gender')}
                         value={watch('gender')}
@@ -206,7 +206,7 @@ const CreatePositionionDialog = ({ eventId }: CreatePositionionDialogProps) => {
                   <Grid container>
                     <Grid container xs={6} justifyContent="flex-start" alignItems="center"></Grid>
                     <Grid container xs={6} justifyContent="flex-end" alignItems="center">
-                      <Button variant="contained" type="submit" color="secondary">
+                      <Button variant="contained" type="submit" color="primary">
                         Post
                       </Button>
                     </Grid>

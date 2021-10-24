@@ -121,7 +121,7 @@ const LoginForm = () => {
               <Button
                 variant="contained"
                 type="submit"
-                color="secondary">
+                color="primary">
                 LOGIN
               </Button>
             </Grid>
@@ -131,7 +131,7 @@ const LoginForm = () => {
           <Grid
             container>
             <Grid container xs={6} justifyContent="flex-start" alignItems="center">
-              <Typography color="secondary">Register now</Typography>
+              <Typography color="primary">Register now</Typography>
             </Grid>
             <Grid container xs={6} justifyContent="flex-end" alignItems="center">
               <Typography>Forgot password?</Typography>

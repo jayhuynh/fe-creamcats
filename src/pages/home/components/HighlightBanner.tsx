@@ -2,6 +2,8 @@ import { Button, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { AccessTime, ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { fromPositions } from '../../../store';
 
 const useStyles = makeStyles(() => ({
   flex: {

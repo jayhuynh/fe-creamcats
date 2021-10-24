@@ -62,7 +62,7 @@ const CcImageList = (props: CcImageListProps) => {
               }}
               actionIcon={
                 <IconButton aria-label={`star ${''}`}>
-                  <DeleteIcon onClick={event => handleRemoveImage(item.file)} color="secondary"/>
+                  <DeleteIcon onClick={event => handleRemoveImage(item.file)} color="primary"/>
                 </IconButton>
               }
             />

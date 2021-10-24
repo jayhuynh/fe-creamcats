@@ -59,7 +59,7 @@ const Profile = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fromPosts.doFetchPosts());
+    dispatch(fromPosts.doFetchMyPosts());
     dispatch(fromApplications.doFetchMyApplications({ statusFilter: 'ALL' }));
   }, [dispatch]);
 

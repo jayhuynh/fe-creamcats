@@ -20,7 +20,7 @@ const OptionContainer = ({
         </Grid>
         { quickClear ?
           <Grid container xs={6} justifyContent="flex-end" alignItems="center">
-            <Typography color="secondary" variant="caption">Clear</Typography>
+            <Typography color="primary" variant="caption">Clear</Typography>
           </Grid> : null
         }
       </Grid>

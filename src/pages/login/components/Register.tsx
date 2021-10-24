@@ -121,7 +121,7 @@ export default function Register(props: any) {
         <Box style={{ flex:1 }}></Box>
           <Button
           className={loginCls.login}
-          color="secondary"
+          color="primary"
           variant="contained"
             onClick={() => {
               props.setTab(1);

@@ -14,6 +14,7 @@ export default function MyPosts(props: any) {
   const classes = useStyles();
 
   const { posts } = props;
+  console.log(posts);
 
   const postCards = posts.map((item: any) => {
     return (

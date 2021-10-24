@@ -88,7 +88,7 @@ const ApplicationDialog = ({ postionId }: ApplicationDialogProps) => {
     <div>
       <Button
         variant="contained"
-        color="secondary"
+        color="primary"
         onClick={handleClickOpen}>
         REGISTER
       </Button>
@@ -144,7 +144,7 @@ const ApplicationDialog = ({ postionId }: ApplicationDialogProps) => {
                       <Button
                         variant="contained"
                         type="submit"
-                        color="secondary">
+                        color="primary">
                         APPLY NOW
                       </Button>
                     </Box>

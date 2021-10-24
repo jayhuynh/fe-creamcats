@@ -35,9 +35,11 @@ export const getApplicantDetails = async (applicantId: number): Promise<Profile>
 };
 
 export const updateApplication = async (applicationId: number, status: string, feedback: string): Promise<any> => {
-  const application = (await Axios.patch(`/applications/${applicationId}`, {
-    status,
-    feedback,
+  const application = (await Axios.patch(`/applications/${applicationId}`, null, {
+    params: {
+      status: status,
+      feedback: feedback === '' ? ' ' : feedback,
+    },
   })).data;
   return {
     applicationId,

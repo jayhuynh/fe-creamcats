@@ -23,7 +23,7 @@ export const LoadingProgress = () => {
 
   return (
     <Box position="fixed" zIndex='tooltip' top className={classes.root}>
-      <LinearProgress color="secondary"/>
+      <LinearProgress color="primary"/>
     </Box>
   );
 };

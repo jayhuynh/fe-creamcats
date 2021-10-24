@@ -140,7 +140,7 @@ export default function CreateOrganizationProfile(props: any) {
           </Button>
           <Button
           className={loginCls.login}
-          color="secondary"
+          color="primary"
           variant="contained"
           type="submit">Continue</Button>
         </Grid>

@@ -181,7 +181,7 @@ export default function CreateVolunteerProfile(props: any) {
                         Back
                     </Button>
                     <Button className={loginCls.login}
-                            color="secondary"
+                            color="primary"
                             variant="contained" type="submit">Continue</Button>
                 </Grid>
             </Grid>

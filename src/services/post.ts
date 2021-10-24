@@ -9,15 +9,39 @@ export const getPosts = async () => {
     (post: any) =>
       ({
         id: post.id,
-        title: post.id,
+        title: post.title,
         postCover: post.thumbnail,
         content: post.content,
       } as Post),
   );
 };
 
+export const getSharingZonePost = async () => {
+  const posts: any = (await Axios.get('/posts', {
+    params: {
+      sort: 'timeCreated',
+      order: 'desc',
+    },
+  })).data.data;
+  const postWithUserProfile = await Promise.all(posts.map(async (post: any) => {
+    const profile = (await Axios.get(`/users/${post.userId}`)).data;
+    return {
+      id: post.id,
+      title: post.title,
+      postCover: post.thumbnail,
+      content: post.content,
+      profile: { ...profile },
+    } as Post;
+  }));
+  return postWithUserProfile;
+};
+
 export const createPost = async (data: CreatePostFormInputs) => {
-  console.log('Created post', data);
+  const response = (await Axios.post('/posts', {
+    title: data.title,
+    thumbnail: data.image,
+    content: data.body,
+  })).data;
   return {
     title: data.title,
     postCover: data.image,

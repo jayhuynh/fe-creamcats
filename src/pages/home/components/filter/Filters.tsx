@@ -28,8 +28,8 @@ export interface FilterFormInputs {
   endDate: Date;
   limit: number;
   offset: number;
-  sort: string;
-  order: string;
+  sort: 'applications' | 'distance' | 'timecreated';
+  order: 'asc' | 'desc';
 }
 
 export const parseQuery = (filters: FilterFormInputs) => {
@@ -48,10 +48,6 @@ export const parseQuery = (filters: FilterFormInputs) => {
   if (filters.gender === 'all') delete query.gender;
   if (!filters.tags || filters.tags?.length === 0) delete query.tags;
 
-  // Remove temporary because backend bug
-  delete query.sort;
-  delete query.order;
-
   return query;
 };
 
@@ -65,6 +61,17 @@ const distances = [
   { label: '5km', value: 5000 },
   { label: '10km', value: 10000 },
   { label: '20km', value: 20000 },
+];
+
+const sort = [
+  { label: 'Application', value: 'applications' },
+  { label: 'Distance', value: 'distance' },
+  { label: 'Timecreated', value: 'timecreated' },
+];
+
+const order = [
+  { label: 'Ascending', value: 'asc' },
+  { label: 'Descending', value: 'desc' },
 ];
 
 const Filters = () => {
@@ -135,11 +142,21 @@ const Filters = () => {
           </Select>
         </OptionContainer>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={2}>
         <OptionContainer label="Start Date">
           <CcDatePicker
             value={watch('startDate')}
             onChange={(date: MaterialUiPickersDate) => setValue('startDate', date?.toDate() || new Date())}
+            animateYearScrolling
+          />
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={2}>
+        <OptionContainer label="End Date">
+          <CcDatePicker
+            {...register('endDate')}
+            value={watch('endDate')}
+            onChange={(date: MaterialUiPickersDate) => setValue('endDate', date?.toDate() || new Date())}
             animateYearScrolling
           />
         </OptionContainer>
@@ -167,14 +184,34 @@ const Filters = () => {
             selectedTags={watch('tags') || []}/>
         </OptionContainer>
       </Grid>
-      <Grid item xs={4}>
-        <OptionContainer label="End Date">
-          <CcDatePicker
-            {...register('endDate')}
-            value={watch('endDate')}
-            onChange={(date: MaterialUiPickersDate) => setValue('endDate', date?.toDate() || new Date())}
-            animateYearScrolling
-          />
+
+
+      <Grid item xs={2}>
+        <OptionContainer label="Sort">
+          <Select
+            {...register('sort')}
+            value={watch('sort')}
+            variant="outlined"
+            displayEmpty
+          >
+            {sort.map(val =>
+              (<MenuItem value={val.value} key={val.value}>{val.label}</MenuItem>))
+            }
+          </Select>
+        </OptionContainer>
+      </Grid>
+      <Grid item xs={2}>
+        <OptionContainer label="Order">
+          <Select
+            {...register('order')}
+            value={watch('order')}
+            variant="outlined"
+            displayEmpty
+          >
+            {order.map(val =>
+              (<MenuItem value={val.value} key={val.value}>{val.label}</MenuItem>))
+            }
+          </Select>
         </OptionContainer>
       </Grid>
     </Grid>

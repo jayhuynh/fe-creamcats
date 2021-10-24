@@ -128,7 +128,7 @@ const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
       desc: '',
       startTime: new Date(),
       endTime: new Date(),
-      organizationId: 0,
+      organizationId,
     },
   });
 
@@ -141,7 +141,7 @@ const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
   };
 
   const doCreateEvent = async (data: CreateEventFormInputs) => {
-    dispatch(fromVoluntaryEvents.createVoluntaryEvent({ event: data }));
+    await dispatch(fromVoluntaryEvents.createVoluntaryEvent({ event: data }));
     reset();
     setOpen(false);
     dispatch(fromNotifications.doPushNotification({

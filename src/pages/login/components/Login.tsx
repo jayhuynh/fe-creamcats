@@ -42,7 +42,7 @@ export const useStyle = makeStyles({
     background:'white',
     marginTop:12,
     '& .MuiInputBase-input':{
-      color:'#d5d5d5',
+      color:'Black',
       borderColor:'#eaeaea',
     },
   },

@@ -25,18 +25,18 @@ interface LoginInputForm {
 export const useStyle = makeStyles({
   // Define the styles here
   // Use ```className={classes.<style name>}``` in components to apply the styles
-  radio:{
+  radio: {
     flexDirection: 'row',
 
-    '& .MuiFormControlLabel-root':{
+    '& .MuiFormControlLabel-root': {
       width: '48%',
     },
-    '& .MuiFormControlLabel-label.Mui-disabled':{
-      color:'#333',
+    '& .MuiFormControlLabel-label.Mui-disabled': {
+      color: '#333',
     },
   },
-  bold:{
-    fontWeight:'bold',
+  bold: {
+    fontWeight: 'bold',
   },
   input:{
     background:'white',
@@ -58,46 +58,46 @@ export const useStyle = makeStyles({
       },
     },
   },
-  check:{
-    '& .MuiSvgIcon-root path':{
+  check: {
+    '& .MuiSvgIcon-root path': {
       // color:'#eaeaea',
     },
   },
-  text:{
-    color:'#929699',
-    display:'inline-block',
+  text: {
+    color: '#929699',
+    display: 'inline-block',
   },
-  btn:{
-    '&:hover':{
+  btn: {
+    '&:hover': {
       color: '#fa6980',
     },
-    cursor:'pointer',
-    fontSize:14,
-    fontWeight:'bold',
+    cursor: 'pointer',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   login: {
     boxShadow: 'none',
-    background:'#fa6980',
+    background: '#fa6980',
     fontSize: 12,
-    padding:'12px 45px',
-    position:'relative',
-    top:0,
+    padding: '12px 45px',
+    position: 'relative',
+    top: 0,
   },
-  back:{
+  back: {
     fontSize: 12,
-    padding:'10px 45px',
+    padding: '10px 45px',
     borderRadius: 6,
     border: 'solid 2px #d5d5d5',
     color: '#bfc4c9',
-    marginRight:20,
+    marginRight: 20,
   },
-  imgBtn:{
+  imgBtn: {
     width: 200,
-    height:200,
-    backgroundColor:'#eaeaea',
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center',
+    height: 200,
+    backgroundColor: '#eaeaea',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
@@ -111,17 +111,26 @@ export default function Login(props: any) {
         type: 'Volunteer',
         email: '',
         password: '',
-        rememberMe: false,
+        rememberMe: true,
       },
     });
 
   const onSubmit = async (data: LoginInputForm) => {
     const formattedEmail = data.email.toLowerCase();
-    await dispatch(fromAuth.doLogin({
-      credential: { email: formattedEmail, password: data.password, type: data.type.toLowerCase() }, rememberMe: data.rememberMe,
-    }));
+    await dispatch(
+      fromAuth.doLogin({
+        credential: {
+          email: formattedEmail,
+          password: data.password,
+          type: data.type.toLowerCase(),
+        },
+        rememberMe: data.rememberMe,
+      }),
+    );
 
-    await dispatch(fromProfile.doFetchMyProfile({ type: data.type.toLowerCase() }));
+    await dispatch(
+      fromProfile.doFetchMyProfile({ type: data.type.toLowerCase() }),
+    );
   };
 
   useEffect(() => {
@@ -133,10 +142,25 @@ export default function Login(props: any) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container direction="column" spacing={6} style={{ width:'60vw', margin:'10vh auto 0', fontFamily:'HelveticaNeue' }}>
+      <Grid
+        container
+        direction="column"
+        spacing={6}
+        style={{
+          width: '60vw',
+          margin: '10vh auto 0',
+          fontFamily: 'HelveticaNeue',
+        }}
+      >
         <Grid item>
-          <Typography style={{ fontSize:36, fontWeight:'bold' }}>Hello! Welcome back to our platform.</Typography>
-          <Typography style={{ fontSize:48, fontWeight:'bold', color:'#fa6980' }}>Login Here</Typography>
+          <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>
+            Hello! Welcome back to our platform.
+          </Typography>
+          <Typography
+            style={{ fontSize: 48, fontWeight: 'bold', color: '#fa6980' }}
+          >
+            Login Here
+          </Typography>
         </Grid>
         <Grid item>
           <Controller
@@ -162,34 +186,73 @@ export default function Login(props: any) {
         <Grid item>
           <Grid container direction="row" spacing={4}>
             <Grid item style={{ width: '47%' }}>
-              <Grid container direction="column" spacing={2} style={{ margin:0 }}>
+              <Grid
+                container
+                direction="column"
+                spacing={2}
+                style={{ margin: 0 }}
+              >
                 <Typography className={classes.bold}>Email</Typography>
-                <TextField className={classes.input} required variant="outlined" type="email" {...register('email')} />
+                <TextField
+                  className={classes.input}
+                  required
+                  variant="outlined"
+                  type="email"
+                  {...register('email')}
+                />
               </Grid>
             </Grid>
             <Grid item style={{ width: '47%' }}>
-              <Grid container direction="column" spacing={2} style={{ margin:0 }}>
+              <Grid
+                container
+                direction="column"
+                spacing={2}
+                style={{ margin: 0 }}
+              >
                 <Typography className={classes.bold}>Password</Typography>
-                <TextField required className={classes.input} variant="outlined" type="password" {...register('password')} />
+                <TextField
+                  required
+                  className={classes.input}
+                  variant="outlined"
+                  type="password"
+                  {...register('password')}
+                />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Box style={{ padding:'0 12px' }}>
-          <Checkbox className={classes.check} defaultChecked={false} {...register('rememberMe')} />
+        <Box style={{ padding: '0 12px' }}>
+          <Checkbox
+            className={classes.check}
+            defaultChecked={getValues('rememberMe')}
+            {...register('rememberMe')}
+          />
           <Box className={classes.text}>Remember me</Box>
         </Box>
-        <Box style={{ display:'flex', alignItems:'flex-end', padding:'0 66px 0 16px', marginTop:'20vh' }}>
+        <Box
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            padding: '0 66px 0 16px',
+            marginTop: '20vh',
+          }}
+        >
           <Box className={classes.text + ' ' + classes.btn}>Register now</Box>
-          <Box className={classes.text + ' ' + classes.btn} style={{ marginLeft: 77 }}>Forget password?</Box>
-          <Box style={{ flex:1 }}></Box>
+          <Box
+            className={classes.text + ' ' + classes.btn}
+            style={{ marginLeft: 77 }}
+          >
+            Forget password?
+          </Box>
+          <Box style={{ flex: 1 }}></Box>
           <Button
-          className={classes.login}
-                        variant="contained"
-                        type="submit"
-                        color="secondary">
-                        Login
-                      </Button>
+            className={classes.login}
+            variant="contained"
+            type="submit"
+            color="secondary"
+          >
+            Login
+          </Button>
         </Box>
       </Grid>
     </form>

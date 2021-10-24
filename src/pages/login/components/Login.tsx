@@ -42,8 +42,20 @@ export const useStyle = makeStyles({
     background:'white',
     marginTop:12,
     '& .MuiInputBase-input':{
-      color:'#d5d5d5',
+      color:'Black',
       borderColor:'#eaeaea',
+    },
+    '& .MuiOutlinedInput-root': {
+      color: 'white',
+      '& fieldset': {
+        borderColor: '#fa6980',
+      },
+      '&:hover fieldset': {
+        borderColor: '#fa6980',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#fa6980',
+      },
     },
   },
   check:{

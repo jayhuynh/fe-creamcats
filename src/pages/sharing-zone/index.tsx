@@ -2,6 +2,9 @@ import { FormControl, InputLabel, Select, MenuItem, Grid, Box, Typography } from
 import Organisation from './components/Organisation';
 import Event from './components/Event';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { fromApplications, fromPosts, useAppDispatch } from '../../store';
+import { useEffect } from 'react';
 const useStyles = makeStyles(() => ({
   wrap:{
     fontFamily:'HelveticaNeue !important',
@@ -34,6 +37,16 @@ const testImg =
 
 const SharingZone = () => {
   const classes = useStyles();
+  const posts = useSelector(fromPosts.selectPosts);
+  const dispatch = useAppDispatch();
+  const highlight = posts.slice(-2);
+  console.log(highlight);
+
+  useEffect(() => {
+    dispatch(fromPosts.doFetchPosts());
+  }, [dispatch]);
+
+
   return (
     <Box className={classes.wrap} style={{ background: '#f6f8f9', padding: '10px 150px' }}>
       <FormControl className={classes.sort} variant="outlined" style={{ minWidth:140, marginBottom:30 }}>
@@ -45,22 +58,20 @@ const SharingZone = () => {
       </FormControl>
       <Grid container spacing={3}>
         <Grid item xs={7}>
-          <Event
-            images={testImg}
-            desc=" Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-        voluptartem accusantium "
-          ></Event>
-          <Event images={testImg}></Event>
+          { posts.map(post => (
+            <Event post={post}></Event>
+          ))}
         </Grid>
         <Grid item xs={5}>
-          <Typography className={classes.title}>Organisations</Typography>
-          <Organisation images={testImg} organisation></Organisation>
-          <Organisation images={testImg} organisation></Organisation>
-          <Typography className={classes.title} style={{ marginTop: 60 }}>
+          {/*<Typography className={classes.title}>Organisations</Typography>*/}
+          {/*<Organisation images={testImg} organisation></Organisation>*/}
+          {/*<Organisation images={testImg} organisation></Organisation>*/}
+          <Typography className={classes.title}>
             Most popular posts
           </Typography>
-          <Organisation images={testImg}></Organisation>
-          <Organisation images={testImg}></Organisation>
+          { highlight.map(post => (
+            <Organisation post={post}></Organisation>
+          )) }
         </Grid>
       </Grid>
     </Box>

@@ -166,7 +166,6 @@ const Header = () => {
           placement="bottom-end"
           role={undefined}
           transition
-          disablePortal
         >
           {({ TransitionProps }) => (
             <Grow {...TransitionProps}>

@@ -22,11 +22,25 @@ export const createInitialState = (): PostsState => ({
   errors: [],
 });
 
+export const doFetchMyPosts = createAsyncThunk(
+  'myposts/fetch',
+  async (data, { rejectWithValue }) => {
+    try {
+      const posts = await PostService.getPosts();
+      return {
+        posts,
+      };
+    } catch (e) {
+      return rejectWithValue(exceptionOf(e).toJson());
+    }
+  },
+);
+
 export const doFetchPosts = createAsyncThunk(
   'posts/fetch',
   async (data, { rejectWithValue }) => {
     try {
-      const posts = await PostService.getPosts();
+      const posts = await PostService.getSharingZonePost();
       return {
         posts,
       };
@@ -53,12 +67,28 @@ const postsSlice = createSlice({
   initialState: createInitialState(),
   reducers: {},
   extraReducers: builder => {
+    //Fetch my posts
+    builder.addCase(doFetchMyPosts.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(doFetchMyPosts.fulfilled, (state, action) => {
+      state.posts = action.payload.posts;
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(doFetchMyPosts.rejected, (state, action) => {
+      const payload = action.payload as SerializedException;
+      state.posts = [];
+      state.loading = false;
+      state.errors.push(payload);
+    });
+
     //Fetch posts
     builder.addCase(doFetchPosts.pending, state => {
       state.loading = true;
     });
     builder.addCase(doFetchPosts.fulfilled, (state, action) => {
-      state.posts = action.payload.posts;
+      state.posts = action.payload.posts as any[];
       state.loading = false;
       state.errors = [];
     });

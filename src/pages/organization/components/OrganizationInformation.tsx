@@ -102,6 +102,7 @@ export default function OrganizationInformation() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const profile: any = useSelector(fromProfile.selectProfile) || {};
+  console.log(profile);
 
   const onSubmit = async (data: any) => {
     setIsSaving(true);
@@ -128,7 +129,7 @@ export default function OrganizationInformation() {
               alt={typeof profile.email === 'undefined' ? 'Unknown' : profile.email}
               src={
                 //Default a question mark if no URL for avatar
-                typeof profile.avatar === 'undefined' ? questionMark : profile.avatar
+                typeof profile.profilePic === 'undefined' ? questionMark : profile.profilePic
               }
             />
           </Grid>

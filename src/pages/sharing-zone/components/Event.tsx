@@ -8,6 +8,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ScreenShareOutlinedIcon from '@material-ui/icons/ScreenShareOutlined';
 import { makeStyles } from '@material-ui/core/styles';
+import ReactHtmlParser from 'react-html-parser';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -69,20 +70,19 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface EventProps {
-  images: string;
-  desc?: string;
+  post: any;
 }
-const Event: FC<EventProps> = ({ images, desc }) => {
+const Event: FC<EventProps> = ({ post }: EventProps) => {
   const classes = useStyles();
   const [more, setMore] = useState(false);
   return (
     <Box style={{ padding: 40, background: 'white', marginBottom: 20 }}>
-      <CardMedia component="img" alt="" height="430px" image={images} />
+      <CardMedia component="img" alt="" height="430px" image={post.postCover} />
       <Typography variant="h5" style={{ marginTop: 30 }}>
-        Volunteer Event - What a great experience!
+        {post.title}
       </Typography >
       <Box className={classes.text} style={{ color: '#333333' }}>
-        <PersonIcon className={classes.icon}></PersonIcon>Name slfdsf
+        <PersonIcon className={classes.icon}></PersonIcon>{post.profile.fullname}
         <AccessTime className={classes.icon} style={{ marginLeft: 20 }}></AccessTime>19/05/2021
         <ForumIcon className={classes.icon} style={{ marginLeft: 20 }}></ForumIcon>10
         <VisibilityIcon className={classes.icon} style={{ marginLeft: 20 }}></VisibilityIcon>301
@@ -92,15 +92,7 @@ const Event: FC<EventProps> = ({ images, desc }) => {
         className={classes.text + (more ? '' : ' ' + classes.limit)}
         style={{ marginTop: 10 }}
       >
-        Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-        voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et
-        quasi ropeior architecto beatae vitae dicta sunt. Culpa qui officia deserunt mollit anim id est laborum Et harum
-        quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque
-        nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
-        repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et
-        voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut
-        aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. am libero
-        tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere.
+        {ReactHtmlParser(post.content)}
       </Typography>
       {!more && (
         <Box className={classes.moreBtn} onClick={() => setMore(true)}>
@@ -113,7 +105,7 @@ const Event: FC<EventProps> = ({ images, desc }) => {
           <ChatBubbleOutlineIcon className={classes.icon2} style={{ marginLeft: 20 }}></ChatBubbleOutlineIcon>Comment
           <ScreenShareOutlinedIcon className={classes.icon2} style={{ marginLeft: 20 }}></ScreenShareOutlinedIcon>Share
         </Box>
-        {desc && <Typography className={classes.descText}>{desc}</Typography>}
+        {ReactHtmlParser(post.content) && <Typography className={classes.descText}>{ReactHtmlParser(post.content)}</Typography>}
       </Box>
     </Box>
   );

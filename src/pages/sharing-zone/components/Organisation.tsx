@@ -6,6 +6,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import ForumIcon from '@material-ui/icons/Forum';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { makeStyles } from '@material-ui/core/styles';
+import ReactHtmlParser from 'react-html-parser';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -34,16 +35,16 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface OrganisationProps {
-  images: string;
-  organisation?: boolean;
+  post: any
+  organisation?: any
 }
-const Organisation: FC<OrganisationProps> = ({ images, organisation }) => {
+const Organisation: FC<OrganisationProps> = ({ post, organisation }: OrganisationProps) => {
   const classes = useStyles();
   return (
     <Box style={{ padding: '0 40px', marginBottom: 30 }}>
-      <CardMedia component="img" alt="" height="230px" image={images} />
+      <CardMedia component="img" alt="" height="230px" image={post.postCover} />
       <Typography variant="h5" style={{ marginTop: 30 }}>
-        Organisation 1
+        {post.title}
       </Typography>
       <Box className={classes.text} style={{ color: '#bfc4c9', fontSize: 12 }}>
         {organisation ? (
@@ -52,7 +53,7 @@ const Organisation: FC<OrganisationProps> = ({ images, organisation }) => {
           </>
         ) : (
           <Box style={{ color: '#333333' }}>
-            <PersonIcon className={classes.icon}></PersonIcon>Name slfdsf
+            <PersonIcon className={classes.icon}></PersonIcon>{post.profile.fullname}
             <AccessTime className={classes.icon} style={{ marginLeft: 20 }}></AccessTime>19/05/2021
             <ForumIcon className={classes.icon} style={{ marginLeft: 20 }}></ForumIcon>10
             <VisibilityIcon className={classes.icon} style={{ marginLeft: 20 }}></VisibilityIcon>301
@@ -60,15 +61,7 @@ const Organisation: FC<OrganisationProps> = ({ images, organisation }) => {
         )}
       </Box>
       <Typography variant="body1" className={classes.text + ' ' + classes.limit} style={{ marginTop: 10 }}>
-        Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-        voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et
-        quasi ropeior architecto beatae vitae dicta sunt. Culpa qui officia deserunt mollit anim id est laborum Et harum
-        quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque
-        nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
-        repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et
-        voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut
-        aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. am libero
-        tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere.
+        {ReactHtmlParser(post.content)}
       </Typography>
     </Box>
   );

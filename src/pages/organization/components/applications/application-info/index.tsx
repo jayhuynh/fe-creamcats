@@ -100,7 +100,7 @@ export const ApplicationInfo = ({ applicationInformation, handlerCloseApplicatio
     }));
     handlerCloseApplication();
     dispatch(fromNotifications.doPushNotification({
-      message: 'Successfully update a application',
+      message: 'Successfully update an application',
       key: new Date().getTime(),
       type: NotificationsType.SUCCESS,
     }));

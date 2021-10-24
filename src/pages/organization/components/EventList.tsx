@@ -85,8 +85,11 @@ export default function EventList({ events, showFilters }: EventListProps) {
     setPage(value);
   };
 
-  const positionCards = events.slice((page - 1) * (pageSize), page * (pageSize)).map((item: VoluntaryEvent) => {
-    return (
+  const positionCards = events
+    .sort((a: VoluntaryEvent, b: VoluntaryEvent) => (b.id - a.id))
+    .slice((page - 1) * (pageSize), page * (pageSize))
+    .map((item: VoluntaryEvent) => {
+      return (
             <Grid key={item.name} item xs={4}>
               <Link to={`/event/${item.id}`} style={{ textDecoration: 'none' }}>
                 <PositionCard
@@ -95,11 +98,12 @@ export default function EventList({ events, showFilters }: EventListProps) {
                   status="ONGOING"
                   description={item.desc}
                   time={item.startTime}
+                  coverURL={item.gallery.length > 0 ? item.gallery[0] : ''}
                 />
               </Link>
             </Grid>
-    );
-  });
+      );
+    });
 
   return (
         <>

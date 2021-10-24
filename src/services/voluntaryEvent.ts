@@ -14,8 +14,8 @@ export const getOrganizationVoluntaryEvents = async (organizationId: number, sta
 };
 
 export const createOrganizationVoluntaryEvents = async (event: CreateEventFormInputs) => {
-  const response = await Axios.post('/events', {
+  const response = (await Axios.post('/events', {
     ...event,
-  });
-  return event as VoluntaryEvent;
+  })).data.createdEvent;
+  return response as VoluntaryEvent;
 };

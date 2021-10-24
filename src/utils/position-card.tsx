@@ -57,7 +57,7 @@ export default function PositionCard(props: any) {
   const { title, usage, status, description, time } = props;
 
   coverURL =
-    typeof coverURL === 'undefined'
+    typeof coverURL === 'undefined' || coverURL === ''
       ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1200px-Question_Mark.svg.png'
       : coverURL;
 

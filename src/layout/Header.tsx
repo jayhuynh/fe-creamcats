@@ -13,9 +13,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { AccountBox } from '@material-ui/icons';
 import { useSelector } from 'react-redux';
-import { home, login, organization, profile, useNavigate, useQuery } from '../routes';
+import { home, login, organization, profile, sharingZone, useNavigate, useQuery } from '../routes';
 import { Token } from '../models';
-import { useLocation } from 'react-router-dom';
+import { useLocation, NavLink } from 'react-router-dom';
 const useStyles = makeStyles(() => ({
   'top-menu': {
     color: 'gray',

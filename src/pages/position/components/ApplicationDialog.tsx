@@ -103,7 +103,7 @@ const ApplicationDialog = ({ postionId }: ApplicationDialogProps) => {
             <Grid item xs={6}>
               <img
                 className={classes.maxSize}
-                src="https://i.ibb.co/jH3P4H0/Screen-Shot-2021-08-27-at-2-42-37-am.png"
+                src="https://creamcats-bucket.s3.ap-southeast-1.amazonaws.com/1635155277312belief-6202977_1280.jpg"
                 alt="Screen-Shot-2021-08-27-at-2-42-37-am"/>
             </Grid>
             <Grid item xs={6}>

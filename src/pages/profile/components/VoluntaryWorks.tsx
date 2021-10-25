@@ -10,10 +10,10 @@ export default function VoluntaryWorks(props: any) {
   const positionCards = works.map((item: any) => {
     return (
       <Grid key={item.title} item xs={4}>
-        <Link to={`/positions/${item.id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/positions/${item.position.id}`} style={{ textDecoration: 'none' }}>
           <PositionCard
-            coverURL={item.thumbnail}
-            title={item.title}
+            coverURL={item.position.thumbnail}
+            title={item.position.name}
             usage="personal"
             status={item.status}
             description={item.description}

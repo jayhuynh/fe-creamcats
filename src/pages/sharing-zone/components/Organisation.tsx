@@ -53,7 +53,7 @@ const Organisation: FC<OrganisationProps> = ({ post, organisation }: Organisatio
           </>
         ) : (
           <Box style={{ color: '#333333' }}>
-            <PersonIcon className={classes.icon}></PersonIcon>{post.profile.fullname}
+            <PersonIcon className={classes.icon}></PersonIcon>{post?.profile?.fullname}
             <AccessTime className={classes.icon} style={{ marginLeft: 20 }}></AccessTime>19/05/2021
             <ForumIcon className={classes.icon} style={{ marginLeft: 20 }}></ForumIcon>10
             <VisibilityIcon className={classes.icon} style={{ marginLeft: 20 }}></VisibilityIcon>301

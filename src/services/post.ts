@@ -41,6 +41,7 @@ export const createPost = async (data: CreatePostFormInputs) => {
     title: data.title,
     thumbnail: data.image,
     content: data.body,
+    userId: data.userId,
   })).data;
   return {
     title: data.title,

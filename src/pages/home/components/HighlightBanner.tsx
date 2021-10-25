@@ -54,7 +54,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const testImg =
-  'https://images.unsplash.com/photo-1622389084799-e2343c893b8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2734&q=80';
+  'https://creamcats-bucket.s3.ap-southeast-1.amazonaws.com/1635154855955good-4206177_1280.jpg';
 
 const HighlightBanner = () => {
   const classes = useStyles();
@@ -64,7 +64,7 @@ const HighlightBanner = () => {
       <div
         className={classes.bg}
         style={{
-          height: 600,
+          height: 650,
           boxSizing: 'border-box',
           padding: '176px 130px 0',
           width: '60%',
@@ -74,9 +74,7 @@ const HighlightBanner = () => {
         <Typography variant="h4" style={{ color: 'white' }}>Resident Admissions Volunteer</Typography>
         <div style={{ background:'white', height: 2, marginTop: 20, marginBottom: 20 }}/>
         <Typography variant="body1" className={classes.limit}>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit sodales primis, mollis viverra conubia ligula
-          inceptos laoreet libero tortor, nascetur non habitasse iaculis tempor nec egestas fames augue, platea porta
-          integer nostra curae sed arcu. Nec ut diam vulputate ante scelerisque ridiculus lobortis orci mi{' '}
+          Volunteers play a very important part in what we do at New Auckland Place. We would like to thank our existing volunteers who give their valuable time every week to improve the lives of our residents. We thank you for all of your assistance, efforts and love; you are greatly appreciated by us all.
         </Typography>
         <Button variant="contained" style={{ background: '#fa6980', color: 'white', marginTop: 22 }}>
           LEARN MORE
@@ -90,17 +88,17 @@ const HighlightBanner = () => {
           <ChevronRight style={{ cursor: 'pointer' }}></ChevronRight>
         </Typography>
         <div style={{ margin: '40px 0', background: '#ebeded', height: 1 }} />
-        <Typography className={classes.t1}>POSITION 1</Typography>
-        <Typography className={classes.t2}>Organisation 1 </Typography>
-        <Typography className={classes.text}>Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat…</Typography>
+        <Typography className={classes.t1}>Volunteers building connections with young adults with disabilities</Typography>
+        <Typography className={classes.t2}>Wesley Mission Queensland's</Typography>
+        <Typography className={classes.text}>Wesley Mission Queensland's ORCA Project is looking for volunteers to assist us to build meaningful connections for young post school adults with disabilities in the community with a focus on training, work experience and ultimately employment.</Typography>
         <div className={classes.text}>
           <AccessTime className={classes.time}></AccessTime> <i>2 min ago</i>
         </div>
         <Typography className={classes.t1} style={{ marginTop: 38 }}>
-          POSITION 1
+          Emergency Relief Volunteer
         </Typography>
-        <Typography className={classes.t2}>Organisation 1 </Typography>
-        <Typography className={classes.text}>Lorem ipsum dolor sit amet, ipsum labitur lucilius mel id, ad has appareat…</Typography>
+        <Typography className={classes.t2}>Brisbane Relief Hub</Typography>
+        <Typography className={classes.text}>Our Emergency Service volunteers are best known for helping people during a disaster - they might greet people at evacuation centres, or go door to door in communities following a flood or fire to check how people are coping, or register people on our registration service that helps people find their family and friends.</Typography>
         <div className={classes.text}>
           <AccessTime className={classes.time}></AccessTime> <i>2 min ago</i>
         </div>

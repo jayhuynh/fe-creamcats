@@ -87,7 +87,7 @@ const applicationsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doCreateApplication.fulfilled, (state, action) => {
-      state.applications.push(action.payload.application);
+      state.applications = [action.payload.application, ...state.applications];
       state.loading = false;
       state.errors = [];
     });

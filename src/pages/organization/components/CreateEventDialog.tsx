@@ -23,7 +23,7 @@ import {
   fromEvents,
   fromNotifications,
   fromOrganizationPositions,
-  fromPosts,
+  fromPosts, fromProfile,
   fromVoluntaryEvents,
   useAppDispatch,
 } from '../../../store';
@@ -32,6 +32,7 @@ import { Tag } from '../../../models';
 import TagsMultiSelect from '../../home/components/filter/components/TagsMultiSelect';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { CcDatePicker } from '../../../utils';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -104,14 +105,11 @@ export interface CreateEventFormInputs {
   organizationId: number;
 }
 
-interface CreateEventDialogProps {
-  organizationId: number;
-}
-
-const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
+const CreateEventDialog = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const profile = useSelector(fromProfile.selectProfile);
 
   const {
     register,
@@ -128,7 +126,7 @@ const CreateEventDialog = ({ organizationId }: CreateEventDialogProps) => {
       desc: '',
       startTime: new Date(),
       endTime: new Date(),
-      organizationId,
+      organizationId: profile?.id,
     },
   });
 

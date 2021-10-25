@@ -51,11 +51,11 @@ export default function RegisterAndLogin() {
   const { get } = useQuery();
 
   if (isAuthenticated && userType) {
-    if (get('redirect')) {
-      return <Redirect to={get('redirect') || '/home'} />;
-    }
     if (userType === 'organization') {
       return <Redirect to={'/organizations/admin'} />;
+    }
+    if (get('redirect')) {
+      return <Redirect to={get('redirect') || '/home'} />;
     }
     return <Redirect to={'/home'} />;
   }

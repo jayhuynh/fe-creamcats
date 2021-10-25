@@ -115,6 +115,7 @@ const Filters = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <MyLocation
+                    style={{ cursor: 'pointer' }}
                     onClick={() => {
                       navigator.geolocation.getCurrentPosition(position => {
                         fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyDjtgoai7vPIEm7ARnTalIn-f3YX_T-e-w&language=en-AU`)

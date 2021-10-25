@@ -45,6 +45,7 @@ const profileSlice = createSlice({
   reducers: {
     doCleanProfile: state => {
       state.profile = null;
+      state.type = '';
     },
   },
   extraReducers: builder => {

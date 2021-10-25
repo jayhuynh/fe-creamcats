@@ -25,11 +25,11 @@ export const createInitialState = (): PositionsState => ({
   positions: [],
   filters: {
     address: '77 Sir Fred Schonell Dr, St Lucia QLD 4067, Australia',
-    distance: 10000,
+    distance: 20000,
     gender: 'all',
     tags: ['Education', 'Young People', 'Community Services'],
     startDate: moment('2021-01-01T14:48:00.000Z').toDate(),
-    endDate: moment('2022-01-01T14:48:00.000Z').add(7, 'days').toDate(),
+    endDate: moment('2022-01-01T14:48:00.000Z').toDate(),
     limit: 9,
     offset: 0,
     sort: 'timecreated',

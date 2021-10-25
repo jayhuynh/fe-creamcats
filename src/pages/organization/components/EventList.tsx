@@ -1,12 +1,14 @@
 import { Box, Button, FormControl, Grid, MenuItem, Select, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Pagination from '@material-ui/lab/Pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import PositionCard from '../../../utils/position-card';
 import { VoluntaryEvent } from '../../../models';
 import CreateEventDialog from './CreateEventDialog';
+import { fromProfile, useAppDispatch } from '../../../store';
+import { useSelector } from 'react-redux';
 
 interface TitleProps {
   total: number;
@@ -63,7 +65,7 @@ const Title = ({ total, showFilters }: TitleProps) => {
                               </FormControl>
                             </Grid>
                             <Grid item>
-                              <CreateEventDialog organizationId={1}/>
+                              <CreateEventDialog/>
                             </Grid>
                         </Grid>
                     </Box>

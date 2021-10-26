@@ -113,7 +113,7 @@ export default function PostCard(props: any) {
         />
         <CardContent className={classes.postContent}>
           <Typography className={classes.title}>{title}</Typography>
-          <Typography className={classes.description}>{description}</Typography>
+          <Typography className={classes.description}>{description.replace(/<\/?[^>]+(>|$)/g, '')}</Typography>
           <section className={classes.postActions}>
             <section className={classes.iconArea}>
               <TimeTag usage="personal" time={time} status="Posted" />

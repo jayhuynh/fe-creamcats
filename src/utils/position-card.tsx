@@ -78,7 +78,7 @@ export default function PositionCard(props: any) {
             //If for public or undefined usage, add description
             usage === 'public' || typeof usage === 'undefined' ? (
               <Typography className={classes.description}>
-                {description}
+                {description.replace(/<\/?[^>]+(>|$)/g, '')}
               </Typography>
             ) : null
           }

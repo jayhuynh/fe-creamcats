@@ -10,6 +10,11 @@ export const getOrganizationProfile = async () => {
   return (await Axios.get<Profile>('/organizations/me')).data;
 };
 
+
+export const getOrganizationById = async (id: number) => {
+  return (await Axios.get<Profile>(`/organizations/${id}`)).data;
+};
+
 export const updateMyProfile = async (data: any) => {
   const response: any = (
     await Axios.post('/users/me', data)

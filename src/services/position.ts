@@ -61,7 +61,7 @@ export const getCurrentPosition = async (id: number) => {
     thumbnail: currentPosition.thumbnail,
     eventId: currentPosition.eventId,
     location: currentEvent.location,
-    //typesOfWork: currentPosition.typesOfWork,
+    tags: currentPosition.tags,
     carouselItems: currentEvent.gallery,
     startAt: currentEvent.startTime,
     endAt: currentEvent.endTime,

@@ -57,12 +57,12 @@ const SharingZone = () => {
         </Select>
       </FormControl>
       <Grid container spacing={3}>
-        <Grid item xs={7}>
+        <Grid item xs={8}>
           { posts.map(post => (
             <Event post={post}></Event>
           ))}
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={4}>
           {/*<Typography className={classes.title}>Organisations</Typography>*/}
           {/*<Organisation images={testImg} organisation></Organisation>*/}
           {/*<Organisation images={testImg} organisation></Organisation>*/}

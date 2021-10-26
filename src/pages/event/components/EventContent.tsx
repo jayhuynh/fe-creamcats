@@ -1,6 +1,9 @@
 import { Grid, Typography, Divider, makeStyles } from '@material-ui/core';
 
 import moment from 'moment';
+import ReactHtmlParser from 'react-html-parser';
+import ApplicationDialog from '../../position/components/ApplicationDialog';
+import React from 'react';
 
 const useStyles = makeStyles({
   briefPositionDetailsGrid: {
@@ -24,6 +27,48 @@ const useStyles = makeStyles({
     letterSpacing: 'normal',
     textAlign: 'left',
     color: '#a6adb4',
+  },
+  contentGrid: {
+    '& h1': {
+      fontSize: 48,
+      fontWeight: 'bold',
+      fontStretch: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 'normal',
+      textAlign: 'left',
+      color: '#333',
+      marginTop: 0,
+      marginBottom: 10,
+    },
+    '& h2': {
+      fontSize: 32,
+      fontWeight: 'bold',
+      fontStretch: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 'normal',
+      textAlign: 'left',
+      color: '#333',
+      marginBottom: 5,
+    },
+    '& p': {
+      fontSize: 14,
+      fontWeight: 'normal',
+      fontStretch: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 'normal',
+      textAlign: 'left',
+      color: '#333',
+      marginBottom: 10,
+    },
+    '& img': {
+      width: '80%',
+      borderRadius: 10,
+      marginLeft: '10%',
+      marginRight: '10%',
+    },
+    '& figure': {
+      margin: 0,
+    },
   },
 });
 
@@ -66,10 +111,19 @@ export default function EventContent(props: any) {
         <Divider orientation="vertical" />
       </Grid>
       <Grid item xs>
-        <Typography className={classes.briefTitle}>Description</Typography>
-        <Typography className={classes.briefContent}>
-          {eventInfo.description}
-        </Typography>
+        <Grid
+          container
+          direction="column"
+          spacing={2}
+          className={classes.contentGrid}
+        >
+          <Grid item>
+            <Typography variant="h2">Description</Typography>
+            <Typography className={classes.briefContent}>
+              {ReactHtmlParser(eventInfo.description)}
+            </Typography>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

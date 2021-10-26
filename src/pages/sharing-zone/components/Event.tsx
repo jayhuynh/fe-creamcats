@@ -67,6 +67,50 @@ const useStyles = makeStyles(() => ({
     fontSize: 14,
     marginTop: 24,
   },
+  contentGrid: {
+    '& h1': {
+      fontSize: 48,
+      fontWeight: 'bold',
+      fontStretch: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 'normal',
+      textAlign: 'left',
+      color: '#333',
+      marginTop: 0,
+      marginBottom: 10,
+    },
+    '& h2': {
+      fontSize: 32,
+      fontWeight: 'bold',
+      fontStretch: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 'normal',
+      textAlign: 'left',
+      color: '#333',
+      marginBottom: 5,
+      marginTop: 10,
+    },
+    '& p': {
+      fontSize: 14,
+      fontWeight: 'normal',
+      fontStretch: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 'normal',
+      textAlign: 'left',
+      color: '#333',
+      marginBottom: 10,
+    },
+    '& img': {
+      width: '80%',
+      borderRadius: 10,
+      marginLeft: '10%',
+      marginRight: '10%',
+    },
+    '& figure': {
+      margin: 0,
+    },
+  },
+
 }));
 
 interface EventProps {
@@ -92,7 +136,9 @@ const Event: FC<EventProps> = ({ post }: EventProps) => {
         className={classes.text + (more ? '' : ' ' + classes.limit)}
         style={{ marginTop: 10 }}
       >
-        {ReactHtmlParser(post.content)}
+        <div className={classes.contentGrid}>
+          {ReactHtmlParser(post.content)}
+        </div>
       </Typography>
       {!more && (
         <Box className={classes.moreBtn} onClick={() => setMore(true)}>
@@ -105,7 +151,7 @@ const Event: FC<EventProps> = ({ post }: EventProps) => {
           <ChatBubbleOutlineIcon className={classes.icon2} style={{ marginLeft: 20 }}></ChatBubbleOutlineIcon>Comment
           <ScreenShareOutlinedIcon className={classes.icon2} style={{ marginLeft: 20 }}></ScreenShareOutlinedIcon>Share
         </Box>
-        {ReactHtmlParser(post.content) && <Typography className={classes.descText}>{ReactHtmlParser(post.content)}</Typography>}
+        {ReactHtmlParser(post.title) && <Typography className={classes.descText}>{ReactHtmlParser(post.title)}</Typography>}
       </Box>
     </Box>
   );

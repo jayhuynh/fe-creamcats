@@ -52,6 +52,7 @@ export const doCreateApplication = createAsyncThunk(
   ) => {
     try {
       const application = await ApplicationService.createApplication(data.application);
+      console.log('slice', application);
       return {
         application,
       };

@@ -42,7 +42,7 @@ export const createInitialState = (): PositionsState => ({
     overview: '',
     releaseTime: new Date(),
     carousel: [],
-    eventId: 1,
+    eventId: -1,
     subtitle: '',
     organization: '',
     description: '',

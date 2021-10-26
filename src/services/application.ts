@@ -16,5 +16,10 @@ export const getMyApplications = async (statusFilter: string) => {
 
 export const createApplication = async (application: Required<Pick<Application, 'userId' | 'positionId' | 'notes'>>) => {
   application.notes = !!application.notes ? application.notes : ' ';
-  return (await Axios.post<Application>('/applications', application)).data;
+  const app = (await Axios.post<Application>('/applications', application)).data;
+  const position = (await Axios.get(`/positions/${app.positionId}`)).data;
+  return {
+    ...app,
+    position,
+  };
 };

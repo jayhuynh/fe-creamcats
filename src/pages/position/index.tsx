@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Grid, Typography, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import ReactHtmlParser from 'react-html-parser';
@@ -13,6 +13,7 @@ import PositionCarousel from './components/PositionCarousel';
 import Brief from './components/Brief';
 import ApplicationDialog from './components/ApplicationDialog';
 import PositionCards from './components/PositionCards';
+import { EventService, ProfileService } from '../../services';
 
 interface ParamsTypes {
   positionId: string;
@@ -69,6 +70,7 @@ const useStyles = makeStyles({
       textAlign: 'left',
       color: '#333',
       marginBottom: 5,
+      marginTop: 10,
     },
     '& p': {
       fontSize: 14,
@@ -81,8 +83,13 @@ const useStyles = makeStyles({
       marginBottom: 10,
     },
     '& img': {
-      width: 500,
+      width: '80%',
       borderRadius: 10,
+      marginLeft: '10%',
+      marginRight: '10%',
+    },
+    '& figure': {
+      margin: 0,
     },
   },
 });
@@ -104,10 +111,25 @@ function Position() {
   const positions = useSelector(fromPositions.selectPositions);
   const dispatch = useAppDispatch();
 
+  const [event, setEvent] = useState<any>({});
+  const [organization, setOrganization] = useState<any>({});
+
   useEffect(() => {
     dispatch(fromPositions.doFetchCurrentPosition({ id: Number(positionId) }));
     dispatch(fromPositions.doFetchPositions());
   }, [dispatch, positionId]);
+
+  useEffect(() => {
+    (async () => {
+      if (position.eventId > 0) {
+        const event = await EventService.getEventById(position.eventId);
+        const organization = await ProfileService.getOrganizationById(event.organizationId);
+        setEvent(event);
+        setOrganization(organization);
+        console.log(event);
+      }
+    })();
+  }, [position]);
 
   const {
     name,
@@ -120,14 +142,16 @@ function Position() {
     numberOfApplicants,
   } = position;
 
+  console.log(position, event, organization);
+
   const briefInformations = {
     location: location,
     startAt: startAt,
     endAt: endAt,
-    typesOfWork: ['Children care', 'Charity'],
+    typesOfWork: [...position.tags],
     numberOfApplicants: numberOfApplicants,
     requirements: requirements,
-    organizationName: 'Test Organization',
+    organizationName: organization.name,
     createdAt: createdAt,
   };
 
@@ -164,14 +188,30 @@ function Position() {
             <Grid
               container
               direction="column"
-              spacing={2}
+              spacing={1}
               className={classes.contentGrid}
             >
-              <Grid item>
-                <h1>{name}</h1>
-                {ReactHtmlParser(positionDetail)}
-              </Grid>
-              <Grid item>
+              <h1>{name}</h1>
+              { organization ? <Grid item>
+                <h2>About us</h2>
+                {organization.desc}
+                <p>&nbsp;</p>
+                <figure>
+                  <img
+                    alt={event.name}
+                    src={event?.gallery?.reverse()[0]}/>
+                </figure>
+                <p>&nbsp;</p>
+              </Grid> : <></> }
+              { event ? <Grid item>
+                <h2>Event</h2>
+                {ReactHtmlParser(event.description)}
+              </Grid> : <></> }
+              { position ? <Grid item>
+                <h2>Description</h2>
+                {ReactHtmlParser(position.description)}
+              </Grid> : <></> }
+              <Grid style={{ marginTop: 25 }} item>
                 <ApplicationDialog postionId={position.id} />
               </Grid>
             </Grid>

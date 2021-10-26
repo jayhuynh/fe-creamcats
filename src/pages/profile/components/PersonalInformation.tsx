@@ -12,6 +12,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { ProfileService } from '../../../services';
 import { Profile } from '../../../models';
+import { useSelector } from 'react-redux';
+import { fromApplications } from '../../../store';
 
 const questionMark =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1200px-Question_Mark.svg.png';
@@ -93,6 +95,7 @@ export default function PersonalInformation(props: any) {
   const { register, handleSubmit } = useForm();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const applications = useSelector(fromApplications.selectApplications);
 
   const onSubmit = async (data: any) => {
     setIsSaving(true);
@@ -190,7 +193,7 @@ export default function PersonalInformation(props: any) {
                   Joined Work
                 </Typography>
                 <Typography className={classes.personalInformationContent}>
-                  45
+                  { applications?.filter(application => (application.status === 'ACCEPTED')).length}
                 </Typography>
               </Grid>
             )}

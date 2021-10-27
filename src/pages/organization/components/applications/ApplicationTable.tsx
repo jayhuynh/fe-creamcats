@@ -12,10 +12,10 @@ import {
   TableHead,
   TableRow,
   TableFooter,
-  TablePagination,
   Paper,
   IconButton,
-  Typography, Box,
+  Typography,
+  Box,
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -36,7 +36,7 @@ import CreatePost from '../../../sharing-zone/components/CreatePost';
 
 const useStyles = makeStyles({
   table: {
-    width: 1400,
+    width: 1300,
   },
   tableContainer: {
     boxShadow: 'none',
@@ -233,12 +233,11 @@ export default function ApplicationTable(props: any) {
               </TableRow>
             ))}
           </TableBody>
+          <TableFooter></TableFooter>
         </Table>
       </TableContainer>
       <Box width={1}>
-        <Grid justifyContent="flex-end"
-              alignItems="center"
-              container>
+        <Grid justifyContent="flex-end" alignItems="center" container>
           <Pagination
             count={Math.ceil(applicationNumber / filters.limit)}
             shape="rounded"

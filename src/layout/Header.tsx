@@ -13,7 +13,15 @@ import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { AccountBox } from '@material-ui/icons';
 import { useSelector } from 'react-redux';
-import { home, login, organization, profile, sharingZone, useNavigate, useQuery } from '../routes';
+import {
+  home,
+  login,
+  organization,
+  profile,
+  sharingZone,
+  useNavigate,
+  useQuery,
+} from '../routes';
 import { Token } from '../models';
 import { useLocation, NavLink } from 'react-router-dom';
 const useStyles = makeStyles(() => ({
@@ -30,7 +38,7 @@ const useStyles = makeStyles(() => ({
       color: '#343638',
     },
   },
-  'active': {
+  active: {
     color: '#000000',
     '&>p': {
       fontWeight: 'bold',
@@ -45,10 +53,9 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const userType = useSelector(fromProfile.selectType);
   const { replaceQuery, navigate, replace } = useNavigate();
-  const  isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
+  const isAuthenticated = useSelector(fromAuth.selectIsAuthenticated);
   const { get, clear, queryString, queryDictionary } = useQuery();
   const location = useLocation();
-
 
   const redirectToProfile = () => {
     if (userType === 'organization') {
@@ -58,7 +65,6 @@ const Header = () => {
     }
   };
 
-
   const handleToggle = () => {
     (async () => {
       if (!isAuthenticated) {
@@ -67,11 +73,12 @@ const Header = () => {
           replaceQuery({ redirect: `${location.pathname}?${queryString()}` }),
         );
       }
-      const accountType = JSON.parse(localStorage.getItem(fromAuth.TYPE) || 'volunteer');
+      const accountType = JSON.parse(
+        localStorage.getItem(fromAuth.TYPE) || 'volunteer',
+      );
       await dispatch(fromAuth.doResume(undefined));
       await dispatch(fromProfile.doFetchMyProfile({ type: accountType }));
       setOpen(prevOpen => !prevOpen);
-
     })();
   };
 
@@ -114,49 +121,64 @@ const Header = () => {
     >
       <Grid container style={{ display: 'flex', flex: 1 }}>
         <Grid container item style={{ display: 'flex', flex: 1 }}>
-          <Typography style={{ color: '#fa6980', lineHeight: '30px', marginRight: 42 }}>LOGO</Typography>
+          <Typography
+            style={{ color: '#fa6980', lineHeight: '30px', marginRight: 42 }}
+          >
+            LOGO
+          </Typography>
 
           <Grid item className={classes['top-menu']}>
             <span>
               <NavLink
-                  style={{ textDecoration: 'none' }}
-                  to={home.path}
-                  activeClassName={classes.active}>
+                style={{ color: 'black', textDecoration: 'none' }}
+                to={home.path}
+                activeClassName={classes.active}
+              >
                 <Typography>Home</Typography>
               </NavLink>
             </span>
             <span>
               <NavLink
-                  style={{ textDecoration: 'none' }}
-                  to={'/positions'}
-                  activeClassName={classes.active}>
+                style={{ color: 'black', textDecoration: 'none' }}
+                to={'/positions'}
+                activeClassName={classes.active}
+              >
                 <Typography>Opportunities</Typography>
               </NavLink>
             </span>
             <span>
               <NavLink
-                  style={{ textDecoration: 'none' }}
-                  to={'/about-us'}
-                  activeClassName={classes.active}>
+                style={{ color: 'black', textDecoration: 'none' }}
+                to={'/about-us'}
+                activeClassName={classes.active}
+              >
                 <Typography>About Us</Typography>
               </NavLink>
             </span>
             <span>
               <NavLink
-                  style={{ textDecoration: 'none' }}
-                  to={sharingZone.path}
-                  activeClassName={classes.active}>
+                style={{ color: 'black', textDecoration: 'none' }}
+                to={sharingZone.path}
+                activeClassName={classes.active}
+              >
                 <Typography>Sharing zone</Typography>
               </NavLink>
             </span>
           </Grid>
         </Grid>
-
       </Grid>
       <Grid style={{ display: 'flex', alignItems: 'center' }}>
         <SearchIcon></SearchIcon>
-        <NotificationsIcon style={{ margin:'0 20px' }}></NotificationsIcon>
-        <Avatar onClick={handleToggle} style={{ backgroundColor: 'orange', width: 30, height: 30, marginLeft: 10 }}>
+        <NotificationsIcon style={{ margin: '0 20px' }}></NotificationsIcon>
+        <Avatar
+          onClick={handleToggle}
+          style={{
+            backgroundColor: 'orange',
+            width: 30,
+            height: 30,
+            marginLeft: 10,
+          }}
+        >
           <span ref={anchorRef}>N</span>
         </Avatar>
 

@@ -29,7 +29,7 @@ export const createInitialState = (): PositionsState => ({
     gender: 'all',
     tags: ['Education', 'Young People', 'Community Services'],
     startDate: moment('2021-10-01T14:48:00.000Z').toDate(),
-    endDate: moment('2022-12-31T14:48:00.000Z').toDate(),
+    endDate: moment('2021-12-30T14:48:00.000Z').toDate(),
     limit: 9,
     offset: 0,
     sort: 'applications',

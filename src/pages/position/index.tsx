@@ -148,7 +148,7 @@ function Position() {
     location: location,
     startAt: startAt,
     endAt: endAt,
-    typesOfWork: [...position.tags],
+    typesOfWork: position.tags ? [...position.tags] : [],
     numberOfApplicants: numberOfApplicants,
     requirements: requirements,
     organizationName: organization.name,

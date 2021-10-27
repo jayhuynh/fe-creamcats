@@ -78,5 +78,5 @@ export const createPostion = async (position: CreatePositionFormInputs) => {
   const response = (await Axios.post('/positions', {
     ...position,
   })).data;
-  return position;
+  return response.createdPosition;
 };

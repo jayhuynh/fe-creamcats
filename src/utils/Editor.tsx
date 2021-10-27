@@ -13,8 +13,8 @@ const Editor = ({ onChange }: EditorProps) => {
       config={
         {
           cloudServices: {
-            tokenUrl: 'https://83680.cke-cs.com/token/dev/8b1e6018794322c1896172e6dd4536953ab7ad8e0463c98de8ef8a0b23a6',
-            uploadUrl: 'https://83680.cke-cs.com/easyimage/upload/',
+            tokenUrl: 'https://84403.cke-cs.com/token/dev/cb6117a02a6de4d368bd7567b9febf3e5cdc04aab8b83157ed8f01f83e75',
+            uploadUrl: 'https://84403.cke-cs.com/easyimage/upload/',
           },
         } as EditorConfig
       }
